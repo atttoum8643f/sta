@@ -1,0 +1,107 @@
+---
+title: "Projet STATIS"
+author: "Ibrahim8643f"
+date: "2024-01-31"
+output: pdf_document
+---
+
+La fonction calculant le produit scalaire de Frobénius 
+```{r}
+prd_scalaire = function(A,B){
+  n = length(A[,1]); p = length(A[1,])
+  # Les matrices de ponderation
+  W = (1/n)*diag(n); C = (1/p)*diag(p)
+  
+  # Calcul des matrices A_tild et B_tild
+  A_tild = sqrt(W) %*% A %*% sqrt(C)
+  B_tild = sqrt(W) %*% B %*% sqrt(C)
+  
+  # Produit scalaire
+  ps = sum(diag(t(A_tild)%*%B_tild))
+  
+  return(ps)
+ }
+```
+
+Exemple d'application sur le produit scalaire de Frobénius
+```{r}
+# On initialise des matrices au hasard
+A  = matrix(-16:18, nrow =7)
+B = matrix(1:35, nrow =7)
+
+# On applique la fonction prd_scalaire
+resultat = prd_scalaire(A,B)
+
+# Affichage du résultat
+print(resultat)
+```
+
+La fonction calculant la norme d'une matrice A associée au produit scalaire de Frobénius 
+```{r}
+norme = function(A){
+  return(sqrt(prd_scalaire(A,A)))
+}
+```
+
+Exemple d'application sur la norme
+```{r}
+# On utilise les matrices précédente afin de calculer leurs normes
+rn1 = norme(A)
+rn2 = norme(B)
+
+# Affichage du résultat
+rn1; rn2
+```
+
+La fonction calculant le coefficient RV d'Escoufier                  
+```{r}
+coef_RV = function(T_tableaux) {
+  t = length(T_tableaux)
+  mat_rv = matrix(rep(NA, t * t), nrow = t, ncol = t)
+  
+  for (i in seq_along(T_tableaux)) {
+    for (j in seq_along(T_tableaux)) {
+      # Stocker le résultat dans une matrice
+      prd_sclr = prd_scalaire(T_tableaux[[i]], T_tableaux[[j]])
+      norm_i = norme(T_tableaux[[i]])
+      norm_j = norme(T_tableaux[[j]])
+      mat_rv[i, j] = prd_sclr / (norm_j * norm_i)
+    }
+  }
+  
+  return(mat_rv)
+}
+
+```
+
+
+Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
+```{r}
+X1  = matrix(-12:22, nrow =7)
+X2  = matrix(-20:14, nrow =7)
+X3  = matrix(-16:18, nrow =7)
+X4  = matrix(1:35, nrow =7)
+X5  = matrix(-8:26, nrow =7)
+X6  = matrix(-10:24, nrow =7)
+X7  = matrix(-16:18, nrow =7)
+X8  = matrix(-4:30, nrow =7)
+
+n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8)
+resultats_n = coef_RV(n_tableaux)
+print(data.frame(resultats_n))
+```
+
+\[
+\max_{\| u \|^2 = 1} \left\| \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right\|^2 = \max_{\| u \|^2 = 1} \mathrm{tr}\left( \left( \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right)^T \left( \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right) \right)
+\]
+
+
+
+
+
+
+
+
+
+
+
