@@ -1,9 +1,70 @@
 ---
-title: "Projet STATIS"
-author: "Ibrahim8643f"
-date: "2024-01-31"
+title: "Projet STATIS: Réponse feuille de route"
 output: pdf_document
 ---
+
+Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z} \quad \forall n(n,p)\).
+Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
+
+\[[A \mid B] = \text{tr}(CA'WB)
+\]
+\[\iff [A \mid B] = \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})
+\]
+\[[A \mid B] = \text{tr}(\tilde{A}'\tilde{B})
+\]
+
+Pour montrer que \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, nous devons démontrer les propriétés suivantes :
+
+### Symétrie :
+
+\[
+[A \mid B] = [B \mid A]
+\]
+
+### Linéarité :
+
+\[
+[A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] \quad \text{pour tous } A, B_1, B_2 \text{ et scalaires } \alpha, \beta.
+\]
+
+### Positivité définie :
+
+\[
+[A \mid A] \geq 0 \quad \text{et} \quad [A \mid A] = 0 \text{ si et seulement si } A = 0.
+\]
+
+Vérifions ces propriétés :
+
+### Symétrie :
+
+\[
+\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) = \text{tr}(C^{\frac{1}{2}} B' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}})
+\]
+
+En utilisant la propriété de la trace \(\text{tr}(AB) = \text{tr}(BA)\), cela montre que la symétrie est respectée.
+
+### Linéarité :
+
+\[
+\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} (\alpha B_1 + \beta B_2) C^{\frac{1}{2}})
+\]
+\[= \alpha \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_1 C^{\frac{1}{2}}) + \beta \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_2 C^{\frac{1}{2}})
+\]
+\[= \alpha \text{tr}(\tilde{A}'\tilde{B_1}) + \beta \text{tr}(\tilde{A}'\tilde{B_2})
+\]
+
+La linéarité de la trace assure que cette propriété est respectée.
+
+### Positivité définie :
+
+\[
+\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \geq 0
+\]
+
+La positivité de la trace et le fait que \(W^{1/2}\) et \(C^{1/2}\) sont des matrices de racine carrée positive assurent que cette propriété est vérifiée. De plus, \(\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) = 0\) implique que \(A = 0\).
+
+Par conséquent, la quantité \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
+
 
 La fonction calculant le produit scalaire de Frobénius 
 ```{r}
@@ -77,31 +138,106 @@ coef_RV = function(T_tableaux) {
 
 Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
 ```{r}
-X1  = matrix(-12:22, nrow =7)
-X2  = matrix(-20:14, nrow =7)
-X3  = matrix(-16:18, nrow =7)
-X4  = matrix(1:35, nrow =7)
-X5  = matrix(-8:26, nrow =7)
-X6  = matrix(-10:24, nrow =7)
-X7  = matrix(-16:18, nrow =7)
-X8  = matrix(-4:30, nrow =7)
+set.seed(123)
+X1 <- matrix(-12:22, nrow = 7)
+X2 <- matrix(-20:14, nrow = 7)
+X3 <- matrix(-16:18, nrow = 7)
+X4 <- matrix(1:35, nrow = 7)
+X5 <- matrix(-8:26, nrow = 7)
+X6 <- matrix(-10:24, nrow = 7)
+X7 <- matrix(-16:18, nrow = 7)
+X8 <- matrix(-4:30, nrow = 7)
+X9 <- matrix(rnorm(35), nrow = 7)
+X10 <- matrix(rpois(35,0.5), nrow = 7)
 
-n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8)
+# Noms de lignes
+noms_lignes <- c("Ligne1", "Ligne2", "Ligne3", "Ligne4", "Ligne5", "Ligne6", "Ligne7")
+
+# Ajouter les noms de lignes aux matrices
+rownames(X1) <- noms_lignes
+rownames(X2) <- noms_lignes
+rownames(X3) <- noms_lignes
+rownames(X4) <- noms_lignes
+rownames(X5) <- noms_lignes
+rownames(X6) <- noms_lignes
+rownames(X7) <- noms_lignes
+rownames(X8) <- noms_lignes
+rownames(X9) <- noms_lignes
+rownames(X10) <- noms_lignes
+
+
+n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8,X9,X10)
 resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
+## Problème d'Optimisation
+
+L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 =  \underbrace{\sum_{t=1}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2}_{\text{Inertie intra-tableau}} + \underbrace{2 \sum\limits_{1 \leq t < \tau}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \vert \frac{u_{\tau}}{\left[\left| X_{\tau} \right|\right]} X_{\tau} \right|\right]}_{\text{Inertie inter-tableau}}\)
+représente l'inertie dans le contexte de l'analyse factorielle. L'inertie est également appelée somme des carrés des corrélations ou variance totale. Dans le cadre de l'analyse factorielle, cette quantité mesure la dispersion totale des données dans l'espace factoriel.
+
+L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale.
+
 
 \[
-\max_{\| u \|^2 = 1} \left\| \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right\|^2 = \max_{\| u \|^2 = 1} \mathrm{tr}\left( \left( \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right)^T \left( \sum_{t=1}^{T} \frac{u_t}{\| X_t \|} X_t \right) \right)
+\max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 = \max_{\left[\left| u \right|\right]^2 = 1} \mathrm{tr}\left( C \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right)' W \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right) \right) 
 \]
 
+\[
+\iff \max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2= \sum_{t=1}^{T} \sum_{\tau =1}^{T} \frac{1}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t u_{\tau} \mathrm{tr}\left( CX_{\tau}'WX_t \right) 
+\]
 
+1. \(X_t\): \(n \times p\) (la matrice \(X_t\) a des dimensions \(n \times p\)).
+2. \(\frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\) (chaque colonne de \(X_t\) est pondérée par \(\frac{u_t}{\left[\left| X_t \right|\right]}\)).
+3. \(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\) (somme des termes précédents sur \(t\)).
+4. \(\left(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\right)'\): \(p \times n\) (transposée de la matrice résultante).
+5. \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\): \(1 \times 1\) (la norme euclidienne au carré est un scalaire).
 
+Le langrangien associée au problème d'optimisation ci-dessus s'écrit:
+\[L(u,\lambda) = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{u_t u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} tr(\tilde{X_t'\tilde{X_{\tau}}}) - \lambda( \|u\|^2-1) \]
+On a alors :
 
+\[
+\begin{cases}
+  \frac{\partial L}{\partial u}(u,\lambda) = 2\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} tr(\tilde{X_t'\tilde{X_{\tau}}}) - 2\lambda u \\
+  \frac{\partial L}{\partial \lambda}(u,\lambda) = \|u\|^2 - 1
+\end{cases}
+\]
+\[\iff (S)
+\begin{cases}
+  \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]}u_{\tau}  = \lambda u \quad (*) \\
+  \|u\|^2 = 1 \quad (**)
+\end{cases}
+\]
 
+D'une part, en multipliant l'équation \((*) \quad par \quad u'\) on obtient grâce à l'équation \((**)\) le résultat suivant:
+\[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{u_t tr(\tilde{X_t'\tilde{X_{\tau}}}) u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} = \lambda \]
 
+D'autre part, en multipliant par \(Z := [X_1|...|X_T]\) l'équation $(*)$ on obtient le résultat suivant:
+\[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau}  \right|\right]}X_tu_{\tau} = \lambda \sum_{t =1}^{T}X_t u_t \]
 
+D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
 
+Fonction donnant les vecteurs u solution et valeurs propres
+```{r}
+vecval_prop = function(T_tableau) {
+  matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
+  
+  resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
+  val_prop = resultat_propre$values #valeurs propres
+  vec_prop = resultat_propre$vectors #vecteurs propres associées
+  
+  return(list(val_prop = val_prop, vec_prop = vec_prop))
+}
 
+```
 
+Exemple d'application de la fonction vecval_prop
+```{r}
+info = vecval_prop(n_tableaux)
+
+# Affichage des résultats
+info$val_prop # valeurs propres
+data.frame(info$vec_prop) # les vecteurs propres
+sum(info$val_prop) # inertie
+```
 
