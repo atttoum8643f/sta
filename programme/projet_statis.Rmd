@@ -119,7 +119,10 @@ rn2 = norme(B)
 rn1; rn2
 ```
 
-La fonction calculant le coefficient RV d'Escoufier                  
+\subsubsection{1.2 Coeffecient RV}
+a) Le coefficient RV représente le cosinus entre A et B ? Mesure la corrélation ? L'alignement entre deux ensembles ?
+
+b) La fonction calculant le coefficient RV d'Escoufier                  
 ```{r}
 coef_RV = function(T_tableaux) {
   t = length(T_tableaux)
@@ -175,6 +178,8 @@ n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8,X9,X10)
 resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
+\subsection{2. Programme STATIS1}
+a)
 ## Problème d'Optimisation
 
 L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 =  \underbrace{\sum_{t=1}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2}_{\text{Inertie intra-tableau}} + \underbrace{2 \sum\limits_{1 \leq t < \tau}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \vert \frac{u_{\tau}}{\left[\left| X_{\tau} \right|\right]} X_{\tau} \right|\right]}_{\text{Inertie inter-tableau}}\)
