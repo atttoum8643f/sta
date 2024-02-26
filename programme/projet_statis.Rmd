@@ -3,7 +3,10 @@ title: "Projet STATIS: Réponse feuille de route"
 output: pdf_document
 ---
 
-Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z} \quad \forall n(n,p)\).
+\section{I - Situation 1}
+\subsection{1. Préliminaires}
+\subsubsection{1.1 Produit scalaire}
+a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z} \quad \forall n(n,p)\).
 Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
 
 \[[A \mid B] = \text{tr}(CA'WB)
@@ -13,7 +16,7 @@ Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
 \[[A \mid B] = \text{tr}(\tilde{A}'\tilde{B})
 \]
 
-Pour montrer que \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, nous devons démontrer les propriétés suivantes :
+b) Pour montrer que \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, nous devons démontrer les propriétés suivantes :
 
 ### Symétrie :
 
@@ -65,8 +68,10 @@ La positivité de la trace et le fait que \(W^{1/2}\) et \(C^{1/2}\) sont des ma
 
 Par conséquent, la quantité \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
 
+c) Nous allons maintenant expliciter ce produit scalaire sous forme d'une double somme : \\
+\([A \mid B] = \text{tr}(A^{\sim}\text{'}B^{\sim}) = \sum_{i=1}^{n}\sum_{j=1}^{p}A_{ij}^{\sim}B_{ij}^{\sim}\)
 
-La fonction calculant le produit scalaire de Frobénius 
+d) La fonction calculant le produit scalaire de Frobénius 
 ```{r}
 prd_scalaire = function(A,B){
   n = length(A[,1]); p = length(A[1,])
