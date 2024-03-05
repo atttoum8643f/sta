@@ -240,4 +240,13 @@ info$val_prop # valeurs propres
 data.frame(info$vec_prop) # les vecteurs propres
 sum(info$val_prop) # inertie
 ```
+```{r}
+X = data.frame(info$vec_prop)
+for (i in 1:10) {
+  for (j in 1:10) {
+    a = t(X[, i]) %*% X[, j]
+    cat("Le produit scalaire entre le vecteur X", i, "et X", j, "est", a, "\n")
+  }
+}
 
+```
