@@ -154,7 +154,7 @@ rn1; rn2
 2. On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
 
-a) En terme géométrique le coefficient RV et le cosinus de A et B.
+a) En terme géométrique le coefficient RV est le cosinus de A et B.
 
 b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \)
 
@@ -182,7 +182,6 @@ coef_RV = function(T_tableaux) {
 
 Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
 ```{r}
-set.seed(123)
 X1 <- matrix(-12:22, nrow = 7)
 X2 <- matrix(-20:14, nrow = 7)
 X3 <- matrix(-16:18, nrow = 7)
@@ -191,8 +190,8 @@ X5 <- matrix(-8:26, nrow = 7)
 X6 <- matrix(-10:24, nrow = 7)
 X7 <- matrix(-16:18, nrow = 7)
 X8 <- matrix(-4:30, nrow = 7)
-X9 <- matrix(rnorm(35), nrow = 7)
-X10 <- matrix(rpois(35,0.5), nrow = 7)
+X9 <- matrix(-2:32, nrow = 7)
+X10 <- matrix(-1:31, nrow = 7)
 
 # Noms de lignes
 noms_lignes <- c("Ligne1", "Ligne2", "Ligne3", "Ligne4", "Ligne5", "Ligne6", "Ligne7")
@@ -282,7 +281,6 @@ vecval_prop = function(T_tableau) {
   
   return(list(val_prop = val_prop, vec_prop = vec_prop))
 }
-
 ```
 
 
@@ -388,11 +386,95 @@ Lorsque nous obtenons les vecteurs propres \( u_k \) de la matrice des coefficie
 Ensuite, les composantes principales \( F^k \) sont obtenues en projetant les tableaux \( X_t \) sur les vecteurs propres \( u_k \). Comme chaque vecteur propre \( u_k \) est orthogonal aux autres vecteurs propres, les projections des tableaux sur ces vecteurs propres le seront également. Par conséquent, les composantes principales \( F^k \) seront orthogonales les unes aux autres.
 
 
-c) 
+c) Dépliage du tableau cubique en un tableau juxtaposé :
+```{r}
+# Création des tableaux X_t dépliés
+X1_jux <- matrix(-12:22, nrow = 35)
+X2_jux <- matrix(-20:14, nrow = 35)
+X3_jux <- matrix(-16:18, nrow = 35)
+X4_jux <- matrix(1:35, nrow = 35)
+X5_jux <- matrix(-8:26, nrow = 35)
+X6_jux <- matrix(-10:24, nrow = 35)
+X7_jux <- matrix(-16:18, nrow = 35)
+X8_jux <- matrix(-4:30, nrow = 35)
+X9_jux <- matrix(-2:32, nrow = 35)
+X10_jux <- matrix(-3:31, nrow = 35)
+mat_jux <- cbind(X1_jux, X2_jux, X3_jux, X4_jux, X5_jux, X6_jux, X7_jux, X8_jux, X9_jux, X10_jux)
+mat_jux_centr <- scale(mat_jux) # Centrage-réduction des données
+w_jux <- diag(35)/35 # Poids uniformes
+mat_sym <- t(mat_jux_centr) %*% w_jux %*% mat_jux_centr # Matrice de variance-covariance
+```
 
-d)
+Composantes principales des tableaux dépliés :
+```{r}
+# On veut donner la fonction des composantes principales correspondant aux vecteurx u (vec_prop)
+composantes_principales = function(u, X_t){
+  F <- X_t %*% u # calcul de la matrice des composantes principales
+  
+  return(F)
+}
+print(composantes_principales(vec_prop, mat_jux)) # Affichage des composantes principales
+
+# On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la composante normée f_k correspondante
+composante_k = function(u, X_t, k){
+  
+  F_k = X_t %*% u # calcul des composantes principales
+
+  
+  f_k = F_k / sqrt(sum(F_k^2)) # calcul de la kième composante principale normée
+  
+  return(list(F_k = F_k[,k], f_k = f_k[,k]))
+}
+print(composante_k(vec_prop, mat_jux, 1)) # Affichage de la première composante principale et de sa version normée
+print(composante_k(vec_prop, mat_jux, 2)) # Affichage de la deuxième composante principale et de sa version normée
+
+# Fonction donnant la représentation graphique des individus en plan principal (k,l)
+representation_graphique = function(vec_prop, X_t, k, l){
+  F_k = composante_k(vec_prop, X_t, k)$F_k # Récupération de la kième composante principale
+  F_l = composante_k(vec_prop, X_t, l)$F_k # Récupération de la lième composante principale
+  
+  plot(F_k, F_l, xlab = paste("F", k, sep = ""), ylab = paste("F", l, sep = ""), main = paste("Représentation des individus en plan principal (", k, ",", l, ")", sep = ""))
+  abline(h = 0, col = "gray")
+  abline(v = 0, col = "gray")
+}
+representation_graphique(vec_prop, mat_jux, 1, 2) # Affichage de la représentation graphique des individus en plan principal (1,2)
+
+```
+d) Cosinus entre les tableaux et les composantes principales :
+```{r}
+# Calcul des cosinus entre Xt (resultats_n) et chaque composante principale F_k
+cosinus = function(X_t, F_k){
+  for (k in 1:ncol(F_k)){
+    cos = sum(X_t * F_k[,k]) / (sqrt(sum(X_t^2)) * sqrt(sum(F_k^2))) # Calcul du cosinus entre Xt et la kième composante F_k
+    print(cos)
+  }
+}
+cosinus(resultats_n, composantes_principales(vec_prop, resultats_n)) # Affichage du produit scalaire entre Xt et la ième composante principale)
+
+# Fonction donnant la représentation graphique des variables en plan principal (k,l)
+representation_graphique_variables = function(vec_prop, X_t, k, l){
+  F_k = composante_k(vec_prop, X_t, k)$F_k # Récupération de la kième composante principale
+  F_l = composante_k(vec_prop, X_t, l)$F_k # Récupération de la lième composante principale
+  
+  plot(F_k, F_l, xlab = paste("F", k, sep = ""), ylab = paste("F", l, sep = ""), main = paste("Représentation des variables en plan principal (", k, ",", l, ")", sep = ""))
+  abline(h = 0, col = "gray")
+  abline(v = 0, col = "gray")
+}
+representation_graphique_variables(vec_prop, resultats_n, 1, 2) # Affichage de la représentation graphique des variables en plan principal (1,2)
+
+```
 
 ### 2.3. ACP et d'autres dépliages du tableau cubique 
+a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
+
+b) Quelle(s) ACP des tableaux dépliés pouvez-vous envisager? Pour chacune: quels sont ses
+"individus" et ses "variables"? Quel centrage paraît opportun? Quelle réduction? Quels
+éléments sont utiles à projeter en supplémentaire?
+Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici nous avons créé notre jeu de données sans réelle signification. De même les indidus et variables restent à déterminer. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent de ce que l'on souhaite étudier.
+
+c) Quels sont les avantages et les inconvénients de chaque ACP d'un tableau "déplié"?
+Finalement, le "dépliage" opéré par STATIS1 était-il le plus opportun?
+Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. 
 
 ## II - Situation 2
 
