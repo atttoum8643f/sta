@@ -2,35 +2,47 @@
 title: "Projet STATIS: Réponse feuille de route"
 output: pdf_document
 ---
+## I-Préliminaires pour la situation 1
 
-\section{I - Situation 1}
-\subsection{1. Préliminaires}
-\subsubsection{1.1 Produit scalaire}
-a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z} \quad \forall n(n,p)\).
+### 1.1 Produit scalaire 
+
+La matrice diagonale des poids des \( n \) individus est \( W \) (par défaut, \( W = \frac{1}{n} I_n \)).
+On considérera également une matrice diagonale des poids des \( p \) colonnes : \( C = \frac{1}{p} I_p \) par défaut.
+
+1. Le produit scalaire entre deux matrices \( A \) et \( B \) de taille \( (n, p) \) est :
+
+\[ [A|B] = \text{tr}(CA'WB) \]
+
+La norme d'une matrice \( A \) correspondant à ce produit scalaire sera notée \( \left[\left| A \right|\right] \).
+
+a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z}\), \( \forall Z \) \( (n, p) \).
+
 Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
 
-\[[A \mid B] = \text{tr}(CA'WB)
-\]
-\[\iff [A \mid B] = \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})
-\]
-\[[A \mid B] = \text{tr}(\tilde{A}'\tilde{B})
-\]
+\begin{align*}
+[A \mid B] &= \text{tr}(CA'WB) \\
+&= \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(\tilde{A}'\tilde{B})
+\end{align*}
 
-b) Pour montrer que \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, nous devons démontrer les propriétés suivantes :
+où \(\forall (n,p)\) \(\tilde{Z} =  W^{\frac{1}{2}} Z C^{\frac{1}{2}}\)
 
-### Symétrie :
+b) Pour montrer que \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire, nous devons démontrer les propriétés suivantes : 
+
+**(i) Symétrie** : \(\forall\) \(A,B \in M_{n,p}(\mathbb{R}) \)
 
 \[
 [A \mid B] = [B \mid A]
 \]
 
-### Linéarité :
+**(ii) Linéarité** :\(\forall\) \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta in \mathbb{R}\)
 
 \[
-[A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] \quad \text{pour tous } A, B_1, B_2 \text{ et scalaires } \alpha, \beta.
+[A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] 
 \]
 
-### Positivité définie :
+**(iii) Positivité définie** :\(\forall\) \(A \in M_{n,p}(\mathbb{R}) \)
 
 \[
 [A \mid A] \geq 0 \quad \text{et} \quad [A \mid A] = 0 \text{ si et seulement si } A = 0.
@@ -38,40 +50,58 @@ b) Pour montrer que \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} 
 
 Vérifions ces propriétés :
 
-### Symétrie :
+(i) Soit \(A, B \in M_{n,p}(\mathbb{R}) \)
 
-\[
-\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) = \text{tr}(C^{\frac{1}{2}} B' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}})
-\]
+\begin{align*}
+[A \mid B] &= \text{tr}(\tilde{A}'\tilde{B}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})
+\end{align*}
 
-En utilisant la propriété de la trace \(\text{tr}(AB) = \text{tr}(BA)\), cela montre que la symétrie est respectée.
+Or, par la propriété de la trace, \(\text{tr}(AB) = \text{tr}(BA)\) et l'invariance par transposition des matrices de poids \(\forall k \in \mathbb{R}, \quad {W^k}' = W^k\) et \({C^k}' = C^k\), on a alors:
 
-### Linéarité :
+\begin{align*}
+\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) &= \text{tr}(C^{\frac{1}{2}} B' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \\
+&= [B \mid A]
+\end{align*}
 
-\[
-\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} (\alpha B_1 + \beta B_2) C^{\frac{1}{2}})
-\]
-\[= \alpha \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_1 C^{\frac{1}{2}}) + \beta \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_2 C^{\frac{1}{2}})
-\]
-\[= \alpha \text{tr}(\tilde{A}'\tilde{B_1}) + \beta \text{tr}(\tilde{A}'\tilde{B_2})
-\]
+(ii) Soit \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta \in \mathbb{R}\)
+
+\begin{align*}
+[A \mid (\alpha B_1 + \beta B_2)] &= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} (\alpha B_1 + \beta B_2) C^{\frac{1}{2}}) \\
+&= \alpha \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_1 C^{\frac{1}{2}}) + \beta \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_2 C^{\frac{1}{2}}) \\
+&= \alpha \text{tr}(\tilde{A}'\tilde{B_1}) + \beta \text{tr}(\tilde{A}'\tilde{B_2})\\
+&= \alpha [A \mid B_1] + \beta [A \mid B_2] 
+\end{align*}
 
 La linéarité de la trace assure que cette propriété est respectée.
 
-### Positivité définie :
+(iii) Soit \(A \in M_{n,p}(\mathbb{R}) \)
 
 \[
-\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \geq 0
+[A \mid A]=\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \geq 0
 \]
+On suppose que :
+\begin{align*}
+[A \mid A] &= 0\\
+\iff tr(\tilde{A}'\tilde{A}) &=0\\
+\iff \tilde{A}'\tilde{A} &=0\\
+\iff \tilde{A} &=0\\
+\iff A &=0 
+\end{align*} 
+(car W et C ne sont pas nulle)
 
-La positivité de la trace et le fait que \(W^{1/2}\) et \(C^{1/2}\) sont des matrices de racine carrée positive assurent que cette propriété est vérifiée. De plus, \(\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) = 0\) implique que \(A = 0\).
+Par conséquent, la quantité \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
 
-Par conséquent, la quantité \([A \mid B] = \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
+c) Écrivons le produit scalaire précédent sous forme de double somme. On note \(\tilde{B} = (\tilde{b}_{ij})\), d'où \([ \tilde{A} \tilde{B} ] = \sum_{k=1}^{n} \tilde{a}_{ik} \tilde{b}_{kj}\) et \([ \tilde{A}' \tilde{B} ] = \sum_{k=1}^{n} \tilde{a}_{ki} \tilde{b}_{kj}\). On en déduit alors:
+\begin{align*}
+[A \mid A] &= tr(\tilde{A}'\tilde{B})\\
+ &= \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{b}_{kl}
+\end{align*}
 
-c) Nous allons maintenant expliciter ce produit scalaire sous forme d'une double somme : \\
-\([A \mid B] = \text{tr}(A^{\sim}\text{'}B^{\sim}) = \sum_{i=1}^{n}\sum_{j=1}^{p}A_{ij}^{\sim}B_{ij}^{\sim}\)
+d) Nous pouvons observer le programme du précédent  produit scalaire ci-dessous, ainsi que la norme associée à ce produit scalaire.
 
-d) La fonction calculant le produit scalaire de Frobénius 
+La fonction calculant le produit scalaire de Frobénius 
 ```{r}
 prd_scalaire = function(A,B){
   n = length(A[,1]); p = length(A[1,])
@@ -119,10 +149,16 @@ rn2 = norme(B)
 rn1; rn2
 ```
 
-\subsubsection{1.2 Coeffecient RV}
-a) Le coefficient RV représente le cosinus entre A et B ? Mesure la corrélation ? L'alignement entre deux ensembles ?
+### 1.2 Coefficient RV
 
-b) La fonction calculant le coefficient RV d'Escoufier                  
+2. On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
+\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+
+a) En terme géométrique le coefficient RV et le cosinus de A et B.
+
+b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \)
+
+La fonction calculant le coefficient RV d'Escoufier                  
 ```{r}
 coef_RV = function(T_tableaux) {
   t = length(T_tableaux)
@@ -178,15 +214,18 @@ n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8,X9,X10)
 resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
-\subsection{2. Programme STATIS1}
-a)
-## Problème d'Optimisation
 
-L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 =  \underbrace{\sum_{t=1}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2}_{\text{Inertie intra-tableau}} + \underbrace{2 \sum\limits_{1 \leq t < \tau}^{T} \left[\left| \frac{u_t}{\left[\left| X_t \right|\right]} X_t \vert \frac{u_{\tau}}{\left[\left| X_{\tau} \right|\right]} X_{\tau} \right|\right]}_{\text{Inertie inter-tableau}}\)
+## 2. Programme de STATIS1
+
+### 2.1. Programme
+
+
+a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
 représente l'inertie dans le contexte de l'analyse factorielle. L'inertie est également appelée somme des carrés des corrélations ou variance totale. Dans le cadre de l'analyse factorielle, cette quantité mesure la dispersion totale des données dans l'espace factoriel.
 
 L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale.
 
+b) Résolvons le programme ci-dessus:
 
 \[
 \max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 = \max_{\left[\left| u \right|\right]^2 = 1} \mathrm{tr}\left( C \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right)' W \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right) \right) 
@@ -225,9 +264,14 @@ D'une part, en multipliant l'équation \((*) \quad par \quad u'\) on obtient gr�
 D'autre part, en multipliant par \(Z := [X_1|...|X_T]\) l'équation $(*)$ on obtient le résultat suivant:
 \[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau}  \right|\right]}X_tu_{\tau} = \lambda \sum_{t =1}^{T}X_t u_t \]
 
-D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
+D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{\tilde{X_t'}\tilde{X_{\tau}} }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
+
+c) Nous allons écrivez le programme R fournissant les vecteurs u solutions des équations du premier
+ordre. 
+
 
 Fonction donnant les vecteurs u solution et valeurs propres
+
 ```{r}
 vecval_prop = function(T_tableau) {
   matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
@@ -241,22 +285,118 @@ vecval_prop = function(T_tableau) {
 
 ```
 
-Exemple d'application de la fonction vecval_prop
-```{r}
-info = vecval_prop(n_tableaux)
 
-# Affichage des résultats
-info$val_prop # valeurs propres
-data.frame(info$vec_prop) # les vecteurs propres
-sum(info$val_prop) # inertie
-```
+exemple d'application de la fonction vecval_prop
 ```{r}
-X = data.frame(info$vec_prop)
-for (i in 1:10) {
-  for (j in 1:10) {
-    a = t(X[, i]) %*% X[, j]
-    cat("Le produit scalaire entre le vecteur X", i, "et X", j, "est", a, "\n")
+vecval = vecval_prop(n_tableaux)
+
+val_prop <- vecval$val_prop
+vec_prop <- vecval$vec_prop
+
+# Affichage des valeurs propres et des vecteurs propres
+print("Valeurs propres :")
+print(val_prop)
+print("Vecteurs propres :")
+print(data.frame(vec_prop))
+```
+Montrons à présent que les vecteurs u obtenus forment une base I-orthonormée.
+
+La fonction **"vecval_prop()"** ci-dessus nous donne les vecteurs propres de la matrice des coefficients RV \(\Gamma\) associée  aux valeurs propres \(\lambda\). Ensuite, nous utilisons la fonction **"verifier_orthogonalite()"** ci-dessous afin de calculé le produit scalire euclidienne entre les vecteurs propres. Si les vecteurs sont orthogonaux, la fonction nous renverra **"Les vecteurs propres sont orthogonaux entre eux"** dans le cas contraire elle affichera **"Les vecteurs propres ne sont pas orthogonaux entre eux"**.
+
+
+
+```{r}
+# Fonction pour vérifier l'orthogonalité des vecteurs propres
+verifier_orthogonalite <- function(vec_prop) {
+  n <- nrow(vec_prop) # Nombre de vecteurs propres
+  orthogonale <- TRUE
+  
+  # Vérifier l'orthogonalité pour chaque paire de vecteurs propres
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      produit_scalaire <- sum(vec_prop[, i] * vec_prop[, j]) # Produit scalaire
+      if (abs(produit_scalaire) > 1e-15) { # Vérifier si le produit scalaire est proche de zéro
+        orthogonale <- FALSE
+        break
+      }
+    }
+    if (!orthogonale) {
+      break
+    }
   }
+  
+  return(orthogonale)
 }
+```
+
+
+```{r}
+# fonction pour vérifier si les vecteurs propres sont bien de norme 1
+verifier_norme = function(vec_prop){
+  n = length(vec_prop[,1]) 
+  v = rep(1,n)
+  int = rep(NA,n)
+  
+  for (i in 1:n) {
+      p = t(vec_prop[,i]) %*% vec_prop[,i]
+      int[i] = p
+  }
+  
+  if(sum(int) == sum(v)){
+    print("les vecteurs sont bien de norme 1")
+  }else{
+    print("il existe un vecteurs qui n'est pas de norme 1")
+ }
+}
+
+```
+
+
+Utilisation de les fonctions pour vérifier si les vecteurs propres forment une base orthonormée:
+```{r}
+orthogonale = verifier_orthogonalite(vec_prop)
+
+# Affichage du résultat
+if (orthogonale) {
+  print("Les vecteurs propres sont orthogonaux entre eux.")
+} else {
+  print("Les vecteurs propres ne sont pas orthogonaux entre eux.")
+}
+
+verifier_norme(vec_prop)
+```
+
+
+
+
+### 2.2. Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
+
+a) 
+
+Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
+
+Dans notre cas, chaque $\mathbf{X_t}$ représente un tableau de données à une période de temps spécifique, où les lignes représentent les individus et les colonnes représentent les variables. Par conséquent, chaque colonne de $\mathbf{X_t}$ représente une variable différente observée à cette période.
+
+Ainsi, en considérant les tableaux $\mathbf{X_t}$ comme les variables, la matrice $\mathbf{A}$ est calculée en utilisant les produits scalaires entre les différentes combinaisons de tableaux $\mathbf{X_t}$. Les valeurs propres et les vecteurs propres de cette matrice $\mathbf{A}$ correspondent alors aux directions dans lesquelles la dispersion des données est maximale dans l'espace des tableaux juxtaposés.
+
+
+
+b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) sont orthogonales au sens du produit scalaire convenable, nous devons considérer la façon dont ces composantes sont construites à partir des vecteurs propres obtenus.
+
+Lorsque nous obtenons les vecteurs propres \( u_k \) de la matrice des coefficients RV, nous avons montré précédemment qu'ils forment une base orthogonale au sens du produit scalaire euclidien. Cela signifie que ces vecteurs propres sont mutuellement orthogonaux.
+
+Ensuite, les composantes principales \( F^k \) sont obtenues en projetant les tableaux \( X_t \) sur les vecteurs propres \( u_k \). Comme chaque vecteur propre \( u_k \) est orthogonal aux autres vecteurs propres, les projections des tableaux sur ces vecteurs propres le seront également. Par conséquent, les composantes principales \( F^k \) seront orthogonales les unes aux autres.
+
+
+c) 
+
+d)
+
+### 2.3. ACP et d'autres dépliages du tableau cubique 
+
+## II - Situation 2
+
+
+```{r}
 
 ```
