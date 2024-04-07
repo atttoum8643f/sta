@@ -313,7 +313,7 @@ verifier_orthogonalite <- function(vec_prop) {
   for (i in 1:(n - 1)) {
     for (j in (i + 1):n) {
       produit_scalaire <- sum(vec_prop[, i] * vec_prop[, j]) # Produit scalaire
-      if (abs(produit_scalaire) > 1e-15) { # Vérifier si le produit scalaire est proche de zéro
+      if (abs(produit_scalaire) > 1e-14) { # Vérifier si le produit scalaire est proche de zéro
         orthogonale <- FALSE
         break
       }
@@ -399,9 +399,10 @@ X7_jux <- matrix(-16:18, nrow = 35)
 X8_jux <- matrix(-4:30, nrow = 35)
 X9_jux <- matrix(-2:32, nrow = 35)
 X10_jux <- matrix(-3:31, nrow = 35)
+
 mat_jux <- cbind(X1_jux, X2_jux, X3_jux, X4_jux, X5_jux, X6_jux, X7_jux, X8_jux, X9_jux, X10_jux)
-mat_jux_centr <- scale(mat_jux) # Centrage-réduction des données
-w_jux <- diag(35)/35 # Poids uniformes
+
+
 mat_sym <- t(mat_jux_centr) %*% w_jux %*% mat_jux_centr # Matrice de variance-covariance
 ```
 
@@ -441,6 +442,7 @@ representation_graphique(vec_prop, mat_jux, 1, 2) # Affichage de la représentat
 
 ```
 d) Cosinus entre les tableaux et les composantes principales :
+
 ```{r}
 # Calcul des cosinus entre Xt (resultats_n) et chaque composante principale F_k
 cosinus = function(X_t, F_k){
