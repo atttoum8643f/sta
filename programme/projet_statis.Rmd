@@ -154,7 +154,7 @@ rn1; rn2
 2. On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
 
-a) En terme géométrique le coefficient RV est le cosinus de A et B.
+a) En terme géométrique le coefficient RV et le cosinus de A et B.
 
 b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \)
 
@@ -191,7 +191,7 @@ X6 <- matrix(-10:24, nrow = 7)
 X7 <- matrix(-16:18, nrow = 7)
 X8 <- matrix(-4:30, nrow = 7)
 X9 <- matrix(-2:32, nrow = 7)
-X10 <- matrix(-1:31, nrow = 7)
+X10 <- matrix(-1:33, nrow = 7)
 
 # Noms de lignes
 noms_lignes <- c("Ligne1", "Ligne2", "Ligne3", "Ligne4", "Ligne5", "Ligne6", "Ligne7")
@@ -281,6 +281,7 @@ vecval_prop = function(T_tableau) {
   
   return(list(val_prop = val_prop, vec_prop = vec_prop))
 }
+
 ```
 
 
@@ -378,13 +379,11 @@ Dans notre cas, chaque $\mathbf{X_t}$ représente un tableau de données à une 
 Ainsi, en considérant les tableaux $\mathbf{X_t}$ comme les variables, la matrice $\mathbf{A}$ est calculée en utilisant les produits scalaires entre les différentes combinaisons de tableaux $\mathbf{X_t}$. Les valeurs propres et les vecteurs propres de cette matrice $\mathbf{A}$ correspondent alors aux directions dans lesquelles la dispersion des données est maximale dans l'espace des tableaux juxtaposés.
 
 
-
 b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) sont orthogonales au sens du produit scalaire convenable, nous devons considérer la façon dont ces composantes sont construites à partir des vecteurs propres obtenus.
 
 Lorsque nous obtenons les vecteurs propres \( u_k \) de la matrice des coefficients RV, nous avons montré précédemment qu'ils forment une base orthogonale au sens du produit scalaire euclidien. Cela signifie que ces vecteurs propres sont mutuellement orthogonaux.
 
 Ensuite, les composantes principales \( F^k \) sont obtenues en projetant les tableaux \( X_t \) sur les vecteurs propres \( u_k \). Comme chaque vecteur propre \( u_k \) est orthogonal aux autres vecteurs propres, les projections des tableaux sur ces vecteurs propres le seront également. Par conséquent, les composantes principales \( F^k \) seront orthogonales les unes aux autres.
-
 
 c) Dépliage du tableau cubique en un tableau juxtaposé :
 ```{r}
@@ -398,13 +397,34 @@ X6_jux <- matrix(-10:24, nrow = 35)
 X7_jux <- matrix(-16:18, nrow = 35)
 X8_jux <- matrix(-4:30, nrow = 35)
 X9_jux <- matrix(-2:32, nrow = 35)
-X10_jux <- matrix(-3:31, nrow = 35)
+X10_jux <- matrix(-1:33, nrow = 35)
 
 mat_jux <- cbind(X1_jux, X2_jux, X3_jux, X4_jux, X5_jux, X6_jux, X7_jux, X8_jux, X9_jux, X10_jux)
 
+oper_inert = function(X){
+  
+  p = length(X[1,]) # la dimension des individus
+  n = length(X[,1]) # la dimension des variables
+  W = diag(n)/n
+  M = matrix(0, nrow = p, ncol = p)
+  
+  for (i in 1:p) {
+    M[i,i] = 1/sqrt(t(X[,i])%*%W%*%X[,i])
+  }
+  mat_d = M %*% t(X) %*% W %*% X %*% M
+  return(mat_d)
+}
 
-mat_sym <- t(mat_jux_centr) %*% w_jux %*% mat_jux_centr # Matrice de variance-covariance
+mat_sym <- oper_inert(mat_jux)
+
+  result_propre = eigen(mat_sym)# list ayant les valeurs et vecteurs propres
+  val_prop_jux = result_propre$values #valeurs propres
+  vec_prop_jux = result_propre$vectors #vecteurs propres associées
 ```
+
+La fonction **oper_inert()** est définie pour calculer une matrice de covariance normalisée:
+Cette fonction prend une matrice **X** en entrée, calcule une matrice de poids **W**, puis calcule une matrice de normalisation **M**. Enfin, elle renvoie la matrice de covariance normalisée **mat_d**.
+
 
 Composantes principales des tableaux dépliés :
 ```{r}
@@ -414,8 +434,12 @@ composantes_principales = function(u, X_t){
   
   return(F)
 }
-print(composantes_principales(vec_prop, mat_jux)) # Affichage des composantes principales
+comp_prin = composantes_principales(vec_prop, mat_jux)
+print(comp_prin[,1]) # Affichage de la première composante principale
+```
 
+
+```{r}
 # On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la composante normée f_k correspondante
 composante_k = function(u, X_t, k){
   
@@ -428,6 +452,10 @@ composante_k = function(u, X_t, k){
 }
 print(composante_k(vec_prop, mat_jux, 1)) # Affichage de la première composante principale et de sa version normée
 print(composante_k(vec_prop, mat_jux, 2)) # Affichage de la deuxième composante principale et de sa version normée
+```
+
+
+```{r}
 
 # Fonction donnant la représentation graphique des individus en plan principal (k,l)
 representation_graphique = function(vec_prop, X_t, k, l){
@@ -438,9 +466,11 @@ representation_graphique = function(vec_prop, X_t, k, l){
   abline(h = 0, col = "gray")
   abline(v = 0, col = "gray")
 }
-representation_graphique(vec_prop, mat_jux, 1, 2) # Affichage de la représentation graphique des individus en plan principal (1,2)
+representation_graphique(vec_prop, mat_jux, 1, 3) # Affichage de la représentation graphique des individus en plan principal (1,2)
 
 ```
+
+
 d) Cosinus entre les tableaux et les composantes principales :
 
 ```{r}
@@ -467,17 +497,18 @@ representation_graphique_variables(vec_prop, resultats_n, 1, 2) # Affichage de l
 ```
 
 ### 2.3. ACP et d'autres dépliages du tableau cubique 
-Pour cette parties, les réponses sont données dans un contexte sans data. Nous utiliserons par la suite le set de données chickenk de la librairie ade4 et modifierons nos réponses en conséquence, mais ous devons d'abord le fonctionnement de ce set : par exemple comment fonctionne le dépliage si les tableaux ne font pas la même dimension ? Est-ce possible de le transformer en tableau cubique ? Devons-nous changer de set ? Une compréhension des variables est aussi nécessaire pour répondre aux questions b) et c).
 
 a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
 
 b) Quelle(s) ACP des tableaux dépliés pouvez-vous envisager? Pour chacune: quels sont ses
 "individus" et ses "variables"? Quel centrage paraît opportun? Quelle réduction? Quels
 éléments sont utiles à projeter en supplémentaire?
+
 Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici nous avons créé notre jeu de données sans réelle signification. De même les indidus et variables restent à déterminer. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent de ce que l'on souhaite étudier.
 
 c) Quels sont les avantages et les inconvénients de chaque ACP d'un tableau "déplié"?
 Finalement, le "dépliage" opéré par STATIS1 était-il le plus opportun?
+
 Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. 
 
 ## II - Situation 2
