@@ -467,6 +467,8 @@ representation_graphique_variables(vec_prop, resultats_n, 1, 2) # Affichage de l
 ```
 
 ### 2.3. ACP et d'autres dépliages du tableau cubique 
+Pour cette parties, les réponses sont données dans un contexte sans data. Nous utiliserons par la suite le set de données chickenk de la librairie ade4 et modifierons nos réponses en conséquence, mais ous devons d'abord le fonctionnement de ce set : par exemple comment fonctionne le dépliage si les tableaux ne font pas la même dimension ? Est-ce possible de le transformer en tableau cubique ? Devons-nous changer de set ? Une compréhension des variables est aussi nécessaire pour répondre aux questions b) et c).
+
 a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
 
 b) Quelle(s) ACP des tableaux dépliés pouvez-vous envisager? Pour chacune: quels sont ses
