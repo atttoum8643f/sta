@@ -813,6 +813,25 @@ c) Le principal inconvénient est qu'on perde une grosse partie de l'information
 
 ## II - Situation 2
 
+### 1. De nouvelles matrices dans un nouvel espace
+
+1.1.a) Calculons \(P_m\) en fonction de \(X_m\) et \(M_m\):
+\[P_m = X_m M_m X_m'\]
+
+b) Les matrices \(P_m\) se trouvent dans l'espace \(\mathbk{P} = \mathbk{M}_n(\mathbb{R})\) où \(n\) est le nombre d'individus.
+
+1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = frac{1}{n}I_n \) même chose ^pour les colonnes.
+
+b) On peut munir \(\mathbk{P}\) du produit scalaire suivant:
+
+\[(P_m,P_k) = tr(P_m W P_k W) \quad (p)\]
+
+c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de normées les tableaux \(P_m\) afin de les ramenées sur la même échelle.
+
+d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\).Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(\X_m) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées.
+
+### 2.1 Graphiques directs de STATIS
+
 
 ```{r}
 
