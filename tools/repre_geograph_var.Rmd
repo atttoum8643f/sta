@@ -1,0 +1,172 @@
+```{r}
+# Données
+data <- data.frame(
+    Variable = c("Fed.Cuba", "Trad.Cuba", "Abroad", "GS Pop Est", "Period Death", "Period Birth", "Net Int Migration", "GS Pop Est"),
+    F1 = c(0.5, 0.3, -0.2, 0.7, -0.4, 0.6, -0.1, 0.8),
+    F2 = c(0.4, -0.1, 0.6, 0.8, -0.3, 0.5, -0.2, 0.7)
+)
+
+
+# Calculer les limites des axes
+max_range <- max(abs(range(data$F1)), abs(range(data$F2)))
+
+# Créer le graphique en utilisant ggplot2
+ggplot(data, aes(x = F1, y = F2, label = Variable)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(hjust = 0, vjust = 0) +
+    geom_point(color = "red", size = 3) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +  # Pour s'assurer que les axes aient la même échelle
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Ajouter l'axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +  # Ajouter l'axe vertical
+    xlim(-max_range, max_range) +  # Centrer le graphe sur l'axe x
+    ylim(-max_range, max_range) +  # Centrer le graphe sur l'axe y
+    labs(title = "Variables (axes F1 and F2: 67.72 %)",
+         x = "F1 (30.96 %)",
+         y = "F2 (17.76 %)")
+
+```
+
+
+```{r}
+# Création des données pour le cercle unité
+library(ggplot2)
+
+# Création des données pour le cercle unité
+theta <- seq(0, 2 * pi, length.out = 100)
+x <- cos(theta)
+y <- sin(theta)
+
+# Créer le graphique en utilisant ggplot2
+ggplot() +
+  geom_path(data = data.frame(x = x, y = y), aes(x = x, y = y), color = "blue") +
+  coord_fixed(ratio = 1) +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  labs(x = "X", y = "Y", title = "Cercle Unité") +
+  theme_classic()
+
+
+```
+
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+# Données
+data <- data.frame(
+    Variable = c("Fed.Cuba", "Trad.Cuba", "Abroad", "GS Pop Est", "Period Death", "Period Birth", "Net Int Migration", "GS Pop Est"),
+    F1 = c(0.5, 0.3, -0.2, 0.7, -0.4, 0.6, -0.1, 0.8),
+    F2 = c(0.4, -0.1, 0.6, 0.8, -0.3, 0.5, -0.2, 0.7)
+)
+
+# Créer le graphique en utilisant ggplot2
+plot1 <- ggplot(data, aes(x = F1, y = F2, label = Variable)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(hjust = 0, vjust = 0) +
+    geom_point(color = "red", size = 3) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +  # Pour s'assurer que les axes aient la même échelle
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Ajouter l'axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +  # Ajouter l'axe vertical
+    labs(title = "Variables (axes F1 and F2: 67.72 %)",
+         x = "F1 (30.96 %)",
+         y = "F2 (17.76 %)")
+
+# Création des données pour le cercle unité
+theta <- seq(0, 2 * pi, length.out = 100)
+x_circle <- cos(theta)
+y_circle <- sin(theta)
+
+# Tracer le cercle unité avec ggplot2
+plot2 <- ggplot() +
+  geom_path(data = data.frame(x = x_circle, y = y_circle), aes(x = x_circle, y = y_circle), color = "blue") +
+  coord_fixed(ratio = 1) +
+  xlim(-1, 1) +
+  ylim(-1, 1) +
+  labs(x = "X", y = "Y", title = "Cercle Unité") +
+  theme_classic()
+
+# Afficher les deux graphiques côte à côte
+grid.arrange(plot1, plot2, ncol = 2)
+
+```
+
+
+```{r}
+# Données
+Variable = c("Fed.Cuba", "Trad.Cuba", "Abroad", "GS Pop Est", "Period Death", "Period Birth", "Net Int Migration", "GS Pop Ouest")
+
+data <- data.frame(
+    F1 = c(0.5, 0.3, -0.2, 0.7, -0.4, 0.6, -0.1, 0.8),
+    F2 = c(0.4, -0.1, 0.6, 0.8, -0.3, 0.5, -0.2, 0.7)
+)
+
+rownames(data) <- Variable
+
+# Création des données pour le cercle unité
+df <- data.frame(
+    varabs = cos(seq(0, 2 * pi, length.out = 100)),
+    varord = sin(seq(0, 2 * pi, length.out = 100))
+)
+
+# Créer le graphique en utilisant ggplot2
+ggplot(data, aes(x = F1, y = F2)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(aes(label = rownames(data)), hjust = 0, vjust = 0) +
+    geom_point(color = "red", size = 2.5) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +  # Pour s'assurer que les axes aient la même échelle
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Ajouter l'axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +  # Ajouter l'axe vertical
+    labs(title = "Variables (axes F1 and F2: 67.72 %)",
+         x = "F1 (30.96 %)",
+         y = "F2 (17.76 %)") +
+    geom_path(data = df, aes(varabs, varord), color = "#222211", size = 0.5) +
+    xlim(-1, 1) +
+    ylim(-1, 1)
+
+```
+
+
+
+```{r}
+cosinus(mat_jux, composantes_principales(vec_prop_jux, mat_jux))
+```
+
+```{r}
+representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
+  inert_k = val_prop[k]/sum(val_prop) * 100 #l'inertie captée par la comp k
+  inert_l = val_prop[l]/sum(val_prop) * 100 #l'inertie captée par la comp k
+  
+  mat_cos = data.frame(cosinus(X_t, composantes_principales(vec_prop, X_t)))
+  F_k = mat_cos[,k] # Récupération de la kième composante principale
+  F_l = mat_cos[,l] # Récupération de la lième composante principale
+  
+  # Création des données pour le cercle unité
+  df <- data.frame(
+    varabs = cos(seq(0, 2 * pi, length.out = 100)),
+    varord = sin(seq(0, 2 * pi, length.out = 100))
+  )
+  
+  # Créer le graphique en utilisant ggplot2
+  ggplot(mat_cos, aes(x = F_k, y = F_l)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(aes(label = rownames(mat_cos)), hjust = 1.1, vjust = 0.5) +  # Ajustement de la position du texte
+    geom_point(color = "red", size = 1.5) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
+    labs(x = paste("F", k, " (", round(inert_k, 2), "%)"),
+         y = paste("F", l, " (", round(inert_l, 2), "%)")) +
+    ggtitle(paste("Représentation des variables dans le plan (", k, ",", l, ")")) +
+    geom_path(data = df, aes(varabs, varord), color = "#222211", size = 0.5) +  # Ajout du cercle unité
+    xlim(-1, 1) +
+    ylim(-1, 1)
+}
+
+representation_graph_var(vec_prop_jux, mat_jux, val_prop_jux, 1, 2) # Affichage de la représentation graphique des variables en plan principal (1,2)
+
+```
