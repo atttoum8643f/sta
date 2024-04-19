@@ -15,7 +15,7 @@ On considérera également une matrice diagonale des poids des \( p \) colonnes 
 
 La norme d'une matrice \( A \) correspondant à ce produit scalaire sera notée \( \left[\left| A \right|\right] \).
 
-a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad vers \quad \tilde{Z}\), \( \forall Z \) \( (n, p) \).
+a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \text{ vers } \tilde{Z}\), \( \forall Z \) \( (n, p) \).
 
 Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
 
@@ -86,9 +86,9 @@ On suppose que :
 [A \mid A] &= 0\\
 \iff \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) &=0\\
 \iff tr(\tilde{A}'\tilde{A}) &=0\\
-\iff sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{a}_{kl} &=0\\
-\iff sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl}^{2} &=0\\
-\iff \tilde{a}_{kl} &=0 \quad \forall k,l \in \{1,2,...,n\} \text{ et } \{1,2,...,p\
+\iff \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{a}_{kl} &=0\\
+\iff \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl}^{2} &=0\\
+\iff \tilde{a}_{kl} &=0 \quad \forall k,l \in \{1,2,...,n\} \text{ et } \{1,2,...,p\}\\
 \iff \tilde{A} &=0 \\
 \iff A &=0 
 \end{align*} 
@@ -96,7 +96,7 @@ On suppose que :
 
 Par conséquent, la quantité \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
 
-c) Écrivons le produit scalaire précédent sous forme de double somme. On reprend [A \mid B]=\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) = tr(\tilde{A}'\tilde{B}). On note \(\tilde{A} = (\tilde{a}_{ij})\) et \(\tilde{B} = (\tilde{b}_{ij})\) avec \(\tilde{A} = W^{\frac{1}{2}}AC^{\frac{1}{2}})\) et \(\tilde{B} = W^{\frac{1}{2}}BC^{\frac{1}{2}})\), d'où \(tr(\tilde{A} \tilde{B}) = \sum_{k=1}^{n} \tilde{a}_{ik} \tilde{b}_{kj}\). Ainsi:
+c) Écrivons le produit scalaire précédent sous forme de double somme. On reprend \([A \mid B]=\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) = tr(\tilde{A}'\tilde{B})\). On note \(\tilde{A} = (\tilde{a}_{ij}\) et \(\tilde{B} = (\tilde{b}_{ij}\) avec \(\tilde{A} = W^{\frac{1}{2}}AC^{\frac{1}{2}})\) et \(\tilde{B} = W^{\frac{1}{2}}BC^{\frac{1}{2}})\), d'où \(tr(\tilde{A} \tilde{B}) = \sum_{k=1}^{n} \tilde{a}_{ik} \tilde{b}_{kj}\). Ainsi:
 \begin{align*}
 [A \mid B] &= tr(\tilde{A}'\tilde{B})\\
  &= \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{b}_{kl}
@@ -158,7 +158,7 @@ rn1; rn2
 
 ### 1.2 Coefficient RV
 
-2. On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
+On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
 
 a) En termes géométriques le coefficient RV et le cosinus de A et B.
@@ -214,7 +214,7 @@ a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right
 
 représente l'inertie dans le contexte de l'analyse factorielle. L'inertie est également appelée somme des carrés des corrélations ou variance totale. Dans le cadre de l'analyse factorielle, cette quantité mesure la dispersion totale des données dans l'espace factoriel.
 
-L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale.
+L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale. L'inertie d'un vecteur u par rapport à une matrice X est définie comme la norme au carré de la projection de X sur u. Plus précisément, \(\sum_{t=1}^{T}(u^TX_t)^2\) représente la somme des inerties  de tous les vecteurs \(X_t\) projetés sur u.
 
 b) Résolvons le programme ci-dessus:
 
@@ -359,14 +359,12 @@ if (orthogonale) {
 
 verifier_norme(vec_prop)
 ```
-
+On veut prouver mathématiquement que les vecteurs u forment une base I-orthonormée. Pour cela, nous devons montrer que les vecteurs u sont orthogonaux entre eux et que leur norme est égale à 1.
 
 
 ### 2.2. Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
 
-a) 
-
-Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
+a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
 
 Dans notre cas, chaque $\mathbf{X_t}$ représente un tableau de données à une période de temps spécifique, où les lignes représentent les individus et les colonnes représentent les variables. Par conséquent, chaque colonne de $\mathbf{X_t}$ représente une variable différente observée à cette période.
 
@@ -437,7 +435,8 @@ print(comp_prin[1:8,1:3]) # Affichage de la première composante principale
 
 
 ```{r}
-# On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la composante normée f_k correspondante
+# On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la 
+# composante normée f_k correspondante
 composante_k = function(u, X_t, k){
   
    # calcul des composantes principales
@@ -808,16 +807,9 @@ representation_graph_var(vecp,X,valp,2,3)
 
 a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
 
-b) Quelle(s) ACP des tableaux dépliés pouvez-vous envisager? Pour chacune: quels sont ses
-"individus" et ses "variables"? Quel centrage paraît opportun? Quelle réduction? Quels
-éléments sont utiles à projeter en supplémentaire?
+b) Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici les individus et variables ne sont pas clairement définit car ne porte que des numéros. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent, encore une fois, de ce que l'on souhaite étudier.
 
-Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici nous avons créé notre jeu de données sans réelle signification. De même les indidus et variables restent à déterminer. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent de ce que l'on souhaite étudier.
-
-c) Quels sont les avantages et les inconvénients de chaque ACP d'un tableau "déplié"?
-Finalement, le "dépliage" opéré par STATIS1 était-il le plus opportun?
-
-Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. 
+c) Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent. 
 
 ## II - Situation 2
 
