@@ -15,7 +15,7 @@ On considérera également une matrice diagonale des poids des \( p \) colonnes 
 
 La norme d'une matrice \( A \) correspondant à ce produit scalaire sera notée \( \left[\left| A \right|\right] \).
 
-a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad en \quad \tilde{Z}\), \( \forall Z \) \( (n, p) \).
+a) Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\) (produit scalaire de Frobénius) en explicitant la transformation \(Z \quad vers \quad \tilde{Z}\), \( \forall Z \) \( (n, p) \).
 
 Soit \(A,B \in M_{n,p}(\mathbb{R}) \)
 
@@ -36,7 +36,7 @@ b) Pour montrer que \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produ
 [A \mid B] = [B \mid A]
 \]
 
-**(ii) Linéarité** :\(\forall\) \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta in \mathbb{R}\)
+**(ii) Linéarité** :\(\forall\) \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta \in \mathbb{R}\)
 
 \[
 [A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] 
@@ -84,18 +84,21 @@ La linéarité de la trace assure que cette propriété est respectée.
 On suppose que :
 \begin{align*}
 [A \mid A] &= 0\\
+\iff \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) &=0\\
 \iff tr(\tilde{A}'\tilde{A}) &=0\\
-\iff \tilde{A}'\tilde{A} &=0\\
-\iff \tilde{A} &=0\\
+\iff sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{a}_{kl} &=0\\
+\iff sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl}^{2} &=0\\
+\iff \tilde{a}_{kl} &=0 \quad \forall k,l \in \{1,2,...,n\} \text{ et } \{1,2,...,p\
+\iff \tilde{A} &=0 \\
 \iff A &=0 
 \end{align*} 
-(car W et C ne sont pas nulle)
+(car \(W\) et \(C\) sont régulières)
 
 Par conséquent, la quantité \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
 
-c) Écrivons le produit scalaire précédent sous forme de double somme. On note \(\tilde{B} = (\tilde{b}_{ij})\), d'où \([ \tilde{A} \tilde{B} ] = \sum_{k=1}^{n} \tilde{a}_{ik} \tilde{b}_{kj}\) et \([ \tilde{A}' \tilde{B} ] = \sum_{k=1}^{n} \tilde{a}_{ki} \tilde{b}_{kj}\). On en déduit alors:
+c) Écrivons le produit scalaire précédent sous forme de double somme. On reprend [A \mid B]=\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) = tr(\tilde{A}'\tilde{B}). On note \(\tilde{A} = (\tilde{a}_{ij})\) et \(\tilde{B} = (\tilde{b}_{ij})\) avec \(\tilde{A} = W^{\frac{1}{2}}AC^{\frac{1}{2}})\) et \(\tilde{B} = W^{\frac{1}{2}}BC^{\frac{1}{2}})\), d'où \(tr(\tilde{A} \tilde{B}) = \sum_{k=1}^{n} \tilde{a}_{ik} \tilde{b}_{kj}\). Ainsi:
 \begin{align*}
-[A \mid A] &= tr(\tilde{A}'\tilde{B})\\
+[A \mid B] &= tr(\tilde{A}'\tilde{B})\\
  &= \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{b}_{kl}
 \end{align*}
 
@@ -154,7 +157,7 @@ rn1; rn2
 2. On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
 
-a) En terme géométrique le coefficient RV et le cosinus de A et B.
+a) En termes géométriques le coefficient RV et le cosinus de A et B.
 
 b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \)
 
@@ -263,7 +266,7 @@ D'une part, en multipliant l'équation \((*) \quad par \quad u'\) on obtient gr�
 D'autre part, en multipliant par \(Z := [X_1|...|X_T]\) l'équation $(*)$ on obtient le résultat suivant:
 \[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau}  \right|\right]}X_tu_{\tau} = \lambda \sum_{t =1}^{T}X_t u_t \]
 
-D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{\tilde{X_t'}\tilde{X_{\tau}} }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
+D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{\tilde{X_t'}\tilde{X_{\tau}} }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
 
 c) Nous allons écrivez le programme R fournissant les vecteurs u solutions des équations du premier
 ordre. 
