@@ -832,7 +832,42 @@ d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise 
 
 ### 2.1 Graphiques directs de STATIS
 
+```{r}
+library(ade4)
+data("chickenk")
+```
+
 
 ```{r}
+M = as.matrix(chickenk$Mortality)
+rownames(M) = seq(1,351,1)
 
+FS = as.matrix(chickenk$FarmStructure)
+rownames(FS) = seq(1,351,1)
+
+OFH = as.matrix(chickenk$OnFarmHistory)
+rownames(OFH) = seq(1,351,1)
+
+FC = as.matrix(chickenk$FlockCharacteristics)
+rownames(FC) = seq(1,351,1)
+
+CTS = as.matrix(chickenk$CatchingTranspSlaught)
+rownames(CTS) = seq(1,351,1)
+
+data = list(M, FS, OFH, FC, CTS)
+mat_rv = data.frame(statis::coef_RV(data))
+mat_rv
 ```
+
+
+```{r}
+mat_coldiff = function(X){
+  
+  p = length(X[1,]) # la dimension des individus
+  M = diag(p)/p
+  
+  Pm = X %*% M %*% t(X)
+  
+  return(Pm)
+  
+}
