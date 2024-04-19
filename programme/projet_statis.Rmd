@@ -107,13 +107,17 @@ d) Nous pouvons observer le programme du précédent  produit scalaire ci-dessou
 La fonction calculant le produit scalaire de Frobénius 
 ```{r}
 prd_scalaire = function(A,B){
-  n = length(A[,1]); p = length(A[1,])
+  # les dimension des matrices
+  na = length(A[,1]); nb = length(B[,1])
+  pa = length(A[1,]); pb = length(B[1,])
+  
   # Les matrices de ponderation
-  W = (1/n)*diag(n); C = (1/p)*diag(p)
+  Wa = (1/na)*diag(na); Ca = (1/pa)*diag(pa)
+  Wb = (1/nb)*diag(na); Cb = (1/pb)*diag(pb)
   
   # Calcul des matrices A_tild et B_tild
-  A_tild = sqrt(W) %*% A %*% sqrt(C)
-  B_tild = sqrt(W) %*% B %*% sqrt(C)
+  A_tild = sqrt(Wa) %*% A %*% sqrt(Ca)
+  B_tild = sqrt(Wb) %*% B %*% sqrt(Cb)
   
   # Produit scalaire
   ps = sum(diag(t(A_tild)%*%B_tild))
@@ -185,34 +189,18 @@ coef_RV = function(T_tableaux) {
 
 Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
 ```{r}
-X1 <- matrix(-12:22, nrow = 7)
-X2 <- matrix(-20:14, nrow = 7)
-X3 <- matrix(-16:18, nrow = 7)
-X4 <- matrix(1:35, nrow = 7)
-X5 <- matrix(-8:26, nrow = 7)
-X6 <- matrix(-10:24, nrow = 7)
-X7 <- matrix(-16:18, nrow = 7)
-X8 <- matrix(-4:30, nrow = 7)
-X9 <- matrix(-2:32, nrow = 7)
-X10 <- matrix(-1:33, nrow = 7)
+library(multiblock)
 
-# Noms de lignes
-noms_lignes <- c("Ligne1", "Ligne2", "Ligne3", "Ligne4", "Ligne5", "Ligne6", "Ligne7")
+# Tableau à trois dimension
+data(simulated)
 
-# Ajouter les noms de lignes aux matrices
-rownames(X1) <- noms_lignes
-rownames(X2) <- noms_lignes
-rownames(X3) <- noms_lignes
-rownames(X4) <- noms_lignes
-rownames(X5) <- noms_lignes
-rownames(X6) <- noms_lignes
-rownames(X7) <- noms_lignes
-rownames(X8) <- noms_lignes
-rownames(X9) <- noms_lignes
-rownames(X10) <- noms_lignes
+A = simulated$A
+B = simulated$B
+C = simulated$C
+D = simulated$D
 
+n_tableaux = list(A,B,C,D)
 
-n_tableaux = list(X1, X2, X3, X4, X5, X6, X7, X8,X9,X10)
 resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
@@ -223,50 +211,54 @@ print(data.frame(resultats_n))
 
 
 a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
+
 représente l'inertie dans le contexte de l'analyse factorielle. L'inertie est également appelée somme des carrés des corrélations ou variance totale. Dans le cadre de l'analyse factorielle, cette quantité mesure la dispersion totale des données dans l'espace factoriel.
 
 L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale.
 
 b) Résolvons le programme ci-dessus:
 
-\[
-\max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2 = \max_{\left[\left| u \right|\right]^2 = 1} \mathrm{tr}\left( C \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right)' W \left( \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right) \right) 
-\]
+\begin{align*}
+\max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{X_t}{\left[\left| X_t \right|\right]} u_t \right|\right]^2 &= \max_{\left[\left| u \right|\right]^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{\mathrm{tr}\left( CX_{\tau}'WX_t \right)}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t  \\
+&= \max_{\left[\left| u \right|\right]^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{[X_{\tau} \mid X_t]}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t \\
+&= \max_{\left[\left| u \right|\right]^2 = 1} u'R u
+\end{align*}
 
-\[
-\iff \max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2= \sum_{t=1}^{T} \sum_{\tau =1}^{T} \frac{1}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t u_{\tau} \mathrm{tr}\left( CX_{\tau}'WX_t \right) 
-\]
 
 1. \(X_t\): \(n \times p\) (la matrice \(X_t\) a des dimensions \(n \times p\)).
 2. \(\frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\) (chaque colonne de \(X_t\) est pondérée par \(\frac{u_t}{\left[\left| X_t \right|\right]}\)).
 3. \(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\) (somme des termes précédents sur \(t\)).
 4. \(\left(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\right)'\): \(p \times n\) (transposée de la matrice résultante).
 5. \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\): \(1 \times 1\) (la norme euclidienne au carré est un scalaire).
+6. \(R\) est la matrice des coefficients RV
 
 Le langrangien associée au problème d'optimisation ci-dessus s'écrit:
-\[L(u,\lambda) = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{u_t u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} tr(\tilde{X_t'\tilde{X_{\tau}}}) - \lambda( \|u\|^2-1) \]
+
+\[L(u,\lambda) = u'R u - \lambda (\|u\|^2-1) \]
+
 On a alors :
 
 \[
 \begin{cases}
-  \frac{\partial L}{\partial u}(u,\lambda) = 2\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} tr(\tilde{X_t'\tilde{X_{\tau}}}) - 2\lambda u \\
+  \frac{\partial L}{\partial u}(u,\lambda) = 2Ru - 2\lambda u \\
   \frac{\partial L}{\partial \lambda}(u,\lambda) = \|u\|^2 - 1
 \end{cases}
 \]
 \[\iff (S)
 \begin{cases}
-  \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]}u_{\tau}  = \lambda u \quad (*) \\
+  Ru  = \lambda u \quad (*) \\
   \|u\|^2 = 1 \quad (**)
 \end{cases}
 \]
 
-D'une part, en multipliant l'équation \((*) \quad par \quad u'\) on obtient grâce à l'équation \((**)\) le résultat suivant:
-\[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{u_t tr(\tilde{X_t'\tilde{X_{\tau}}}) u_{\tau}}{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} = \lambda \]
+En multipliant l'équation \((*) \quad par \quad u'\) on obtient grâce à l'équation \((**)\) le résultat suivant:
 
-D'autre part, en multipliant par \(Z := [X_1|...|X_T]\) l'équation $(*)$ on obtient le résultat suivant:
-\[\sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{ tr(\tilde{X_t'\tilde{X_{\tau}}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau}  \right|\right]}X_tu_{\tau} = \lambda \sum_{t =1}^{T}X_t u_t \]
+\[u'Ru = \lambda \]
 
-D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la matrice \(\Gamma = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{\tilde{X_t'}\tilde{X_{\tau}} }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\).
+D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la matrice \(R = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'}\tilde{X_{\tau}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre $u$ de $R$ (tel que $\|u\| = 1$) de valeur propre $\lambda$, on a
+\() u'Ru = \lambda \).
+
+La valeur maximale de $u'Ru$ est obtenue pour les vecteurs propres associés à la plus grande valeur propre de $R$.
 
 c) Nous allons écrivez le programme R fournissant les vecteurs u solutions des équations du premier
 ordre. 
@@ -370,7 +362,6 @@ verifier_norme(vec_prop)
 
 
 
-
 ### 2.2. Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
 
 a) 
@@ -378,8 +369,6 @@ a)
 Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
 
 Dans notre cas, chaque $\mathbf{X_t}$ représente un tableau de données à une période de temps spécifique, où les lignes représentent les individus et les colonnes représentent les variables. Par conséquent, chaque colonne de $\mathbf{X_t}$ représente une variable différente observée à cette période.
-
-Ainsi, en considérant les tableaux $\mathbf{X_t}$ comme les variables, la matrice $\mathbf{A}$ est calculée en utilisant les produits scalaires entre les différentes combinaisons de tableaux $\mathbf{X_t}$. Les valeurs propres et les vecteurs propres de cette matrice $\mathbf{A}$ correspondent alors aux directions dans lesquelles la dispersion des données est maximale dans l'espace des tableaux juxtaposés.
 
 
 b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) sont orthogonales au sens du produit scalaire convenable, nous devons considérer la façon dont ces composantes sont construites à partir des vecteurs propres obtenus.
@@ -391,18 +380,13 @@ Ensuite, les composantes principales \( F^k \) sont obtenues en projetant les ta
 c) Dépliage du tableau cubique en un tableau juxtaposé :
 ```{r}
 # Création des tableaux X_t dépliés
-X1_jux <- matrix(-12:22, nrow = 35)
-X2_jux <- matrix(-20:14, nrow = 35)
-X3_jux <- matrix(-16:18, nrow = 35)
-X4_jux <- matrix(1:35, nrow = 35)
-X5_jux <- matrix(-8:26, nrow = 35)
-X6_jux <- matrix(-10:24, nrow = 35)
-X7_jux <- matrix(-16:18, nrow = 35)
-X8_jux <- matrix(-4:30, nrow = 35)
-X9_jux <- matrix(-2:32, nrow = 35)
-X10_jux <- matrix(-1:33, nrow = 35)
+A_jux <- matrix(A, ncol = 1)
+B_jux <- matrix(B, ncol = 1)
+C_jux <- matrix(C, ncol = 1)
+D_jux <- matrix(D, ncol = 1)
 
-mat_jux <- cbind(X1_jux, X2_jux, X3_jux, X4_jux, X5_jux, X6_jux, X7_jux, X8_jux, X9_jux, X10_jux)
+
+mat_jux <- cbind(A_jux, B_jux, C_jux, D_jux)
 
 oper_inert = function(X){
   
@@ -433,12 +417,22 @@ Composantes principales des tableaux dépliés :
 ```{r}
 # On veut donner la fonction des composantes principales correspondant aux vecteurx u (vec_prop)
 composantes_principales = function(u, X_t){
-  F <- X_t %*% u # calcul de la matrice des composantes principales
+  
+  p = length(X_t[1,]) # la dimension des individus
+  n = length(X_t[,1]) # la dimension des variables
+  W = diag(n)/n
+  M = matrix(0, nrow = p, ncol = p)
+  
+  for (i in 1:p) {
+    M[i,i] = 1/sqrt(t(X_t[,i]) %*% W %*% X_t[,i])
+  }
+  
+  F <- X_t %*% M %*% u # calcul de la matrice des composantes principales
   
   return(F)
 }
-comp_prin = composantes_principales(vec_prop, mat_jux)
-print(comp_prin[,1]) # Affichage de la première composante principale
+comp_prin = composantes_principales(vec_prop_jux, mat_jux)
+print(comp_prin[1:8,1:3]) # Affichage de la première composante principale
 ```
 
 
@@ -446,30 +440,111 @@ print(comp_prin[,1]) # Affichage de la première composante principale
 # On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la composante normée f_k correspondante
 composante_k = function(u, X_t, k){
   
-  F_k = X_t %*% u # calcul des composantes principales
+   # calcul des composantes principales
+  comp_prin = composantes_principales(u, X_t)
+  F_k = comp_prin[,k]
 
   
   f_k = F_k / sqrt(sum(F_k^2)) # calcul de la kième composante principale normée
   
-  return(list(F_k = F_k[,k], f_k = f_k[,k]))
+  return(list(F_k = F_k, f_k = f_k))
 }
-print(composante_k(vec_prop, mat_jux, 1)) # Affichage de la première composante principale et de sa version normée
-print(composante_k(vec_prop, mat_jux, 2)) # Affichage de la deuxième composante principale et de sa version normée
+
+pc1 <- composante_k(vec_prop, mat_jux, 1)$F_k
+pc1_nr <- composante_k(vec_prop, mat_jux, 1)$f_k
+
+# Affichage des premières lignes de la première composante principale et de sa version normée
+cat("Extrait de la 1ère composante :\n")
+print(head(pc1))
+
+cat("\nExtrait de la 1ère composante normée :\n")
+print(head(pc1_nr))
+
 ```
 
 
-```{r}
-
+```{r,fig.height=4.8,fig.width=5.5,fig.align='center'}
 # Fonction donnant la représentation graphique des individus en plan principal (k,l)
-representation_graphique = function(vec_prop, X_t, k, l){
-  F_k = composante_k(vec_prop, X_t, k)$F_k # Récupération de la kième composante principale
-  F_l = composante_k(vec_prop, X_t, l)$F_k # Récupération de la lième composante principale
+representation_graph_ind = function(comp_p, val_prop_dep, k, l, 
+                                    aff_noms = FALSE, col = "navy") {
+  # Créer un data frame avec les composantes principales
+  df <- data.frame(F_k = comp_p[, 1], F_l = comp_p[, 2])
+  inert_k = val_prop_dep[k] / sum(val_prop_dep) * 100
+  inert_l = val_prop_dep[l] / sum(val_prop_dep) * 100
   
-  plot(F_k, F_l, xlab = paste("F", k, sep = ""), ylab = paste("F", l, sep = ""), main = paste("Représentation des individus en plan principal (", k, ",", l, ")", sep = ""))
-  abline(h = 0, col = "gray")
-  abline(v = 0, col = "gray")
+  # Récupérer les noms de lignes ou les numéros de ligne
+  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
+  
+  # Trouver les limites des axes x et y pour centrer l'origine
+  x_limits <- range(df$F_k)
+  y_limits <- range(df$F_l)
+  limits <- range(c(x_limits, y_limits))
+  
+  # Plot les composantes principales dans un plan avec l'origine au centre
+  plot(df$F_k, df$F_l, xlab = paste("F", k, " (", round(inert_k, 2), "%)"),
+       ylab = paste("F", l, " (", round(inert_l, 2), "%)"),
+       main = paste("Représentation des individus dans le plan (", k, ",", l, ")"),
+       xlim = limits, ylim = limits)
+  
+  # Ajouter des lignes en pointillé pour les axes horizontal et vertical
+  abline(h = 0, lty = "dotted", lwd = 0.5)
+  abline(v = 0, lty = "dotted", lwd = 0.5)
+  
+  # Afficher les noms de lignes ou les numéros de ligne si demandé
+  if (aff_noms) {
+    text(df$F_k, df$F_l, labels = row_names, pos = 1, cex = 0.8, col = col)
+  }
 }
-representation_graphique(vec_prop, mat_jux, 1, 3) # Affichage de la représentation graphique des individus en plan principal (1,2)
+
+# Exemple d'utilisation sans afficher les noms de lignes ou les numéros de ligne
+representation_graph_ind(comp_prin, val_prop_jux, 1, 2)
+# Exemple d'utilisation avec l'affichage des noms de lignes ou des numéros de ligne
+representation_graph_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = TRUE)
+
+```
+
+
+```{r,include=FALSE}
+library(ggplot2)
+geo_ind = function(comp_p, val_prop, k, l, col_points = "black", 
+                   col_noms = "navy", aff_noms = FALSE) {
+  
+  # Créer un data frame avec les composantes principales
+  df <- data.frame(PCk = comp_p[, k], PCl = comp_p[, l])
+  inert_k = val_prop[k]/sum(val_prop) * 100
+  inert_l = val_prop[l]/sum(val_prop) * 100
+  
+  # Récupérer les noms de lignes ou les numéros de ligne
+  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
+  
+  # Trouver les limites des axes x et y pour centrer l'origine
+  x_limits <- range(df$PCk)
+  y_limits <- range(df$PCl)
+  limits <- range(c(x_limits, y_limits))
+  
+  # Afficher les composantes principales dans un plan avec l'origine au centre
+  plot <- ggplot(df, aes(x = PCk, y = PCl)) +
+    geom_point(color = col_points) +
+    labs(x = paste("PC", k, " (", round(inert_k, 2), "%)"), y = paste("PC", l, " (", round(inert_l, 2), "%)")) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme_classic() +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
+  
+  # Afficher les noms de lignes ou les numéros de ligne si demandé
+  if (aff_noms) {
+    plot <- plot + geom_text(aes(label = row_names), color = col_noms, size = 3, hjust = -0.2, vjust = -0.2)
+  }
+  
+  plot + xlim(limits) + ylim(limits)
+  
+}
+
+# Exemple d'utilisation sans afficher les noms de lignes ou les numéros de ligne
+geo_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = FALSE)
+
+# Exemple d'utilisation avec l'affichage des noms de lignes ou des numéros de ligne
+geo_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = TRUE)
 
 ```
 
@@ -478,25 +553,255 @@ d) Cosinus entre les tableaux et les composantes principales :
 
 ```{r}
 # Calcul des cosinus entre Xt (resultats_n) et chaque composante principale F_k
-cosinus = function(X_t, F_k){
-  for (k in 1:ncol(F_k)){
-    cos = sum(X_t * F_k[,k]) / (sqrt(sum(X_t^2)) * sqrt(sum(F_k^2))) # Calcul du cosinus entre Xt et la kième composante F_k
-    print(cos)
+cosinus = function(X_t, f_k){
+  mat_cos = matrix(NA, nrow = ncol(f_k),ncol = ncol(f_k))
+  for (k in 1:ncol(f_k)){
+    for (j in 1:ncol(f_k)) {
+           # Calcul du cosinus entre Xt et la kième composante F_k
+           mat_cos[k,j] = sum(X_t[,j] * f_k[,k]) / (sqrt(sum(X_t[,j]^2)) *
+                                                      sqrt(sum(f_k^2))) 
+           
+    }
+
   }
+  rownames(mat_cos) <- paste("v", 1:ncol(mat_cos), sep = "")
+  return(mat_cos)
 }
-cosinus(resultats_n, composantes_principales(vec_prop, resultats_n)) # Affichage du produit scalaire entre Xt et la ième composante principale)
 
-# Fonction donnant la représentation graphique des variables en plan principal (k,l)
-representation_graphique_variables = function(vec_prop, X_t, k, l){
-  F_k = composante_k(vec_prop, X_t, k)$F_k # Récupération de la kième composante principale
-  F_l = composante_k(vec_prop, X_t, l)$F_k # Récupération de la lième composante principale
+# Affichage du produit scalaire entre Xt et la ième composante principale 
+cosinus(mat_jux, composantes_principales(vec_prop_jux, mat_jux)) 
+```
+
+```{r,fig.height=3.5,fig.width=4,fig.align='center'}
+representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
+  inert_k = val_prop[k]/sum(val_prop) * 100 #l'inertie capté par la comp k
+  inert_l = val_prop[l]/sum(val_prop) * 100 #l'inertie capté par la comp k
   
-  plot(F_k, F_l, xlab = paste("F", k, sep = ""), ylab = paste("F", l, sep = ""), main = paste("Représentation des variables en plan principal (", k, ",", l, ")", sep = ""))
-  abline(h = 0, col = "gray")
-  abline(v = 0, col = "gray")
-}
-representation_graphique_variables(vec_prop, resultats_n, 1, 2) # Affichage de la représentation graphique des variables en plan principal (1,2)
+  mat_cos = data.frame(cosinus(X_t, composantes_principales(vec_prop, X_t)))
+  F_k = mat_cos[,k] # Récupération de la kième composante principale
+  F_l = mat_cos[,l] # Récupération de la lième composante principale
 
+  
+  # Création des données pour le cercle unité
+  df <- data.frame(
+    varabs = cos(seq(0, 2 * pi, length.out = 100)),
+    varord = sin(seq(0, 2 * pi, length.out = 100))
+  )
+  
+  # Créer le graphique en utilisant ggplot2
+  ggplot(mat_cos, aes(x = F_k, y = F_l)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(aes(label = rownames(mat_cos)), hjust = 0, vjust = 0) +
+    geom_point(color = "red", size = 1.5) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
+    labs(x = paste("F", k, " (", round(inert_k, 2), "%)"),
+         y = paste("F", l, " (", round(inert_l, 2), "%)")) +
+    ggtitle(paste("Représentation des variables dans le plan (", k, ",", l, ")")) +
+    geom_path(data = df, aes(varabs, varord), color = "#222211", size = 0.5) +  # Ajout du cercle unité
+    xlim(-1, 1) +
+    ylim(-1, 1)
+}
+
+# Affichage de la représentation graphique des variables en plan principal (1,2)
+representation_graph_var(vec_prop_jux, mat_sym, val_prop_jux, 3, 4) 
+
+```
+
+### Illustration d'un ACP d'un tableau juxtaposé déplié le tableau cubique
+
+Soit \( A \), \( B \) et \( C \) les matrices données comme suit:
+
+\[
+\text{A} = \begin{pmatrix}
+1 & 0  \\
+-1 & 1 \\
+2 & 2 
+\end{pmatrix}, \quad
+\text{B} = \begin{pmatrix}
+2 & -1  \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix}, \quad
+\text{C} = \begin{pmatrix}
+3 & 1  \\
+1 & -2 \\
+0 & -3 
+\end{pmatrix}
+\]
+
+En utilisant le produit scalaire défini par:
+
+\begin{align*}
+[A \mid B] &= \text{tr}(CA'WB) \\
+&= \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(\tilde{A}'\tilde{B})
+\end{align*}
+
+avec \(W:= \frac{1}{n}I_n\) la matrice de poids des individus et \(C:= \frac{1}{p}I_p\) la matrice de poids des variables.
+
+Nous allons calculer la matrice des coefficients RV d'Escoufier que l'on notera \(\Gamma\). Ci-dessous la formule permettant de calculer le coefficient RV entre deux matrices \(A\) et \(B\) de taille \(n,p\) ici \(n=3\) et \(p=2\):
+
+\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+
+Calculons les coefficients \(R(A ,B)\), \(R(A ,C)\) et \(R(B ,C)\).
+
+Procédons étape par étape:
+
+\[[ A \mid B] = \text{tr}(CA^tWB)= \frac{1}{6}\text{tr}(A^tB)\]
+Or, 
+\[\frac{1}{6} \begin{pmatrix}
+1 & -1 & 2 \\
+0 & 1 & 2
+\end{pmatrix} \begin{pmatrix}
+2 & -1  \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+3 & 1  \\
+-1 & 2 
+\end{pmatrix}\]
+
+donc \( [A \mid B] = \frac{5}{6} \)
+
+Pour \( [A \mid C] \) :
+
+\[
+[A \mid C] = \frac{1}{6} \text{tr}(A^T C) \]
+Or, 
+\[ \frac{1}{6} \begin{pmatrix} 
+1 & -1 & 2 \\ 
+0 & 1 & 2 
+\end{pmatrix} \begin{pmatrix} 
+3 & 1 \\ 
+1 & -2 \\ 
+0 & -3 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+2 & -3  \\
+1 & -8 
+\end{pmatrix}\]
+
+donc \( [A \mid C] = \frac{-6}{6} = -1 \)
+
+Pour \( [B \mid C] \) :
+
+\[
+[B \mid C] = \frac{1}{6} \text{tr}(B^T C) \]
+Or, 
+\[ \frac{1}{6} \begin{pmatrix} 
+2 & -1 & 0 \\ 
+-1 & 0 & 1 
+\end{pmatrix} \begin{pmatrix} 
+3 & 1 \\ 
+1 & -2 \\ 
+0 & -3 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+5 & 4  \\
+-3 & -4 
+\end{pmatrix}
+\]
+
+donc \( [B \mid C] = \frac{1}{6} \). En utilisant la norme associée à ce produit scalaire on a:
+
+\(\left[\left| A \right|\right] = \sqrt{\frac{11}{6} } \), \(\left[\left| B \right|\right] = \sqrt{\frac{7}{6}} \) et \(\left[\left| C \right|\right] = \sqrt{\frac{24}{6}} = 2 \).
+
+D'où 
+
+\[R(A ,B) = \frac{ \frac{5}{6} }{ \sqrt{\frac{11}{6}} \sqrt{\frac{7}{6}} } \]
+
+\[R(A ,C) = \frac{ -1 }{ 2 \sqrt{\frac{11}{6}}} \]
+et
+\[R(B ,C) = \frac{ \frac{1}{6} }{ 2 \sqrt{\frac{7}{6}} } \]
+
+Par symétrie du produit scalaire, la matrice \(\Gamma \) des coefficients RV est donc égale à:
+
+\[\Gamma = \begin{pmatrix}
+1.0000000 & 0.56980288 & -0.36927447 \\
+0.5698029 & 1.00000000 & 0.07715167 \\
+-0.3692745 & 0.07715167 & 1.00000000 \\
+\end{pmatrix}\]
+
+
+Maintenant, considérons le dépliement des matrices juxtaposées :
+
+\[
+\text{X} = \begin{pmatrix}
+1 & 2 & 3 \\
+-1 & -1 & 1 \\
+2 & 0 & 0 \\
+0 & -1 & 1 \\
+1 & 0 & -2 \\
+2 & 1 & -3
+\end{pmatrix}
+\]
+
+où la première variable est la matrice A dépliée, la deuxième variable est la matrice B dépliée et la troisième variable est la matrice C dépliée.
+
+On pose \(M\) la matrice diagonale \(p,p\) (\(ici \quad p = 3, \quad n = 6 )\) dont le coefficient \(M_{ii} = \frac{1}{||X_i||_W} \) avec:
+
+   - \(W:= \frac{1}{n} I_n\)
+   - \(X_i\) la ième variable
+   - \(||X_i||_W = \sqrt{(X_i^tWX_i)}\)
+
+Ici \(M\) sera donc égale à:
+
+\[M = \begin{pmatrix}
+\frac{1}{\sqrt{\frac{11}{6}}} & 0 & 0 \\
+0 & \frac{1}{\sqrt{\frac{7}{6}}} & 0 \\
+0 & 0 & \frac{1}{2} \\
+\end{pmatrix}\]
+
+On a alors:
+
+\[\Delta := M X^t W X  M = \Gamma \]
+
+La fonction ci-dessous fait les calculs matriciels puis nous donne la matrice obtenue delta qui est égale à la matrice des coefficients RV calculée précédemment.
+
+```{r}
+# Données
+X <- matrix(
+  c( 1, 2, 3,
+    -1,-1, 1,
+     2, 0, 0,
+     0,-1, 1,
+     1, 0,-2,
+     2, 1,-3
+  ), nrow = 6, byrow = TRUE)
+
+# Ajout des noms de lignes
+rownames(X) <- paste0("L", 1:6)
+
+oper_inert = function(X){
+  
+  p = length(X[1,]) # la dimension des individus
+  n = length(X[,1]) # la dimension des variables
+  W = diag(n)/n
+  M = matrix(0, nrow = p, ncol = p)
+  
+  for (i in 1:p) {
+    M[i,i] = 1/sqrt(t(X[,i])%*%W%*%X[,i])
+  }
+  return(M %*% t(X) %*% W %*% X %*% M)
+}
+
+# Calcul de la matrice
+Delta <- oper_inert(X)
+print(Delta)
+
+result_propre = eigen(Delta)# list ayant les valeurs et vecteurs propres
+valp = result_propre$values #valeurs propres
+vecp = result_propre$vectors
+```
+
+Finalement, on en déduit qu'il y a équivalence entre les matrices juxtaposées A, B et C avec la matrice X dont les variables sont les matrices A, B et C dépliées.
+
+```{r,fig.height=3.5,fig.width=4,fig.align='center'}
+comp = composantes_principales(vecp,X)
+representation_graph_ind(comp, valp, 1, 3, aff_noms = T)
+representation_graph_var(vecp,X,valp,2,3)
 ```
 
 ### 2.3. ACP et d'autres dépliages du tableau cubique 
