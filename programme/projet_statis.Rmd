@@ -286,7 +286,7 @@ En multipliant l'équation \((*) \quad par \quad u'\) on obtient grâce à l'éq
 \[u'Ru = \lambda \]
 
 D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la matrice \(R = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'}\tilde{X_{\tau}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre $u$ de $R$ (tel que $\|u\| = 1$) de valeur propre $\lambda$, on a
-\() u'Ru = \lambda \).
+\( u'Ru = \lambda \).
 
 La valeur maximale de $u'Ru$ est obtenue pour les vecteurs propres associés à la plus grande valeur propre de $R$.
 
@@ -657,7 +657,8 @@ representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
     labs(x = paste("F", k, " (", round(inert_k, 2), "%)"),
          y = paste("F", l, " (", round(inert_l, 2), "%)")) +
     ggtitle(paste("Représentation des variables dans le plan (", k, ",", l, ")")) +
-    geom_path(data = df, aes(varabs, varord), color = "#222211", size = 0.5) +  # Ajout du cercle unité
+    geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5)
+  +  # Ajout du cercle unité
     xlim(-1, 1) +
     ylim(-1, 1)
 }
@@ -667,7 +668,7 @@ representation_graph_var(vec_prop_jux, mat_sym, val_prop_jux, 3, 4)
 
 ```
 
-### Illustration d'un ACP d'un tableau juxtaposé déplié le tableau cubique
+### Illustration d'un ACP d'un tableau juxtaposé dépliant le tableau cubique
 
 Soit \( A \), \( B \) et \( C \) les matrices données comme suit:
 
