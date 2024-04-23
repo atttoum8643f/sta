@@ -631,8 +631,8 @@ cosinus(mat_jux, composantes_principales(vec_prop_jux, mat_jux))
 
 ```{r,fig.height=4.3,fig.width=5.4,fig.align='center'}
 representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
-  inert_k = val_prop[k]/sum(val_prop) * 100 #l'inertie capté par la comp k
-  inert_l = val_prop[l]/sum(val_prop) * 100 #l'inertie capté par la comp k
+  inert_k = val_prop[k]/sum(val_prop) * 100 #l'inertie captée par la comp k
+  inert_l = val_prop[l]/sum(val_prop) * 100 #l'inertie captée par la comp k
   
   mat_cos = data.frame(cosinus(X_t, composantes_principales(vec_prop, X_t)))
   F_k = mat_cos[,k] # Récupération de la kième composante principale
@@ -657,14 +657,13 @@ representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
     labs(x = paste("F", k, " (", round(inert_k, 2), "%)"),
          y = paste("F", l, " (", round(inert_l, 2), "%)")) +
     ggtitle(paste("Représentation des variables dans le plan (", k, ",", l, ")")) +
-    geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5)
-  +  # Ajout du cercle unité
+    geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
     ylim(-1, 1)
 }
 
 # Affichage de la représentation graphique des variables en plan principal (1,2)
-representation_graph_var(vec_prop_jux, mat_sym, val_prop_jux, 3, 4) 
+representation_graph_var(vec_prop_jux, mat_sym, val_prop_jux, 3, 4)
 
 ```
 
