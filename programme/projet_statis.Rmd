@@ -1,10 +1,24 @@
 ---
 title: "Projet STATIS: Réponse feuille de route"
-output: pdf_document
+author: "ATTOUMANI Ibrahim et MANNEQUIN Jeanne"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    latex_engine: pdflatex
+header-includes:
+  - \usepackage{hyperref}
 ---
-## I-Préliminaires pour la situation 1
+\newpage
+**\textbf{Introduction}**
 
-### 1.1 Produit scalaire 
+\newpage
+# Situation 1
+
+## Préliminaires
+
+### Produit scalaire 
 
 La matrice diagonale des poids des \( n \) individus est \( W \) (par défaut, \( W = \frac{1}{n} I_n \)).
 On considérera également une matrice diagonale des poids des \( p \) colonnes : \( C = \frac{1}{p} I_p \) par défaut.
@@ -188,7 +202,7 @@ rn2 = norme(B)
 rn1; rn2
 ```
 
-### 1.2 Coefficient RV
+### Coefficient RV
 
 On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
@@ -235,9 +249,9 @@ resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
 
-## 2. Programme de STATIS1
+## Programme de STATIS 1
 
-### 2.1. Programme
+### Programme
 
 
 a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
@@ -420,7 +434,7 @@ verifier_norme(vec_prop)
 ```
 
 
-### 2.2. Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
+### Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
 
 a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
 
@@ -861,7 +875,7 @@ representation_graph_ind(comp, valp, 1, 3, aff_noms = T)
 representation_graph_var(vecp,X,valp,2,3)
 ```
 
-### 2.3. ACP et d'autres dépliages du tableau cubique 
+### Quelles ACP d'autres "dépliages" du tableau cubique ?
 
 a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
 
@@ -869,9 +883,9 @@ b) Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier
 
 c) Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent. 
 
-## II - Situation 2
+# Situation 2
 
-### 1. De nouvelles matrices dans un nouvel espace
+## De nouvelles matrices dans un nouvel espace
 
 1.1.a) Calculons \(P_m\) en fonction de \(X_m\) et \(M_m\):
 \[P_m = X_m M_m X_m'\]
@@ -888,8 +902,13 @@ c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de 
 
 d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\).Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées.
 
-### 2.1 Graphiques directs de STATIS
+## STATIS 2
+On applique le programme de STATIS 1 à un ensemble de matrices $P_m$ issues de tableaux thématiques décrivant les mêmes individus. On note $F_1$,..., $F_k$ les composantes principales obtenues.
 
+### Graphiques directs de STATIS
+a) 
+
+b) 
 ```{r}
 # Tableau à trois dimension
 data(chickenk)
@@ -925,3 +944,19 @@ mat_coldiff = function(X){
   
 }
 ```
+
+### Graphiques projetant les individus et les variables initiales
+a) 
+
+b) 
+
+c) 
+
+### Aides à l'interprétation
+a) 
+
+b) 
+
+c) 
+
+d) 
