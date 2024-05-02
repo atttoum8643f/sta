@@ -886,11 +886,18 @@ representation_graph_var(vecp,X,valp,2,3)
 
 ### Quelles ACP d'autres "dépliages" du tableau cubique ?
 
-a) Il y a deux autres dépliages possibles du tableau cubique selon ce que l'on définit comme individus et variables. 
+a) Disons que l'on dispose d'un tableau cubique X(i,j,t). On peut le déplier de trois manières différentes : Y((i,j),t) de façon à avoir les individus et caractéristiques en fonction du temps. Pour avoir les caractéristiques dans le temps pour chaque individu Y((j,t),i). Ou pour avoir les individus dans le temps pour chaque caractéristique Y((i,t),j). \
+Chacun de  ces dépliages donnera une matrice différente et donc une ACP différente. Mais chacun reste intéressant.
 
-b) Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici les individus et variables ne sont pas clairement définit car ne porte que des numéros. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent, encore une fois, de ce que l'on souhaite étudier.
+b) Selon le dépliage choisi, les individus et variables ne seront pas les mêmes. En individus on peut avoir : \
+- Les individus par caractéristiques (ou caractéristiques par individus) décrit dans le temps, \
+- Les individus dans le temps (à un instant donné), décrit par les caractéristiques, \
+- Les caractéristiques dans le temps (à un instant donné), décrivant les individus. \
+Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici les individus et variables ne sont pas clairement définit car ne porte que des numéros. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent, encore une fois, de ce que l'on souhaite étudier.
 
-c) Le principal inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement. L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent. 
+c) Un inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement (utilisation du produit matriciel possible). Le plus gros inconvénient reste la perte de la symétrie, par exemple lors d'un dépliage de X(i,j,t) en Y((i,j),t). En effet, les individus et variables ne sont plus équivalents. Cela peut poser problème si l'on souhaite comparer les individus et variables entre eux.
+
+L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent ! Tout dépend du tableau initial.
 
 # Situation 2
 
