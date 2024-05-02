@@ -11,12 +11,21 @@ header-includes:
   - \usepackage{hyperref}
 ---
 \newpage
-**\textbf{Introduction}**
+**\textbf{\large Introduction}** \
+\newline
+  L'ACP que nous avons l'habitude de voir est une méthode d'analyse de données qui permet de résumer les informations contenues dans un tableau de données. Dans le cas de plusieurs tableaux superposables, il nous faut trouver une méthode permettant d'analyser les données dans leur ensemble. \
+  On se propose d'étendre l'ACP à l'analyse d'un multi-tableau. L'objectif est de comparer les individus et les variables de plusieurs tableaux. Il existe plusieurs façons de la faire, STATIS en est une. STATIS est une méthode qui permet de synthétiser les informations contenues dans les différents tableaux en une seule représentation. 
+Il existe aussi plusieurs types de multi-tableaux. Nous en distinguons deux : les multi-tableaux à trois entrées (situation 1) et les multi-tableaux avec partition thématique (situation 2). \
+- Le tableau à trois entréees est un tableau de taille \(n \times p \times T\), où \(n\) est le nombre d'individus, \(p\) le nombre de variables et \(T\) les différentes dates. Les indices seront notés $1\leq i\leq n$ , $1\leq j\leq p$ et $1\leq t\leq T$ \
+- Le tableau avec partition thématique est composé de $q$ tableaux décrivants les $n$ individus à l'aide de groupes de variables différents, chaque groupe appartenant conceptuellement à un thème précis. Chacun de ces tableaux $X_m$, avec $1\leq m\leq q$, possède $p_m$ variables (colonnes). 
 
-\newpage
 # Situation 1
+  Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques (n,p). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant nxp "individus" (i,j). \ Nous formalisons d'abord cette extension de l'ACP, appelée STATIS 1.
 
 ## Préliminaires
+  Il est possible de fabriquer ou de trouver un tableau à trois entrées (INSEE, ...). R propose justement un jeu de données (simulated) du package "multiblock", composé de 3 tableaux (A,B et D), de chacun 200 individus et 10 varaibles. Ces tableaux, variables et individus ne portent pas de nom mais des lettres ou numéros. 
+
+Puisque nos valeurs sont des indicateurs numériques, on les centre-réduit.
 
 ### Produit scalaire 
 
