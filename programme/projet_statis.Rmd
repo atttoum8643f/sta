@@ -906,23 +906,26 @@ L'idéal serait de réaliser les trois dépliages possibles et de les comparer p
 1.1.a) Calculons \(P_m\) en fonction de \(X_m\) et \(M_m\):
 \[P_m = X_m M_m X_m'\]
 
-b) Les matrices \(P_m\) se trouvent dans l'espace \(\mathbf{P} = \mathbf{M}_n(\mathbb{R})\) où \(n\) est le nombre d'individus.
+b) Les matrices \(P_m\) se trouvent dans l'espace \(\mathbf{P} = \mathbf{M}_n(\mathbb{R})\) où \(n\) est le nombre d'individus. Cet espace est de taille \(\frac{n(n+1)}{2}\) car \(P_m = X_m M_m X_m'\) produit une matrice symétrique de taille n x n contenant \(\frac{n(n+1)}{2}\) éléments indépendants.
 
-1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = frac{1}{n}I_n \) même chose ^pour les colonnes.
+1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = frac{1}{n}I_n \) même chose pour les colonnes.
 
-b) On peut munir \(\mathbf{P}\) du produit scalaire suivant:
+b) On peut munir \(\mathbf{P}\) du produit scalaire de Frobénius qui est défini par:
 
 \[(P_m,P_k) = tr(P_m W P_k W) \quad (p)\]
 
-c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de normées les tableaux \(P_m\) afin de les ramenées sur la même échelle.
+c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de normées les tableaux \(P_m\) afin de les ramenées sur la même échelle. La normalisation permet de rendre les comparaisons moins sensibles à l'échelle des données et plus centrées sur les relations entre les individus.
 
-d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\).Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées.
+d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\). Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement) et donc une similarité plus grande entre les ensembles d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées (on en peut pas conclure).
 
 ## STATIS 2
 On applique le programme de STATIS 1 à un ensemble de matrices $P_m$ issues de tableaux thématiques décrivant les mêmes individus. On note $F_1$,..., $F_k$ les composantes principales obtenues.
 
 ### Graphiques directs de STATIS
-a) 
+a) Pour projeter chacune des matrices \(P_m\) sur un graphe dont les directions sont un couple de composantes principales \((F_k,F_l)\), on peut utiliser la méthode de la projection orthogonale. \
+Tout d'abord, nous calculons les composantes principales \((F_k\) et \(F_l)\) à partir de la matrice \(P\) résultant de l'analyse STATIS 1. \
+Ensuite, pour chaque \(P_m\), nous calculons les produits scalaires entre \(P_m\) et les composantes principales $F_k$ et $F_l$. \
+Enfin, ces produits scalaires servent de coordonnées pour projeter les points correspondant à $P_m$ sur le plan défini par les composantes principales $F_k$ et $F_l$.
 
 b) 
 ```{r}
@@ -962,17 +965,53 @@ mat_coldiff = function(X){
 ```
 
 ### Graphiques projetant les individus et les variables initiales
-a) 
+a) Pour montrer que les composantes principales sont des matrices symétriques, nous devons rappeler que les matrices de covariance (ou de corrélation) utilisées dans l'analyse des composantes principales (ACP) sont symétriques. Les composantes principales sont calculées à partir de ces matrices de covariance, ce qui garantit que les composantes principales elles-mêmes seront symétriques.
 
-b) 
+b) Chaque composante principale peut être interprétée comme une matrice de produits scalaires entre individus. En utilisant ces produits scalaires, nous pouvons obtenir une image du nuage des individus dans un plan de dimension réduite en utilisant des techniques de visualisation telles que l'Analyse en Composantes Principales (PCA) ou d'autres méthodes de réduction de dimensionnalité. Une fois que nous avons cette représentation en deux dimensions des individus, nous pouvons mettre en relation cette image avec les variables des tableaux en examinant les poids des variables dans chaque composante principale. Les variables qui contribuent le plus aux composantes principales sont celles qui ont le plus d'influence sur la position des individus dans l'espace réduit.
 
 c) 
 
 ### Aides à l'interprétation
-a) 
+a) Le cosinus carré entre une matrice $P_m$ et une composante principale $F_k$ peut être calculé comme suit : \
+$$cos^2(P_m,F_k) = \frac{Var(P_m\cdot F_k)}{Var(P_m)\cdot Var(F_k)}$$
 
-b) 
+b) Le calcul de $QLT_k(P_m)$, qui mesure la qualité de la représentation de $P_m$ par rapport aux premières $k$ composantes principales, est simplement le cosinus carré moyen de $P_m$ pra rapport à ces $k$ composantes principales : \
+$$QLT_k(P_m) = \frac{1}{k} \sum_{l=1}^{k} cos^2(P_m,F_l)$$
 
-c) 
+c) Le CTR (Cumulative Total RV) de la $k$-ième composante principale pour $P_m$ peut être calculée comme suit: \
+$$CTR_k(P_m) = 1-QLT(P_m)$$
+Ce score mesure la proportion de variance de $P_m$ qui n'est pas expliquée par les $k$ premières composantes principales.
 
-d) 
+d) Tentative de programmation des fonctions (à retravailler ):
+```{r}
+# Définition des fonctions
+cos_square <- function(P, F) {
+  P_dot_F <- P * F
+  var_P_dot_F <- var(P_dot_F)
+  var_P <- var(P)
+  var_F <- var(F)
+  return(var_P_dot_F / (var_P * var_F))
+}
+
+QLT_k <- function(P, Fs) {
+  k <- length(Fs)
+  cos_squares <- sapply(Fs, function(F) cos_square(P, F))
+  return(mean(cos_squares[1:k]))
+}
+
+CTR_k <- function(P, Fs) {
+  return(1 - QLT_k(P, Fs))
+}
+
+# Appliquer les fonctions au tableau de données d'application
+# Supposons que P_m représente les données projetées sur une composante principale
+set.seed(123)  # pour la reproductibilité des résultats
+P_m <- matrix(runif(100*2), ncol=2)  # Exemple de données projetées (100 individus, 2 dimensions)
+Fs <- replicate(5, matrix(runif(100*2), ncol=2), simplify = FALSE)  # Exemple de 5 composantes principales
+
+for (k in 1:5) {
+  cat("CTR_", k, "(P_m): ", CTR_k(P_m, Fs[1:k]), "\n")
+}
+
+```
+
