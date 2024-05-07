@@ -20,10 +20,10 @@ Il existe aussi plusieurs types de multi-tableaux. Nous en distinguons deux : le
 - Le tableau avec partition thématique est composé de $q$ tableaux décrivants les $n$ individus à l'aide de groupes de variables différents, chaque groupe appartenant conceptuellement à un thème précis. Chacun de ces tableaux $X_m$, avec $1\leq m\leq q$, possède $p_m$ variables (colonnes). 
 
 # Situation 1
-  Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques (n,p). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant nxp "individus" (i,j). \ Nous formalisons d'abord cette extension de l'ACP, appelée STATIS 1.
+  Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques (n,p). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant $n \times p$ "individus" (i,j). \ Nous formalisons d'abord cette extension de l'ACP, appelée STATIS 1.
 
 ## Préliminaires
-  Il est possible de fabriquer ou de trouver un tableau à trois entrées (INSEE, ...). R propose justement un jeu de données (simulated) du package "multiblock", composé de 3 tableaux (A,B et D), de chacun 200 individus et 10 varaibles. Ces tableaux, variables et individus ne portent pas de nom mais des lettres ou numéros. 
+  Il est possible de fabriquer ou de trouver un tableau à trois entrées (INSEE, ...). R propose justement un jeu de données (simulated) du package "multiblock", composé de 4 tableaux (A,B,C et D), de chacun 200 individus et 10 varaibles. Ces tableaux, variables et individus ne portent pas de nom mais des lettres ou numéros. R ne permettant pas de manipuler des matrices à trois dimensions, ce tableau à trois entrées est une liste de 4 matrices de dimension $10\times10$.
 
 Puisque nos valeurs sont des indicateurs numériques, on les centre-réduit.
 
@@ -158,6 +158,7 @@ La fonction calculant le produit scalaire de Frobénius
 library(multiblock)
 library(ggplot2)
 library(ade4)
+data(simulated)
 ```
 
 ```{r}
@@ -218,7 +219,7 @@ On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \)
 
 a) En termes géométriques le coefficient RV et le cosinus de A et B.
 
-b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \).
+b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \). Cette matrice est symétrique et de taille \(t \times t\).
 
 La fonction calculant le coefficient RV d'Escoufier:                  
 ```{r}
@@ -238,9 +239,7 @@ coef_RV = function(T_tableaux) {
   
   return(mat_rv)
 }
-
 ```
-
 
 Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
 ```{r}
@@ -257,11 +256,12 @@ n_tableaux = list(A,B,C,D)
 resultats_n = coef_RV(n_tableaux)
 print(data.frame(resultats_n))
 ```
+Cette matrice donne les coefficients RV entre les différents tableaux. On a quatre tableaux donc on obtient une matrice de dimension $4\times 4$. Ici les tableaux 2 et 3 sont les plus corrélés. Les tableaux 1 et 3 sont les plus anti-corrélés. Les tableaux 2 et 4, et 1 et 2 sont les moins corrélés.
+Si l'on avait tournée le tableau d'une autre façon en le refaçonnant (3 manières de touner un tableau à trois entrées) les résultats auraient pu être différents.
 
 ## Programme de STATIS 1
 
 ### Programme
-
 
 a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
 
