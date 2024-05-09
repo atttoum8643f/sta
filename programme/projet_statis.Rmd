@@ -10,20 +10,22 @@ output:
 header-includes:
   - \usepackage{hyperref}
 ---
+
 \newpage
+
 **\textbf{\large Introduction}** \
 \newline
-  L'ACP que nous avons l'habitude de voir est une méthode d'analyse de données qui permet de résumer les informations contenues dans un tableau de données. Dans le cas de plusieurs tableaux superposables, il nous faut trouver une méthode permettant d'analyser les données dans leur ensemble. \
+  L'ACP que nous avons l'habitude de voir est une méthode d'analyse de données qui permet de résumer les informations contenues dans un tableau de données. Dans le cas de plusieurs tableaux, il nous faut trouver une méthode permettant d'analyser les données dans leur ensemble. \
   On se propose d'étendre l'ACP à l'analyse d'un multi-tableau. L'objectif est de comparer les individus et les variables de plusieurs tableaux. Il existe plusieurs façons de la faire, STATIS en est une. STATIS est une méthode qui permet de synthétiser les informations contenues dans les différents tableaux en une seule représentation. 
 Il existe aussi plusieurs types de multi-tableaux. Nous en distinguons deux : les multi-tableaux à trois entrées (situation 1) et les multi-tableaux avec partition thématique (situation 2). \
 - Le tableau à trois entréees est un tableau de taille \(n \times p \times T\), où \(n\) est le nombre d'individus, \(p\) le nombre de variables et \(T\) les différentes dates. Les indices seront notés $1\leq i\leq n$ , $1\leq j\leq p$ et $1\leq t\leq T$ \
 - Le tableau avec partition thématique est composé de $q$ tableaux décrivants les $n$ individus à l'aide de groupes de variables différents, chaque groupe appartenant conceptuellement à un thème précis. Chacun de ces tableaux $X_m$, avec $1\leq m\leq q$, possède $p_m$ variables (colonnes). 
 
 # Situation 1
-  Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques (n,p). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant nxp "individus" (i,j). \ Nous formalisons d'abord cette extension de l'ACP, appelée STATIS 1.
+  Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques \((n,p)\). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant \(n \times p\) "individus" \((i,j)\). \ Nous formalisons d'abord cette extension de l'ACP, STATIS 1.
 
 ## Préliminaires
-  Il est possible de fabriquer ou de trouver un tableau à trois entrées (INSEE, ...). R propose justement un jeu de données (simulated) du package "multiblock", composé de 3 tableaux (A,B et D), de chacun 200 individus et 10 varaibles. Ces tableaux, variables et individus ne portent pas de nom mais des lettres ou numéros. 
+  Il est possible de fabriquer ou de trouver un tableau à trois entrées (INSEE, ...). R propose justement un jeu de données (simulated) du package "multiblock", composé de 4 tableaux (A,B, C et D), de chacun 200 individus et 10 varaibles. Ces tableaux, variables et individus ne portent pas de nom mais des lettres ou numéros. 
 
 Puisque nos valeurs sont des indicateurs numériques, on les centre-réduit.
 
@@ -59,7 +61,7 @@ b) Pour montrer que \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produ
 [A \mid B] = [B \mid A]
 \]
 
-**(ii) Linéarité** :\(\forall\) \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta \in \mathbb{R}\)
+**(ii) Linéarité** : \(\forall\) \(A, B_1, B_2 \in M_{n,p}(\mathbb{R}) \) et \(\alpha, \beta \in \mathbb{R}\)
 
 \[
 [A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] 
@@ -81,7 +83,7 @@ Vérifions ces propriétés :
 &= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})
 \end{align*}
 
-Or, par la propriété de la trace, \(\text{tr}(AB) = \text{tr}(BA)\) et l'invariance par transposition des matrices de poids \(\forall k \in \mathbb{R}, \quad {W^k}' = W^k\) et \({C^k}' = C^k\), on a alors:
+Or, par la propriété de la trace, \(\text{tr}(AB) = \text{tr}(BA)\) et l'invariance par transposition des matrices de poids \( W' = W\) et \(C' = C\), on a alors:
 
 \begin{align*}
 \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) &= \text{tr}(C^{\frac{1}{2}} B' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \\
@@ -120,10 +122,10 @@ On suppose que \([A \mid A] = 0\) montrons que \(A = 0_{\mathbb{R}^{n \times p}}
 
 \begin{align*}
 [A \mid A] &= 0\\
-\Rightarrow tr(\tilde{A}'\tilde{A}) &= 0\\
-\Rightarrow tr(\Delta) &= 0\\
-\Rightarrow \sum_{i=1}^{p} \delta_{ii} &= 0\\
-\Rightarrow \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki}^2 &= 0
+\iff tr(\tilde{A}'\tilde{A}) &= 0\\
+\iff tr(\Delta) &= 0\\
+\iff \sum_{i=1}^{p} \delta_{ii} &= 0\\
+\iff \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki}^2 &= 0
 \end{align*}
 
 Cela implique que 
@@ -142,16 +144,19 @@ On en déduit que \(A = 0_{\mathbb{R}^{n \times p}}\) car \(W\) et \(C\) sont r�
 
 Par conséquent, la quantité \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire, car elle satisfait toutes les propriétés requises.
 
-c) Écrivons le produit scalaire précédent sous forme de double somme. Soit \(A,B \in M_{n,p}(\mathbb{R}) \) on note \((\tilde{a}_{ij})\) respectivement \((\tilde{b}_{ij})\) le terme générique de la matrice \(\tilde{A}\) respectivement \(\tilde{B}\). On pose \(\Gamma = \tilde{A}'\tilde{B}\) et on note \((\gamma_{ij})\) le terme générique de la matrice de  \(\Gamma\). Ainsi:
+c) Écrivons le produit scalaire précédent sous forme de double somme. Soit \(A,B \in M_{n,p}(\mathbb{R}) \) on note \((\tilde{a}_{ij})\) respectivement \((\tilde{b}_{ij})\) le terme générique de la matrice \(\tilde{A}\) respectivement \(\tilde{B}\). On pose \(\Omega = \tilde{A}'\tilde{B}\) et on note \((\omega_{ij})\) le terme générique de la matrice de  \(\Omega\). Ainsi:
 
 \begin{align*}
 [A \mid B] &= tr(\tilde{A}'\tilde{B})\\
-&= tr(\Gamma)\\
-&= \sum_{l=1}^{p} \gamma_{ll}\\
- &= \sum_{l=1}^{p} \sum_{k=1}^{n} \tilde{a}_{kl} \tilde{b}_{kl}
+&= tr(\Omega)\\
+&= \sum_{i=1}^{p} \omega_{ii}\\
+ &= \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki} \tilde{b}_{ki}
 \end{align*}
 
-d) Nous pouvons observer le programme du précédent  produit scalaire ci-dessous, ainsi que la norme associée à ce produit scalaire.
+Or, \(\forall A, \tilde{A}\) a pour élément générique \(\tilde{a}_{ki} = \sqrt{w_k} \sqrt{c_i} a_{ki} \) donc :
+\[ [A \mid B] = \sum_{k=1}^{n} \sum_{i=1}^{p} w_k c_i a_ki b_{ki} \]
+
+d) La fonction "prd_scalaire" est définie en Annexe. Toutefois, pour mieux comprendre son utilisation, nous présentons ci-dessous un exemple concret de son application. Le programme du précédent produit scalaire est affiché, accompagné de la norme associée à ce produit scalaire.
 
 La fonction calculant le produit scalaire de Frobénius
 ```{r,include=FALSE}
@@ -160,7 +165,7 @@ library(ggplot2)
 library(ade4)
 ```
 
-```{r}
+```{r,include=FALSE}
 prd_scalaire = function(A,B){
   # les dimension des matrices
   na = length(A[,1]); nb = length(B[,1])
@@ -181,47 +186,73 @@ prd_scalaire = function(A,B){
  }
 ```
 
-Exemple d'application sur le produit scalaire de Frobénius
+Considérons à présent un exemple d'application de ma fonction **prd_scalaire** (le produit scalaire de Frobénius) ci-dessous:
+
+Nous commençons par initialiser les matrices \(A\) et \(B\) avec les valeurs suivantes :
+
+\[
+A = \begin{pmatrix}
+0 & -1 & 0 \\
+1 & 0 & -1 \\
+1 & 1 & 0 \\
+0 & 2 & -1 
+\end{pmatrix}
+\]
+\[
+B = \begin{pmatrix}
+-1 & 1 & 2 \\
+-1 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & -1 
+\end{pmatrix}
+\]
+
+Maintenant que les matrices \(A\) et \(B\) sont initialisées, nous pouvons appliquer la fonction prd_scalaire pour calculer le produit scalaire de Frobenius entre elles.
+
 ```{r}
-# On initialise des matrices au hasard
-A  = matrix(-16:18, nrow =7)
-B = matrix(1:35, nrow =7)
+# Initialisation de A et B
+a <- c(0,1,1,0,-1,0,1,2,0,-1,0,-1)
+b <- c(-1,-1,1,0,1,0,0,1,2,1,0,-1)
+A  = matrix(a, nrow =4)
+B = matrix(b, nrow =4)
 
 # On applique la fonction prd_scalaire
 resultat = prd_scalaire(A,B)
-
-# Affichage du résultat
-print(resultat)
 ```
 
-La fonction calculant la norme d'une matrice A associée au produit scalaire de Frobénius 
-```{r}
+Suite à l'application de la fonction prd_scalaire sur les matrices \(A\) et \(B\), le résultat obtenu est 0.08333333, donc \([A \mid B] = 0.08333333\).
+
+```{r,include=FALSE}
 norme = function(A){
   return(sqrt(prd_scalaire(A,A)))
 }
 ```
 
-Exemple d'application sur la norme
+Après avoir calculé le produit scalaire de Frobenius entre les matrices \(A\) et \(B\), nous allons maintenant calculer la norme associée à ce produit scalaire (\(\left[\left| \cdot \right|\right] = \sqrt{ [\cdot \mid \cdot]} \)) pour chaque matrice, \(A\) et \(B\). La fonction pour calculer la norme associée à ce produit est définie en Annexe.
+
+
 ```{r}
 # On utilise les matrices précédente afin de calculer leurs normes
 rn1 = norme(A)
 rn2 = norme(B)
 
-# Affichage du résultat
-rn1; rn2
 ```
+
+Nous obtenons après calcul les résultats suivants:
+\(\left[\left| A \right|\right] = 0.9128709\) et \(\left[\left| B \right|\right] = 0.9574271\)
 
 ### Coefficient RV
 
-On définit le coefficient RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
+On définit le coefficient de RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
+
 \[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
 
-a) En termes géométriques le coefficient RV et le cosinus de A et B.
+a) Géométriquement, le coefficient de RV représente le cosinus entre les matrices \( A \) et \( B \).
 
-b) Ci-dessous nous trouverons le programme calculant le coefficient RV ainsi qu'une fonction donnant la matrice des coeffients RV en T tableaux \(X_{(n,p)} \).
+b) Les fonctions pour calculer le coefficient de RV et fournir la matrice des coefficients de RV en \( (n,p) \) tableaux \(X_{(n,p)} \) seront présentées en Annexe. En revanche, ici, nous expliciterons un exemple d'application de celles-ci.
 
-La fonction calculant le coefficient RV d'Escoufier:                  
-```{r}
+
+```{r, include=FALSE}
 coef_RV = function(T_tableaux) {
   t = length(T_tableaux)
   mat_rv = matrix(rep(NA, t * t), nrow = t, ncol = t)
@@ -241,8 +272,77 @@ coef_RV = function(T_tableaux) {
 
 ```
 
+Supposons que nos matrices \( X_1, X_2, X_3 \) et \( X_4 \) sont toutes de dimension \( 3 \times 2 \):
 
-Exemple d'application sur le coefficient RV d'Escoufier T tableaux X_t(n , p) 
+\[
+X_1 = \begin{pmatrix}
+2 & -1 \\
+0 & -2 \\
+1 & 1 
+\end{pmatrix}, \quad
+X_2 = \begin{pmatrix}
+1 & -2 \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix}, \quad
+X_3 = \begin{pmatrix}
+-1 & 0 \\
+2 & 1 \\
+0 & -1 
+\end{pmatrix}, \quad
+X_4 = \begin{pmatrix}
+0 & -1 \\
+1 & 2 \\
+-2 & 0 
+\end{pmatrix}
+\]
+
+\[ [X_1|X_2] = \text{tr}(C X_1'W_B X_2) \]
+
+\[ \frac{1}{6} \begin{pmatrix}
+2 & 0 & 1 \\
+-1 & -2 & 1
+\end{pmatrix} \begin{pmatrix}
+1 & -2 \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+2 & -3 \\
+1 & 3
+\end{pmatrix}
+\]
+
+donc \( [X_1|X_2] = \frac{5}{6} \). Or, \( \left\| X_1 \right\| = \frac{11}{6} \) et \( \left\| X_2 \right\| = \frac{7}{6} \), donc \( R(X_1 ,X_2) = \frac{[ X_1 \mid X_2]}{\left\| X_1 \right\| \left\| X_2 \right\| } = \frac{ \frac{5}{6} }{ \frac{11}{6} \frac{7}{6} } = \frac{30}{77} \)
+
+De manière analogue, on obtient les résultats suivants:
+
+  - \( [X_1|X_3] = \frac{-5}{6} \)
+  - \( [X_1|X_4] = \frac{-5}{6} \)
+  - \( [X_2|X_3] = \frac{-4}{6} \)
+  - \( [X_2|X_4] = \frac{1}{6} \)
+  - \( [X_3|X_4] = \frac{11}{6} \)
+  - \( \left\| X_3 \right\| = \frac{7}{6} \)
+  - \( \left\| X_4 \right\| = \frac{10}{6} \)
+  
+En notant \(R_{ij}\) le terme général de la matrice \(R\) des coefficients RV, on a:
+
+\[
+R_{ij} = \frac{[ X_i \mid X_j]}{\left\| X_i \right\| \left\| X_j \right\| }
+\] 
+
+On en déduit alors que:
+
+\[
+R = \begin{pmatrix}
+1 & \frac{30}{77} & \frac{-30}{77} & \frac{-30}{110}\\
+\frac{30}{77} & 1 & \frac{-24}{49} & \frac{6}{70}\\
+\frac{-30}{77} & \frac{-24}{49} & 1 & \frac{24}{70}\\
+\frac{-30}{110} & \frac{6}{70} & \frac{24}{70} & 1
+\end{pmatrix} 
+\]
+
+Pour appliquer la fonction coeff_RV, nous utiliserons les données citées en introduction, à savoir les données "simulated" du package "multiblock".
+
 ```{r}
 # Tableau à trois dimension
 data(simulated)
@@ -255,28 +355,34 @@ D = simulated$D
 n_tableaux = list(A,B,C,D)
 
 resultats_n = coef_RV(n_tableaux)
-print(data.frame(resultats_n))
 ```
+
+Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
+
+\[
+\begin{pmatrix}
+1.0000 & 0.0335 & -0.1629 & -0.1365 \\
+0.0335 & 1.0000 & 0.2213 & -0.0323 \\
+-0.1629 & 0.2213 & 1.0000 & 0.0724 \\
+-0.1365 & -0.0323 & 0.0724 & 1.0000 \\
+\end{pmatrix}
+\]
+
 
 ## Programme de STATIS 1
 
 ### Programme
 
 
-a) L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
-
-représente l'inertie dans le contexte de l'analyse factorielle. L'inertie est également appelée somme des carrés des corrélations ou variance totale. Dans le cadre de l'analyse factorielle, cette quantité mesure la dispersion totale des données dans l'espace factoriel (l'espace ou les individus se trouvent).
-
-L'objectif du problème d'optimisation associé est de maximiser cette inertie sous la contrainte que la norme du vecteur $u$ est égale à 1. Cela revient à trouver la direction dans laquelle la dispersion des données est maximale. L'inertie d'un vecteur u par rapport à une matrice X est définie comme la norme au carré de la projection de X sur u. Plus précisément, \(\sum_{t=1}^{T}(u^TX_t)^2\) représente la somme des inerties  de tous les vecteurs \(X_t\) projetés sur u.
-
-b) Résolvons le programme ci-dessus:
+a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps. L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\) représente l'inertie le long d'un axe \(< u >\), où \(u\) est un vecteur *I*-unitaire: \(\left|\left| u \right|\right|^2 = 1\). On cherche à projeter *I*-orthogonalement le nuage direct sur un espace \(E_k = < F_1,...,F_k >\) de dimension \(k < p\) où \(F_k\) est la \(k^{ème}\) composante principale. cela revient à maximiser l’inertie du nuage direct projeté sur \(< u >\). 
 
 \begin{align*}
-\max_{\left[\left| u \right|\right]^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{X_t}{\left[\left| X_t \right|\right]} u_t \right|\right]^2 &= \max_{\left[\left| u \right|\right]^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{\mathrm{tr}\left( CX_{\tau}'WX_t \right)}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t  \\
-&= \max_{\left[\left| u \right|\right]^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{[X_{\tau} \mid X_t]}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t \\
-&= \max_{\left[\left| u \right|\right]^2 = 1} u'R u
+\max_{\left|\left| u \right|\right|^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{X_t}{\left[\left| X_t \right|\right]} u_t \right|\right]^2 &=
+\max_{\left|\left| u \right|\right|^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{[X_{\tau} \mid X_t]}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t \\
+&= \max_{\left|\left| u \right|\right|^2 = 1} u'R u
 \end{align*}
 
+où:
 
 1. \(X_t\): \(n \times p\) (la matrice \(X_t\) a des dimensions \(n \times p\)).
 2. \(\frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\) (chaque colonne de \(X_t\) est pondérée par \(\frac{u_t}{\left[\left| X_t \right|\right]}\)).
@@ -285,7 +391,8 @@ b) Résolvons le programme ci-dessus:
 5. \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\): \(1 \times 1\) (la norme euclidienne au carré est un scalaire).
 6. \(R\) est la matrice des coefficients RV
 
-Le langrangien associée au problème d'optimisation ci-dessus s'écrit:
+
+b) Résolvons le programme ci-dessus, le langrangien associé s'écrit:
 
 \[L(u,\lambda) = u'R u - \lambda (\|u\|^2-1) \]
 
@@ -297,6 +404,9 @@ On a alors :
   \frac{\partial L}{\partial \lambda}(u,\lambda) = \|u\|^2 - 1
 \end{cases}
 \]
+
+Les conditions de premier ordre donnent:
+
 \[\iff (S)
 \begin{cases}
   Ru  = \lambda u \quad (*) \\
@@ -304,22 +414,18 @@ On a alors :
 \end{cases}
 \]
 
-En multipliant l'équation \((*) \quad par \quad u'\) on obtient grâce à l'équation \((**)\) le résultat suivant:
+On a par suite: \( u' \quad (*)\) et \( (**) \Rightarrow u'Ru = \lambda \).
 
-\[u'Ru = \lambda \]
-
-D'après, $(S)$ on en déduit que les vecteurs u solution du premier ordre sont les vecteurs propres de la matrice \(R = \sum_{t=1}^{T}\sum_{\tau=1}^{T}\frac{tr(\tilde{X_t'}\tilde{X_{\tau}}) }{\left[\left| X_t \right|\right]\left[\left| X_{\tau} \right|\right]} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre $u$ de $R$ (tel que $\|u\| = 1$) de valeur propre $\lambda$, on a
+D'après, $(S)$ on en déduit que les vecteurs \(u\) solution de premier ordre sont les vecteurs propres de la matrice \(R = ((R(X_t,X_{\tau} )))_{t,\tau} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre $u$ de $R$ (tel que $\|u\| = 1$) de valeur propre $\lambda$, on a
 \( u'Ru = \lambda \).
 
 La valeur maximale de $u'Ru$ est obtenue pour les vecteurs propres associés à la plus grande valeur propre de $R$.
 
-c) Nous allons écrivez le programme R fournissant les vecteurs u solutions des équations du premier
+c) Nous allons écrire le programme R fournissant les vecteurs u solutions des équations du premier
 ordre. 
 
 
-Fonction donnant les vecteurs u solution et valeurs propres
-
-```{r}
+```{r,include=FALSE}
 vecval_prop = function(T_tableau) {
   matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
   
@@ -332,26 +438,39 @@ vecval_prop = function(T_tableau) {
 
 ```
 
+Considérons un exemple d'application de la fonction vecval_prop:
 
-exemple d'application de la fonction vecval_prop
 ```{r}
+# on applique vecval_prop aux données simulated
 vecval = vecval_prop(n_tableaux)
 
 val_prop <- vecval$val_prop
 vec_prop <- vecval$vec_prop
 
-# Affichage des valeurs propres et des vecteurs propres
-print("Valeurs propres :")
-print(val_prop)
-print("Vecteurs propres :")
-print(data.frame(vec_prop))
 ```
-Montrons à présent que les vecteurs u obtenus forment une base I-orthonormée.
+
+Aprés exécution de la fonction vecval_prop les résultats suivants:
+
+\[U = \begin{pmatrix}
+-0.4935 & -0.4719 & 0.5853 & 0.4371 \\
+0.4170 & -0.6548 & 0.2544 & -0.5768 \\
+0.6774 & -0.2244 & -0.1247 & 0.6894 \\
+0.3517 & 0.5461 & 0.7597 & -0.0305 
+\end{pmatrix}
+\]
+
+\[\lambda = \begin{pmatrix} \lambda_1 \\ \lambda_2 \\ \lambda_3 \\ \lambda_4 \end{pmatrix} = \begin{pmatrix} 1.2926 \\ 1.1270 \\ 0.8721 \\ 0.7083 \end{pmatrix}
+\]
+
+où, \(U\) est la matrice des vecteurs propres et \(\lambda\) les valeurs propres associées arrondie à \(10^{-4}\).
+
+
+Montrons à présent que les vecteurs u obtenus forment une base *I*-orthonormée.
 
 Reprenons la matrice \(R\) des coefficients RV précédente. Soient \(u_i\) et \(u_j\) des vecteurs propres de \(R\) associés aux valeurs propres \(\lambda_i\) et \(\lambda_j\) distinctes. Comme \(u_i\) et \(u_j\) sont des solutions du problème suivant :
 
 \[
-\max_{\left[\left| u \right|\right]^2 = 1} u'R u
+\max_{\left|\left| u \right|\right|^2 = 1} u'R u
 \]
 
 on a alors \(\|u_i\|^2 = 1\) et \(\|u_j\|^2 = 1\). Il suffit de montrer que \(u_i\) et \(u_j\) sont orthogonaux et ainsi de conclure que les vecteurs \(u\) forment une base I-orthonormée. En d'autres termes, nous allons montrer que \(u_i'u_j = 0\).
@@ -365,7 +484,7 @@ Sachant que \(u_i\) et \(u_j\) sont des vecteurs propres de \(R\) associés aux 
 \end{cases}
 \]
 
-En prenant le produit scalaire des deux équations, nous obtenons :
+Par la suite, on a:
 
 \begin{align*}
 u_i'Ru_j &= \lambda_j u_i' u_j\\
@@ -380,7 +499,6 @@ u_i'Ru_j &= \lambda_j u_i' u_j\\
 On en déduit donc que les vecteurs \(u\) forment une base I-orthonormée.
 
 La fonction **"vecval_prop()"** ci-dessus nous donne les vecteurs propres \(u_i\) de la matrice des coefficients RV \(R\) associée  aux valeurs propres \(\lambda_i\). 
-
 
 ```{r,include=FALSE}
 # Fonction pour vérifier l'orthogonalité des vecteurs propres
@@ -445,19 +563,91 @@ verifier_norme(vec_prop)
 
 ### Équivalence avec l'ACP d'un tableau juxtaposé "dépliant" le tableau cubique
 
-a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps.
+a) Il suffit de décomposer \( X_t \) comme une juxtaposition de colonnes: 
 
-Dans notre cas, chaque $\mathbf{X_t}$ représente un tableau de données à une période de temps spécifique, où les lignes représentent les individus et les colonnes représentent les variables. Par conséquent, chaque colonne de $\mathbf{X_t}$ représente une variable différente observée à cette période.
+\[ X_t = \begin{bmatrix}
+x^{1}_{t}
+\ldots 
+x^{p}_{t}
+\end{bmatrix}_{\text{Profils Colonnes}} = \begin{bmatrix}
+x_{t,1} \\
+\vdots \\
+x_{t,n}
+\end{bmatrix}_{\text{Profils Lignes}} 
+\] 
+
+et de le réécrire sous forme "verticalisée":
+
+\[ y^t = \begin{pmatrix} x^{1}_{t} \\ \vdots \\ x^{p}_{t}) \end{pmatrix} \in \mathbb{R}^{np} \quad \text{où} \quad \forall j \in [|1,p|], x^{j}_{t} = \begin{pmatrix}
+x^{j}_{t,1} \\
+\vdots \\
+x^{j}_{t,n}
+\end{pmatrix} \]
+
+Avant de démontrer l'égalité des produits scalaires, définissons d'abord le Produit Kronecker:
+
+Soient \( A \) une matrice de taille \( m \times n \) et \( B \) une matrice de taille \( p \times q \). Leur produit tensoriel est la matrice \( A \otimes B \) de taille \( mp \) par \( nq \), définie par blocs successifs de taille \( p \times q \), le bloc d'indice \( i,j \) valant \( a_{ij}B \).
+
+En d'autres termes,
+
+\[
+A \otimes B = \begin{pmatrix}
+a_{11}B & \cdots & a_{1n}B \\
+\vdots & \ddots & \vdots \\
+a_{m1}B & \cdots & a_{mn}B
+\end{pmatrix}
+\]
+
+Maintenant, montrons que : 
+
+\[ [ X^s  |  X^t ] = \langle y^s | y^t \rangle_L \] 
+
+où \( L = C \otimes W (Produit de Kronecker) \).
+
+Sachant que, \(W = \frac{1}{n}I_n \) et \(C = \frac{1}{p}I_p \) on en déduit que \(L = \frac{1}{np}I_{np} \).
+
+D'une part, soit \( (s,t) \in [|1,T|] \):
+
+\begin{align*}
+[X_s \mid X_t] &= tr(\tilde{X_s}'\tilde{X_t})\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} w_k c_i x^i_{s,k} x^i_{t,k}\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} \frac{1}{np} x^i_{s,k} x^i_{t,k}
+\end{align*}
+
+D'autre part:
+
+\begin{align*}
+\langle y^s | y^t \rangle_L &= {y^{s}}'L y^{t} \\
+&= \sum_{i=1}^{p} \frac{1}{np} {x^i_{s}}' x^i_{t}\\
+&= \sum_{i=1}^{p} \frac{1}{np} \sum_{k=1}^{n} x^i_{s,k} x^i_{t,k}\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} \frac{1}{np} x^i_{s,k} x^i_{t,k}
+\end{align*}
+
+Donc \([ X^s  |  X^t ] = \langle y^s | y^t \rangle_L\).
+
+Il en découle que \( X^t \) est "verticalisé" en \( {y^t}^* = y^t \) \(L\)-normé.\
+
+Par suite, on note \( Y = [ y^1, \ldots , y^T ] \). Un individu correspond à une ligne de ce tableau, correspondant donc à l'indice \( (j,i) \) dans le cube initial. Un individu est un vecteur de taille \( T \), dont les coordonnées sont les \( T \) valeurs de la case \( (i,j) \) du tableau \( X_t \) sur la période. C'est la trajectoire de cette case. Son poids est \( L_(j,i) = w_i c_j = \frac{1}{np} \).\
+
+Par exemple, pour un tableau cubique ventilant la valeur ajoutée d'une économie par région \( (i) \), secteur \( (j) \) et année \( (t) \), l'individu du tableau dépliant ainsi le cube serait la trajectoire dans le temps de la V.A. réalisée par le secteur \( j \) dans la région \( i \).
+
+Et on a :
+
+\[ \left[\left| \sum_{t=1}^{T} u_t \frac{X_t}{\left[\left| X_t \right|\right]} \right|\right]^2 = \| Y^* u \|_{W}^{2} = \| F \|_{W}^{2} \], où \( F = Y^* u \) est la composante associée à \( u \).
 
 
 b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) sont orthogonales au sens du produit scalaire convenable, nous devons considérer la façon dont ces composantes sont construites à partir des vecteurs propres obtenus.
 
-Lorsque nous obtenons les vecteurs propres \( u_k \) de la matrice des coefficients RV, nous avons montré précédemment qu'ils forment une base orthogonale au sens du produit scalaire euclidien. Cela signifie que ces vecteurs propres sont mutuellement orthogonaux.
+\begin{align*}
+\langle F_k | F_l \rangle_L &= F_k' L F_l \\
+&= u_k' {Y^*}' L Y^* u_l\\
+&= 1 \quad \text{si} \quad k = l\\
+&= 0 \quad \text{si} \quad k \neq l 
+\end{align*}
 
-Ensuite, les composantes principales \( F^k \) sont obtenues en projetant les tableaux \( X_t \) sur les vecteurs propres \( u_k \). Comme chaque vecteur propre \( u_k \) est orthogonal aux autres vecteurs propres, les projections des tableaux sur ces vecteurs propres le seront également. Par conséquent, les composantes principales \( F^k \) seront orthogonales les unes aux autres.
 
 c) Dépliage du tableau cubique en un tableau juxtaposé :
-```{r}
+```{r,include=FALSE}
 # Création des tableaux X_t dépliés
 A_jux <- matrix(A, ncol = 1)
 B_jux <- matrix(B, ncol = 1)
@@ -487,9 +677,6 @@ mat_sym <- oper_inert(mat_jux)
   val_prop_jux = result_propre$values #valeurs propres
   vec_prop_jux = result_propre$vectors #vecteurs propres associées
 ```
-
-La fonction **oper_inert()** est définie pour calculer une matrice de covariance normalisée:
-Cette fonction prend une matrice **X** en entrée, calcule une matrice de poids **W**, puis calcule une matrice de normalisation **M**. Enfin, elle renvoie la matrice de covariance normalisée **mat_d**.
 
 
 Composantes principales des tableaux dépliés :
@@ -638,13 +825,13 @@ cosinus = function(X_t, f_k){
     for (j in 1:ncol(f_k)) {
            # Calcul du cosinus entre Xt et la kième composante F_k
            mat_cos[k,j] = sum(X_t[,j] * f_k[,k]) / (sqrt(sum(X_t[,j]^2)) *
-                                                      sqrt(sum(f_k^2))) 
+                                                      sqrt(sum(f_k[,k]^2))) 
            
     }
 
   }
   rownames(mat_cos) <- paste("v", 1:ncol(mat_cos), sep = "")
-  return(mat_cos)
+  return(t(mat_cos))
 }
 
 # Affichage du produit scalaire entre Xt et la ième composante principale 
@@ -1015,3 +1202,93 @@ for (k in 1:5) {
 
 ```
 
+# Annexe
+
+### Programme des fonctions prd_scalaire et norme
+
+La fonction calculant le produit scalaire de Frobénius: 
+```{r}
+prd_scalaire = function(A,B){
+  # les dimension des matrices
+  na = length(A[,1]); nb = length(B[,1])
+  pa = length(A[1,]); pb = length(B[1,])
+  
+  # Les matrices de ponderation
+  Wa = (1/na)*diag(na); Ca = (1/pa)*diag(pa)
+  Wb = (1/nb)*diag(na); Cb = (1/pb)*diag(pb)
+  
+  # Calcul des matrices A_tild et B_tild
+  A_tild = sqrt(Wa) %*% A %*% sqrt(Ca)
+  B_tild = sqrt(Wb) %*% B %*% sqrt(Cb)
+  
+  # Produit scalaire
+  ps = sum(diag(t(A_tild)%*%B_tild))
+  
+  return(ps)
+ }
+```
+
+
+La fonction calculant la norme d'une matrice A associée au produit scalaire de Frobénius 
+```{r}
+norme = function(A){
+  return(sqrt(prd_scalaire(A,A)))
+}
+```
+
+
+### Coefficient RV
+                
+La fonction calculant le coefficient RV d'Escoufier:                 
+```{r}
+coef_RV = function(T_tableaux) {
+  t = length(T_tableaux)
+  mat_rv = matrix(rep(NA, t * t), nrow = t, ncol = t)
+  
+  for (i in seq_along(T_tableaux)) {
+    for (j in seq_along(T_tableaux)) {
+      # Stocker le résultat dans une matrice
+      prd_sclr = prd_scalaire(T_tableaux[[i]], T_tableaux[[j]])
+      norm_i = norme(T_tableaux[[i]])
+      norm_j = norme(T_tableaux[[j]])
+      mat_rv[i, j] = prd_sclr / (norm_j * norm_i)
+    }
+  }
+  
+  return(mat_rv)
+}
+
+```
+
+Fonction donnant les vecteurs *u* solutions et les valeurs propres associées:
+
+```{r}
+vecval_prop = function(T_tableau) {
+  matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
+  
+  resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
+  val_prop = resultat_propre$values #valeurs propres
+  vec_prop = resultat_propre$vectors #vecteurs propres associées
+  
+  return(list(val_prop = val_prop, vec_prop = vec_prop))
+}
+
+```
+
+### Dépliage du tableau cubique en un tableau juxtaposé :
+
+```{r}
+oper_inert = function(X){
+  
+  p = length(X[1,]) # la dimension des individus
+  n = length(X[,1]) # la dimension des variables
+  W = diag(n)/n
+  M = matrix(0, nrow = p, ncol = p)
+  
+  for (i in 1:p) {
+    M[i,i] = 1/sqrt(t(X[,i])%*%W%*%X[,i])
+  }
+  mat_d = M %*% t(X) %*% W %*% X %*% M
+  return(mat_d)
+}
+```
