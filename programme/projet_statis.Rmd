@@ -908,7 +908,7 @@ L'idéal serait de réaliser les trois dépliages possibles et de les comparer p
 
 b) Les matrices \(P_m\) se trouvent dans l'espace \(\mathbf{P} = \mathbf{M}_n(\mathbb{R})\) où \(n\) est le nombre d'individus. Cet espace est de taille \(\frac{n(n+1)}{2}\) car \(P_m = X_m M_m X_m'\) produit une matrice symétrique de taille n x n contenant \(\frac{n(n+1)}{2}\) éléments indépendants.
 
-1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = frac{1}{n}I_n \) même chose pour les colonnes.
+1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = \frac{1}{n}I_n \) même chose pour les colonnes.
 
 b) On peut munir \(\mathbf{P}\) du produit scalaire de Frobénius qui est défini par:
 
