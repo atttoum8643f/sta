@@ -1,0 +1,1748 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{hyperref}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Projet STATIS: Réponse feuille de route},
+  pdfauthor={ATTOUMANI Ibrahim et MANNEQUIN Jeanne},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Projet STATIS: Réponse feuille de route}
+\author{ATTOUMANI Ibrahim et MANNEQUIN Jeanne}
+\date{}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\newpage
+
+\textbf{\textbf{\large Introduction}}\\
+\newline L'ACP que nous avons l'habitude de voir est une méthode
+d'analyse de données qui permet de résumer les informations contenues
+dans un tableau de données. Dans le cas de plusieurs tableaux, il nous
+faut trouver une méthode permettant d'analyser les données dans leur
+ensemble.\\
+On se propose d'étendre l'ACP à l'analyse d'un multi-tableau. L'objectif
+est de comparer les individus et les variables de plusieurs tableaux. Il
+existe plusieurs façons de la faire, STATIS en est une. STATIS est une
+méthode qui permet de synthétiser les informations contenues dans les
+différents tableaux en une seule représentation. Il existe aussi
+plusieurs types de multi-tableaux. Nous en distinguons deux : les
+multi-tableaux à trois entrées (situation 1) et les multi-tableaux avec
+partition thématique (situation 2).\\
+- Le tableau à trois entréees est un tableau de taille
+\(n \times p \times T\), où \(n\) est le nombre d'individus, \(p\) le
+nombre de variables et \(T\) les différentes dates. Les indices seront
+notés \(1\leq i\leq n\) , \(1\leq j\leq p\) et \(1\leq t\leq T\)\\
+- Le tableau avec partition thématique est composé de \(q\) tableaux
+décrivants les \(n\) individus à l'aide de groupes de variables
+différents, chaque groupe appartenant conceptuellement à un thème
+précis. Chacun de ces tableaux \(X_m\), avec \(1\leq m\leq q\), possède
+\(p_m\) variables (colonnes).
+
+\hypertarget{situation-1}{%
+\section{Situation 1}\label{situation-1}}
+
+Dans cette première partie nous utilisons les tableaux à trois entrées.
+Un tel tableau peut être décomposé en \(T\) tableaux juxtaposés de
+dimensions identiques \((n,p)\). Cette identité de dimension entre les
+\(T\) tableaux homologues permet une extension de l'ACP dans laquelle on
+considère chaque tableau comme une ``variable'' décrivant \(n \times p\)
+``individus'' \((i,j)\).\\
+Nous formalisons d'abord cette extension de l'ACP, STATIS 1.
+
+\hypertarget{pruxe9liminaires}{%
+\subsection{Préliminaires}\label{pruxe9liminaires}}
+
+Il est possible de fabriquer ou de trouver un tableau à trois entrées
+(INSEE, \ldots). R propose justement un jeu de données (simulated) du
+package ``multiblock'', composé de 4 tableaux (A, B, C et D), de chacun
+200 individus et 10 varaibles. Ces tableaux, variables et individus ne
+portent pas de nom mais des lettres ou numéros.\\
+Ce tableau à trois entrées est sous forme de liste de 4 matrices de
+dimensions \(10\times 10\).
+
+Puisque nos valeurs sont des indicateurs numériques, on les
+centre-réduit.
+
+\hypertarget{produit-scalaire}{%
+\subsubsection{Produit scalaire}\label{produit-scalaire}}
+
+La matrice diagonale des poids des \(n\) individus est \(W\) (par
+défaut, \(W = \frac{1}{n} I_n\)). On considérera également une matrice
+diagonale des poids des \(p\) colonnes : \(C = \frac{1}{p} I_p\) par
+défaut.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Le produit scalaire entre deux matrices \(A\) et \(B\) de taille
+  \((n, p)\) est :
+\end{enumerate}
+
+\[ [A|B] = \text{tr}(CA'WB) \]
+
+La norme d'une matrice \(A\) correspondant à ce produit scalaire sera
+notée \(\left[\left| A \right|\right]\).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Ecrivons le produit scalaire sous forme \(tr(\tilde{A}'\tilde{B})\)
+  (produit scalaire de Frobénius) en explicitant la transformation
+  \(Z \text{ vers } \tilde{Z}\), \(\forall Z\) \((n, p)\).
+\end{enumerate}
+
+Soit \(A,B \in M_{n,p}(\mathbb{R})\)
+
+\begin{align*}
+[A \mid B] &= \text{tr}(CA'WB) \\
+&= \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(\tilde{A}'\tilde{B})
+\end{align*}
+
+où \(\forall (n,p)\) \(\tilde{Z} = W^{\frac{1}{2}} Z C^{\frac{1}{2}}\)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Pour montrer que \([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est
+  un produit scalaire, nous devons démontrer les propriétés suivantes :
+\end{enumerate}
+
+\textbf{(i) Symétrie} : \(\forall\) \(A,B \in M_{n,p}(\mathbb{R})\)
+
+\[
+[A \mid B] = [B \mid A]
+\]
+
+\textbf{(ii) Linéarité} : \(\forall\)
+\(A, B_1, B_2 \in M_{n,p}(\mathbb{R})\) et
+\(\alpha, \beta \in \mathbb{R}\)
+
+\[
+[A \mid (\alpha B_1 + \beta B_2)] = \alpha [A \mid B_1] + \beta [A \mid B_2] 
+\]
+
+\textbf{(iii) Positivité définie} :\(\forall\)
+\(A \in M_{n,p}(\mathbb{R})\)
+
+\[
+[A \mid A] \geq 0 \quad \text{et} \quad [A \mid A] = 0 \iff A = 0.
+\]
+
+Vérifions ces propriétés :
+
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\tightlist
+\item
+  Soit \(A, B \in M_{n,p}(\mathbb{R})\)
+\end{enumerate}
+
+\begin{align*}
+[A \mid B] &= \text{tr}(\tilde{A}'\tilde{B}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}})
+\end{align*}
+
+Or, par la propriété de la trace, \(\text{tr}(AB) = \text{tr}(BA)\) et
+l'invariance par transposition des matrices de poids \(W' = W\) et
+\(C' = C\), on a alors:
+
+\begin{align*}
+\text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) &= \text{tr}(C^{\frac{1}{2}} B' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}}) \\
+&= [B \mid A]
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Soit \(A, B_1, B_2 \in M_{n,p}(\mathbb{R})\) et
+  \(\alpha, \beta \in \mathbb{R}\)
+\end{enumerate}
+
+\begin{align*}
+[A \mid (\alpha B_1 + \beta B_2)] &= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} (\alpha B_1 + \beta B_2) C^{\frac{1}{2}}) \\
+&= \alpha \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_1 C^{\frac{1}{2}}) + \beta \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} B_2 C^{\frac{1}{2}}) \\
+&= \alpha \text{tr}(\tilde{A}'\tilde{B_1}) + \beta \text{tr}(\tilde{A}'\tilde{B_2})\\
+&= \alpha [A \mid B_1] + \beta [A \mid B_2] 
+\end{align*}
+
+La linéarité de la trace assure que cette propriété est respectée.
+
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Soit \(A \in M_{n,p}(\mathbb{R})\), on note \((\tilde{a}_{ij})\) le
+  terme générique de la matrice \(\tilde{A}\). On pose
+  \(\Delta = \tilde{A}'\tilde{A}\) et on note \((\delta_{ij})\) le terme
+  générique de la matrice \(\Delta\).
+\end{enumerate}
+
+\begin{align*}
+[A \mid A] &= \text{tr}(C^{\frac{1}{2}} A' W^{\frac{1}{2}} W^{\frac{1}{2}} A C^{\frac{1}{2}})\\
+&= tr(\tilde{A}'\tilde{A})\\
+&= tr(\Delta)\\
+&= \sum_{i=1}^{p} \delta_{ii}
+\end{align*}
+
+Or, \(\delta_{ij} = \sum_{k=1}^{p} \tilde{a}_{ki} \tilde{a}_{kj}\) donc:
+
+\begin{align*}
+tr(\tilde{A}'\tilde{A}) &= tr(\Delta)\\
+&= \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki} \tilde{a}_{ki}\\
+&= \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki}^2 \geq 0
+\end{align*}
+
+On suppose que \([A \mid A] = 0\) montrons que
+\(A = 0_{\mathbb{R}^{n \times p}}\) :
+
+\begin{align*}
+[A \mid A] &= 0\\
+\iff tr(\tilde{A}'\tilde{A}) &= 0\\
+\iff tr(\Delta) &= 0\\
+\iff \sum_{i=1}^{p} \delta_{ii} &= 0\\
+\iff \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki}^2 &= 0
+\end{align*}
+
+Cela implique que
+
+\[\forall (i,k) \in [|1,p|] \times [|1,n|], \quad \tilde{a}_{ki}^2 = 0 \]
+
+donc
+
+\[\forall (i,k) \in [|1,p|] \times [|1,n|], \quad \tilde{a}_{ki} = 0 \]
+
+donc
+
+\[\tilde{A} = W^{\frac{1}{2}} A C^{\frac{1}{2}} = 0_{\mathbb{R}^{n \times p}} \]
+
+On en déduit que \(A = 0_{\mathbb{R}^{n \times p}}\) car \(W\) et \(C\)
+sont régulières donc inversibles.
+
+Par conséquent, la quantité
+\([A \mid B] = \text{tr}(\tilde{A}'\tilde{B})\) est un produit scalaire,
+car elle satisfait toutes les propriétés requises.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Écrivons le produit scalaire précédent sous forme de double somme.
+  Soit \(A,B \in M_{n,p}(\mathbb{R})\) on note \((\tilde{a}_{ij})\)
+  respectivement \((\tilde{b}_{ij})\) le terme générique de la matrice
+  \(\tilde{A}\) respectivement \(\tilde{B}\). On pose
+  \(\Omega = \tilde{A}'\tilde{B}\) et on note \((\omega_{ij})\) le terme
+  générique de la matrice de \(\Omega\). Ainsi:
+\end{enumerate}
+
+\begin{align*}
+[A \mid B] &= tr(\tilde{A}'\tilde{B})\\
+&= tr(\Omega)\\
+&= \sum_{i=1}^{p} \omega_{ii}\\
+ &= \sum_{i=1}^{p} \sum_{k=1}^{n} \tilde{a}_{ki} \tilde{b}_{ki}
+\end{align*}
+
+Or, \(\forall A, \tilde{A}\) a pour élément générique
+\(\tilde{a}_{ki} = \sqrt{w_k} \sqrt{c_i} a_{ki}\) donc :
+\[ [A \mid B] = \sum_{k=1}^{n} \sum_{i=1}^{p} w_k c_i a_ki b_{ki} \]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  La fonction ``prd\_scalaire'' est définie en Annexe. Toutefois, pour
+  mieux comprendre son utilisation, nous présentons ci-dessous un
+  exemple concret de son application. Le programme du précédent produit
+  scalaire est affiché, accompagné de la norme associée à ce produit
+  scalaire.
+\end{enumerate}
+
+La fonction calculant le produit scalaire de Frobénius
+
+Considérons à présent un exemple d'application de ma fonction
+\textbf{prd\_scalaire} (le produit scalaire de Frobénius) ci-dessous:
+
+Nous commençons par initialiser les matrices \(A\) et \(B\) avec les
+valeurs suivantes :
+
+\[
+A = \begin{pmatrix}
+0 & -1 & 0 \\
+1 & 0 & -1 \\
+1 & 1 & 0 \\
+0 & 2 & -1 
+\end{pmatrix}
+\] \[
+B = \begin{pmatrix}
+-1 & 1 & 2 \\
+-1 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & -1 
+\end{pmatrix}
+\]
+
+Maintenant que les matrices \(A\) et \(B\) sont initialisées, nous
+pouvons appliquer la fonction prd\_scalaire pour calculer le produit
+scalaire de Frobenius entre elles.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Initialisation de A et B}
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\NormalTok{b }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\NormalTok{A  }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(a, }\AttributeTok{nrow =}\DecValTok{4}\NormalTok{)}
+\NormalTok{B }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(b, }\AttributeTok{nrow =}\DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# On applique la fonction prd\_scalaire}
+\NormalTok{resultat }\OtherTok{=} \FunctionTok{prd\_scalaire}\NormalTok{(A,B)}
+\end{Highlighting}
+\end{Shaded}
+
+Suite à l'application de la fonction prd\_scalaire sur les matrices
+\(A\) et \(B\), le résultat obtenu est 0.08333333, donc
+\([A \mid B] = 0.08333333\).
+
+Après avoir calculé le produit scalaire de Frobenius entre les matrices
+\(A\) et \(B\), nous allons maintenant calculer la norme associée à ce
+produit scalaire
+(\(\left[\left| \cdot \right|\right] = \sqrt{ [\cdot \mid \cdot]}\))
+pour chaque matrice, \(A\) et \(B\). La fonction pour calculer la norme
+associée à ce produit est définie en Annexe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# On utilise les matrices précédente afin de calculer leurs normes}
+\NormalTok{rn1 }\OtherTok{=} \FunctionTok{norme}\NormalTok{(A)}
+\NormalTok{rn2 }\OtherTok{=} \FunctionTok{norme}\NormalTok{(B)}
+\end{Highlighting}
+\end{Shaded}
+
+Nous obtenons après calcul les résultats suivants:
+\(\left[\left| A \right|\right] = 0.9128709\) et
+\(\left[\left| B \right|\right] = 0.9574271\)
+
+\hypertarget{coefficient-rv}{%
+\subsubsection{Coefficient RV}\label{coefficient-rv}}
+
+On définit le coefficient de RV d'Escoufier entre deux matrices \(A\) et
+\(B\) de taille \((n , p)\) par :
+
+\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Géométriquement, le coefficient de RV représente le cosinus entre les
+  matrices \(A\) et \(B\).
+\item
+  Les fonctions pour calculer le coefficient de RV et fournir la matrice
+  des coefficients de RV en \((n,p)\) tableaux \(X_{(n,p)}\) seront
+  présentées en Annexe. En revanche, ici, nous expliciterons un exemple
+  d'application de celles-ci.
+\end{enumerate}
+
+Exemple d'application sur le coefficient RV d'Escoufier T tableaux
+X\_t(n , p).\\
+Supposons que nos matrices \(X_1, X_2, X_3\) et \(X_4\) sont toutes de
+dimension \(3 \times 2\):
+
+\[
+X_1 = \begin{pmatrix}
+2 & -1 \\
+0 & -2 \\
+1 & 1 
+\end{pmatrix}, \quad
+X_2 = \begin{pmatrix}
+1 & -2 \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix}, \quad
+X_3 = \begin{pmatrix}
+-1 & 0 \\
+2 & 1 \\
+0 & -1 
+\end{pmatrix}, \quad
+X_4 = \begin{pmatrix}
+0 & -1 \\
+1 & 2 \\
+-2 & 0 
+\end{pmatrix}
+\]
+
+\[ [X_1|X_2] = \text{tr}(C X_1'W_B X_2) \]
+
+\[ \frac{1}{6} \begin{pmatrix}
+2 & 0 & 1 \\
+-1 & -2 & 1
+\end{pmatrix} \begin{pmatrix}
+1 & -2 \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+2 & -3 \\
+1 & 3
+\end{pmatrix}
+\]
+
+donc \([X_1|X_2] = \frac{5}{6}\). Or,
+\(\left\| X_1 \right\| = \frac{11}{6}\) et
+\(\left\| X_2 \right\| = \frac{7}{6}\), donc
+\(R(X_1 ,X_2) = \frac{[ X_1 \mid X_2]}{\left\| X_1 \right\| \left\| X_2 \right\| } = \frac{ \frac{5}{6} }{ \frac{11}{6} \frac{7}{6} } = \frac{30}{77}\)
+
+De manière analogue, on obtient les résultats suivants:
+
+\begin{itemize}
+\tightlist
+\item
+  \([X_1|X_3] = \frac{-5}{6}\)
+\item
+  \([X_1|X_4] = \frac{-5}{6}\)
+\item
+  \([X_2|X_3] = \frac{-4}{6}\)
+\item
+  \([X_2|X_4] = \frac{1}{6}\)
+\item
+  \([X_3|X_4] = \frac{11}{6}\)
+\item
+  \(\left\| X_3 \right\| = \frac{7}{6}\)
+\item
+  \(\left\| X_4 \right\| = \frac{10}{6}\)
+\end{itemize}
+
+En notant \(R_{ij}\) le terme général de la matrice \(R\) des
+coefficients RV, on a:
+
+\[
+R_{ij} = \frac{[ X_i \mid X_j]}{\left\| X_i \right\| \left\| X_j \right\| }
+\]
+
+On en déduit alors que:
+
+\[
+R = \begin{pmatrix}
+1 & \frac{30}{77} & \frac{-30}{77} & \frac{-30}{110}\\
+\frac{30}{77} & 1 & \frac{-24}{49} & \frac{6}{70}\\
+\frac{-30}{77} & \frac{-24}{49} & 1 & \frac{24}{70}\\
+\frac{-30}{110} & \frac{6}{70} & \frac{24}{70} & 1
+\end{pmatrix} 
+\]
+
+Pour appliquer la fonction coeff\_RV, nous utiliserons les données
+citées en introduction, à savoir les données ``simulated'' du package
+``multiblock''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Tableau à trois dimension}
+\FunctionTok{data}\NormalTok{(simulated)}
+
+\NormalTok{A }\OtherTok{=}\NormalTok{ simulated}\SpecialCharTok{$}\NormalTok{A}
+\NormalTok{B }\OtherTok{=}\NormalTok{ simulated}\SpecialCharTok{$}\NormalTok{B}
+\NormalTok{C }\OtherTok{=}\NormalTok{ simulated}\SpecialCharTok{$}\NormalTok{C}
+\NormalTok{D }\OtherTok{=}\NormalTok{ simulated}\SpecialCharTok{$}\NormalTok{D}
+
+\NormalTok{n\_tableaux }\OtherTok{=} \FunctionTok{list}\NormalTok{(A,B,C,D)}
+
+\NormalTok{resultats\_n }\OtherTok{=} \FunctionTok{coef\_RV}\NormalTok{(n\_tableaux)}
+\end{Highlighting}
+\end{Shaded}
+
+Cette matrice donne les coefficients RV entre les différents tableaux.
+On a quatre tableaux donc on obtient une matrice de dimension
+\(4\times 4\). Ici les tableaux 2 et 3 sont les plus corrélés. Les
+tableaux 1 et 3 sont les plus anti-corrélés. Les tableaux 2 et 4, et 1
+et 2 sont les moins corrélés. Si l'on avait tournée le tableau d'une
+autre façon en le refaçonnant (3 manières de touner un tableau à trois
+entrées) les résultats auraient pu être différents.
+
+Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
+
+\[
+\begin{pmatrix}
+1.0000 & 0.0335 & -0.1629 & -0.1365 \\
+0.0335 & 1.0000 & 0.2213 & -0.0323 \\
+-0.1629 & 0.2213 & 1.0000 & 0.0724 \\
+-0.1365 & -0.0323 & 0.0724 & 1.0000 \\
+\end{pmatrix}
+\]
+
+\hypertarget{programme-de-statis-1}{%
+\subsection{Programme de STATIS 1}\label{programme-de-statis-1}}
+
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+a161b209115340b66eebe6a0f8e92b04146ea5b4
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+
+\hypertarget{programme}{%
+\subsubsection{Programme}\label{programme}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Dans le contexte de l'ACP des tableaux juxtaposés, les ``variables''
+  sont les différents tableaux \(\mathbf{X_t}\), et les ``individus''
+  sont les observations à chaque période de temps. L'expression
+  \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\)
+  représente l'inertie le long d'un axe \(< u >\), où \(u\) est un
+  vecteur \emph{I}-unitaire: \(\left|\left| u \right|\right|^2 = 1\). On
+  cherche à projeter \emph{I}-orthogonalement le nuage direct sur un
+  espace \(E_k = < F_1,...,F_k >\) de dimension \(k < p\) où \(F_k\) est
+  la \(k^{ème}\) composante principale. cela revient à maximiser
+  l'inertie du nuage direct projeté sur \(< u >\).
+\end{enumerate}
+
+\begin{align*}
+\max_{\left|\left| u \right|\right|^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{X_t}{\left[\left| X_t \right|\right]} u_t \right|\right]^2 &=
+\max_{\left|\left| u \right|\right|^2 = 1} \sum_{t=1}^{T} \sum_{\tau =1}^{T} u_{\tau} \frac{[X_{\tau} \mid X_t]}{\left[\left| X_t \right|\right] \left[\left| X_{\tau} \right|\right]} u_t \\
+&= \max_{\left|\left| u \right|\right|^2 = 1} u'R u
+\end{align*}
+
+où:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(X_t\): \(n \times p\) (la matrice \(X_t\) a des dimensions
+  \(n \times p\)).
+\item
+  \(\frac{u_t}{\left[\left| X_t \right|\right]} X_t\): \(n \times p\)
+  (chaque colonne de \(X_t\) est pondérée par
+  \(\frac{u_t}{\left[\left| X_t \right|\right]}\)).
+\item
+  \(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\):
+  \(n \times p\) (somme des termes précédents sur \(t\)).
+\item
+  \(\left(\sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t\right)'\):
+  \(p \times n\) (transposée de la matrice résultante).
+\item
+  \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\):
+  \(1 \times 1\) (la norme euclidienne au carré est un scalaire).
+\item
+  \(R\) est la matrice des coefficients RV
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Résolvons le programme ci-dessus, le langrangien associé s'écrit:
+\end{enumerate}
+
+\[L(u,\lambda) = u'R u - \lambda (\|u\|^2-1) \]
+
+On a alors :
+
+\[
+\begin{cases}
+  \frac{\partial L}{\partial u}(u,\lambda) = 2Ru - 2\lambda u \\
+  \frac{\partial L}{\partial \lambda}(u,\lambda) = \|u\|^2 - 1
+\end{cases}
+\]
+
+Les conditions de premier ordre donnent:
+
+\[\iff (S)
+\begin{cases}
+  Ru  = \lambda u \quad (*) \\
+  \|u\|^2 = 1 \quad (**)
+\end{cases}
+\]
+
+On a par suite: \(u' \quad (*)\) et \((**) \Rightarrow u'Ru = \lambda\).
+
+D'après, \((S)\) on en déduit que les vecteurs \(u\) solution de premier
+ordre sont les vecteurs propres de la matrice
+\(R = ((R(X_t,X_{\tau} )))_{t,\tau}\) des coefficients RV d'Escoufier
+entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre \(u\) de
+\(R\) (tel que \(\|u\| = 1\)) de valeur propre \(\lambda\), on a
+\(u'Ru = \lambda\).
+
+La valeur maximale de \(u'Ru\) est obtenue pour les vecteurs propres
+associés à la plus grande valeur propre de \(R\).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Nous allons écrire le programme R fournissant les vecteurs u solutions
+  des équations du premier ordre.
+\end{enumerate}
+
+Considérons un exemple d'application de la fonction vecval\_prop:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# on applique vecval\_prop aux données simulated}
+\NormalTok{vecval }\OtherTok{=} \FunctionTok{vecval\_prop}\NormalTok{(n\_tableaux)}
+
+\NormalTok{val\_prop }\OtherTok{\textless{}{-}}\NormalTok{ vecval}\SpecialCharTok{$}\NormalTok{val\_prop}
+\NormalTok{vec\_prop }\OtherTok{\textless{}{-}}\NormalTok{ vecval}\SpecialCharTok{$}\NormalTok{vec\_prop}
+\end{Highlighting}
+\end{Shaded}
+
+Aprés exécution de la fonction vecval\_prop les résultats suivants:
+
+\[U = \begin{pmatrix}
+-0.4935 & -0.4719 & 0.5853 & 0.4371 \\
+0.4170 & -0.6548 & 0.2544 & -0.5768 \\
+0.6774 & -0.2244 & -0.1247 & 0.6894 \\
+0.3517 & 0.5461 & 0.7597 & -0.0305 
+\end{pmatrix}
+\]
+
+\[\lambda = \begin{pmatrix} \lambda_1 \\ \lambda_2 \\ \lambda_3 \\ \lambda_4 \end{pmatrix} = \begin{pmatrix} 1.2926 \\ 1.1270 \\ 0.8721 \\ 0.7083 \end{pmatrix}
+\]
+
+où, \(U\) est la matrice des vecteurs propres et \(\lambda\) les valeurs
+propres associées arrondie à \(10^{-4}\).
+
+Montrons à présent que les vecteurs u obtenus forment une base
+\emph{I}-orthonormée.
+
+Reprenons la matrice \(R\) des coefficients RV précédente. Soient
+\(u_i\) et \(u_j\) des vecteurs propres de \(R\) associés aux valeurs
+propres \(\lambda_i\) et \(\lambda_j\) distinctes. Comme \(u_i\) et
+\(u_j\) sont des solutions du problème suivant :
+
+\[
+\max_{\left|\left| u \right|\right|^2 = 1} u'R u
+\]
+
+on a alors \(\|u_i\|^2 = 1\) et \(\|u_j\|^2 = 1\). Il suffit de montrer
+que \(u_i\) et \(u_j\) sont orthogonaux et ainsi de conclure que les
+vecteurs \(u\) forment une base I-orthonormée. En d'autres termes, nous
+allons montrer que \(u_i'u_j = 0\).
+
+Sachant que \(u_i\) et \(u_j\) sont des vecteurs propres de \(R\)
+associés aux valeurs propres \(\lambda_i\) et \(\lambda_j\), nous avons
+:
+
+\[
+\begin{cases}
+  Ru_i  = \lambda_i u_i \\
+  Ru_j  = \lambda_j u_j \\
+\end{cases}
+\]
+
+Par la suite, on a:
+
+\begin{align*}
+u_i'Ru_j &= \lambda_j u_i' u_j\\
+\iff u_i'R'u_j &= \lambda_j u_i' u_j \quad (\text{car } R \text{ est une matrice symétrique})\\
+\iff (Ru_i)'u_j &= \lambda_j u_i' u_j\\
+\iff (\lambda_i u_i)'u_j &= \lambda_j u_i' u_j\\
+\iff \lambda_i u_i'u_j &= \lambda_j u_i' u_j\\
+\iff (\lambda_i - \lambda_j) u_i'u_j &=  0\\
+\iff u_i'u_j &=  0 \quad (\text{car } \lambda_i \neq \lambda_j)
+\end{align*}
+
+On en déduit donc que les vecteurs \(u\) forment une base I-orthonormée.
+
+La fonction \textbf{``vecval\_prop()''} ci-dessus nous donne les
+vecteurs propres \(u_i\) de la matrice des coefficients RV \(R\)
+associée aux valeurs propres \(\lambda_i\).
+
+\hypertarget{uxe9quivalence-avec-lacp-dun-tableau-juxtaposuxe9-duxe9pliant-le-tableau-cubique}{%
+\subsubsection{Équivalence avec l'ACP d'un tableau juxtaposé
+``dépliant'' le tableau
+cubique}\label{uxe9quivalence-avec-lacp-dun-tableau-juxtaposuxe9-duxe9pliant-le-tableau-cubique}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Il suffit de décomposer \(X_t\) comme une juxtaposition de colonnes:
+\end{enumerate}
+
+\[ X_t = \begin{bmatrix}
+x^{1}_{t}
+\ldots 
+x^{p}_{t}
+\end{bmatrix}_{\text{Profils Colonnes}} = \begin{bmatrix}
+x_{t,1} \\
+\vdots \\
+x_{t,n}
+\end{bmatrix}_{\text{Profils Lignes}} 
+\]
+
+et de le réécrire sous forme ``verticalisée'':
+
+\[ y^t = \begin{pmatrix} x^{1}_{t} \\ \vdots \\ x^{p}_{t}) \end{pmatrix} \in \mathbb{R}^{np} \quad \text{où} \quad \forall j \in [|1,p|], x^{j}_{t} = \begin{pmatrix}
+x^{j}_{t,1} \\
+\vdots \\
+x^{j}_{t,n}
+\end{pmatrix} \]
+
+Avant de démontrer l'égalité des produits scalaires, définissons d'abord
+le Produit Kronecker:
+
+Soient \(A\) une matrice de taille \(m \times n\) et \(B\) une matrice
+de taille \(p \times q\). Leur produit tensoriel est la matrice
+\(A \otimes B\) de taille \(mp\) par \(nq\), définie par blocs
+successifs de taille \(p \times q\), le bloc d'indice \(i,j\) valant
+\(a_{ij}B\).
+
+En d'autres termes,
+
+\[
+A \otimes B = \begin{pmatrix}
+a_{11}B & \cdots & a_{1n}B \\
+\vdots & \ddots & \vdots \\
+a_{m1}B & \cdots & a_{mn}B
+\end{pmatrix}
+\]
+
+Maintenant, montrons que :
+
+\[ [ X^s  |  X^t ] = \langle y^s | y^t \rangle_L \]
+
+où \(L = C \otimes W (Produit de Kronecker)\).
+
+Sachant que, \(W = \frac{1}{n}I_n\) et \(C = \frac{1}{p}I_p\) on en
+déduit que \(L = \frac{1}{np}I_{np}\).
+
+D'une part, soit \((s,t) \in [|1,T|]\):
+
+\begin{align*}
+[X_s \mid X_t] &= tr(\tilde{X_s}'\tilde{X_t})\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} w_k c_i x^i_{s,k} x^i_{t,k}\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} \frac{1}{np} x^i_{s,k} x^i_{t,k}
+\end{align*}
+
+D'autre part:
+
+\begin{align*}
+\langle y^s | y^t \rangle_L &= {y^{s}}'L y^{t} \\
+&= \sum_{i=1}^{p} \frac{1}{np} {x^i_{s}}' x^i_{t}\\
+&= \sum_{i=1}^{p} \frac{1}{np} \sum_{k=1}^{n} x^i_{s,k} x^i_{t,k}\\
+&= \sum_{k=1}^{n} \sum_{i=1}^{p} \frac{1}{np} x^i_{s,k} x^i_{t,k}
+\end{align*}
+
+Donc \([ X^s | X^t ] = \langle y^s | y^t \rangle_L\).
+
+Il en découle que \(X^t\) est ``verticalisé'' en \({y^t}^* = y^t\)
+\(L\)-normé.\\
+
+Par suite, on note \(Y = [ y^1, \ldots , y^T ]\). Un individu correspond
+à une ligne de ce tableau, correspondant donc à l'indice \((j,i)\) dans
+le cube initial. Un individu est un vecteur de taille \(T\), dont les
+coordonnées sont les \(T\) valeurs de la case \((i,j)\) du tableau
+\(X_t\) sur la période. C'est la trajectoire de cette case. Son poids
+est \(L_(j,i) = w_i c_j = \frac{1}{np}\).\\
+
+Par exemple, pour un tableau cubique ventilant la valeur ajoutée d'une
+économie par région \((i)\), secteur \((j)\) et année \((t)\),
+l'individu du tableau dépliant ainsi le cube serait la trajectoire dans
+le temps de la V.A. réalisée par le secteur \(j\) dans la région \(i\).
+
+Et on a :
+
+\[ \left[\left| \sum_{t=1}^{T} u_t \frac{X_t}{\left[\left| X_t \right|\right]} \right|\right]^2 = \| Y^* u \|_{W}^{2} = \| F \|_{W}^{2} \],
+où \(F = Y^* u\) est la composante associée à \(u\).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Pour déduire que les composantes principales
+  \(F^1, \ldots, F^k, \ldots\) sont orthogonales au sens du produit
+  scalaire convenable, nous devons considérer la façon dont ces
+  composantes sont construites à partir des vecteurs propres obtenus.
+\end{enumerate}
+
+\begin{align*}
+\langle F_k | F_l \rangle_L &= F_k' L F_l \\
+&= u_k' {Y^*}' L Y^* u_l\\
+&= 1 \quad \text{si} \quad k = l\\
+&= 0 \quad \text{si} \quad k \neq l 
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Dépliage du tableau cubique en un tableau juxtaposé :
+\end{enumerate}
+
+Composantes principales des tableaux dépliés :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# On veut donner la fonction des composantes principales correspondant aux vecteurx u (vec\_prop)}
+\NormalTok{composantes\_principales }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(u, X\_t)\{}
+  
+\NormalTok{  p }\OtherTok{=} \FunctionTok{length}\NormalTok{(X\_t[}\DecValTok{1}\NormalTok{,]) }\CommentTok{\# la dimension des individus}
+\NormalTok{  n }\OtherTok{=} \FunctionTok{length}\NormalTok{(X\_t[,}\DecValTok{1}\NormalTok{]) }\CommentTok{\# la dimension des variables}
+\NormalTok{  W }\OtherTok{=} \FunctionTok{diag}\NormalTok{(n)}\SpecialCharTok{/}\NormalTok{n}
+\NormalTok{  M }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =}\NormalTok{ p, }\AttributeTok{ncol =}\NormalTok{ p)}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{p) \{}
+\NormalTok{    M[i,i] }\OtherTok{=} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{t}\NormalTok{(X\_t[,i]) }\SpecialCharTok{\%*\%}\NormalTok{ W }\SpecialCharTok{\%*\%}\NormalTok{ X\_t[,i])}
+\NormalTok{  \}}
+  
+\NormalTok{  F }\OtherTok{\textless{}{-}}\NormalTok{ X\_t }\SpecialCharTok{\%*\%}\NormalTok{ M }\SpecialCharTok{\%*\%}\NormalTok{ u }\CommentTok{\# calcul de la matrice des composantes principales}
+  
+  \FunctionTok{return}\NormalTok{(F)}
+\NormalTok{\}}
+\NormalTok{comp\_prin }\OtherTok{=} \FunctionTok{composantes\_principales}\NormalTok{(vec\_prop\_jux, mat\_jux)}
+\FunctionTok{print}\NormalTok{(comp\_prin[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{8}\NormalTok{,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{]) }\CommentTok{\# Affichage de la première composante principale}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]       [,2]        [,3]
+## [1,] -1.3350171  0.7284918  0.28498025
+## [2,]  2.6149460 -0.7778572 -0.44579708
+## [3,] -0.6205920 -1.0449091 -0.09381266
+## [4,]  0.5367399 -0.2626285 -0.39001332
+## [5,]  0.4548871 -0.5489805  0.83000712
+## [6,]  0.1119155 -0.7373719 -0.33002573
+## [7,] -0.7433038  0.6872098  0.26976932
+## [8,]  0.6082812 -2.0817439  0.46856410
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# On veut maintenant programmer la fonction calculant la kième composante F\_k ainsi que la }
+\CommentTok{\# composante normée f\_k correspondante}
+\NormalTok{composante\_k }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(u, X\_t, k)\{}
+  
+   \CommentTok{\# calcul des composantes principales}
+\NormalTok{  comp\_prin }\OtherTok{=} \FunctionTok{composantes\_principales}\NormalTok{(u, X\_t)}
+\NormalTok{  F\_k }\OtherTok{=}\NormalTok{ comp\_prin[,k]}
+
+  
+\NormalTok{  f\_k }\OtherTok{=}\NormalTok{ F\_k }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{(F\_k}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)) }\CommentTok{\# calcul de la kième composante principale normée}
+  
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{F\_k =}\NormalTok{ F\_k, }\AttributeTok{f\_k =}\NormalTok{ f\_k))}
+\NormalTok{\}}
+
+\NormalTok{pc1 }\OtherTok{\textless{}{-}} \FunctionTok{composante\_k}\NormalTok{(vec\_prop, mat\_jux, }\DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{F\_k}
+\NormalTok{pc1\_nr }\OtherTok{\textless{}{-}} \FunctionTok{composante\_k}\NormalTok{(vec\_prop, mat\_jux, }\DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{f\_k}
+
+\CommentTok{\# Affichage des premières lignes de la première composante principale et de sa version normée}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Extrait de la 1ère composante :}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Extrait de la 1ère composante :
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{head}\NormalTok{(pc1))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1.3350171  2.6149460 -0.6205920  0.5367399  0.4548871  0.1119155
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{Extrait de la 1ère composante normée :}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Extrait de la 1ère composante normée :
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{head}\NormalTok{(pc1\_nr))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.026256913  0.051430359 -0.012205709  0.010556519  0.008946650
+## [6]  0.002201137
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fonction donnant la représentation graphique des individus en plan principal (k,l)}
+\NormalTok{representation\_graph\_ind }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(comp\_p, val\_prop\_dep, k, l, }
+                                    \AttributeTok{aff\_noms =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \StringTok{"navy"}\NormalTok{) \{}
+  \CommentTok{\# Créer un data frame avec les composantes principales}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{F\_k =}\NormalTok{ comp\_p[, }\DecValTok{1}\NormalTok{], }\AttributeTok{F\_l =}\NormalTok{ comp\_p[, }\DecValTok{2}\NormalTok{])}
+\NormalTok{  inert\_k }\OtherTok{=}\NormalTok{ val\_prop\_dep[k] }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(val\_prop\_dep) }\SpecialCharTok{*} \DecValTok{100}
+\NormalTok{  inert\_l }\OtherTok{=}\NormalTok{ val\_prop\_dep[l] }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(val\_prop\_dep) }\SpecialCharTok{*} \DecValTok{100}
+  
+  \CommentTok{\# Récupérer les noms de lignes ou les numéros de ligne}
+\NormalTok{  row\_names }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.null}\NormalTok{(}\FunctionTok{rownames}\NormalTok{(df))) }\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(df) }\ControlFlowTok{else} \FunctionTok{rownames}\NormalTok{(df)}
+  
+  \CommentTok{\# Trouver les limites des axes x et y pour centrer l\textquotesingle{}origine}
+\NormalTok{  x\_limits }\OtherTok{\textless{}{-}} \FunctionTok{range}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{F\_k)}
+\NormalTok{  y\_limits }\OtherTok{\textless{}{-}} \FunctionTok{range}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{F\_l)}
+\NormalTok{  limits }\OtherTok{\textless{}{-}} \FunctionTok{range}\NormalTok{(}\FunctionTok{c}\NormalTok{(x\_limits, y\_limits))}
+  
+  \CommentTok{\# Plot les composantes principales dans un plan avec l\textquotesingle{}origine au centre}
+  \FunctionTok{plot}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{F\_k, df}\SpecialCharTok{$}\NormalTok{F\_l, }\AttributeTok{xlab =} \FunctionTok{paste}\NormalTok{(}\StringTok{"F"}\NormalTok{, k, }\StringTok{" ("}\NormalTok{, }\FunctionTok{round}\NormalTok{(inert\_k, }\DecValTok{2}\NormalTok{), }\StringTok{"\%)"}\NormalTok{),}
+       \AttributeTok{ylab =} \FunctionTok{paste}\NormalTok{(}\StringTok{"F"}\NormalTok{, l, }\StringTok{" ("}\NormalTok{, }\FunctionTok{round}\NormalTok{(inert\_l, }\DecValTok{2}\NormalTok{), }\StringTok{"\%)"}\NormalTok{),}
+       \AttributeTok{main =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Représentation des individus dans le plan ("}\NormalTok{, k, }\StringTok{","}\NormalTok{, l, }\StringTok{")"}\NormalTok{),}
+       \AttributeTok{xlim =}\NormalTok{ limits, }\AttributeTok{ylim =}\NormalTok{ limits)}
+  
+  \CommentTok{\# Ajouter des lignes en pointillé pour les axes horizontal et vertical}
+  \FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{0}\NormalTok{, }\AttributeTok{lty =} \StringTok{"dotted"}\NormalTok{, }\AttributeTok{lwd =} \FloatTok{0.5}\NormalTok{)}
+  \FunctionTok{abline}\NormalTok{(}\AttributeTok{v =} \DecValTok{0}\NormalTok{, }\AttributeTok{lty =} \StringTok{"dotted"}\NormalTok{, }\AttributeTok{lwd =} \FloatTok{0.5}\NormalTok{)}
+  
+  \CommentTok{\# Afficher les noms de lignes ou les numéros de ligne si demandé}
+  \ControlFlowTok{if}\NormalTok{ (aff\_noms) \{}
+    \FunctionTok{text}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{F\_k, df}\SpecialCharTok{$}\NormalTok{F\_l, }\AttributeTok{labels =}\NormalTok{ row\_names, }\AttributeTok{pos =} \DecValTok{1}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.8}\NormalTok{, }\AttributeTok{col =}\NormalTok{ col)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# Exemple d\textquotesingle{}utilisation sans afficher les noms de lignes ou les numéros de ligne}
+\FunctionTok{representation\_graph\_ind}\NormalTok{(comp\_prin, val\_prop\_jux, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\CommentTok{\# Exemple d\textquotesingle{}utilisation avec l\textquotesingle{}affichage des noms de lignes ou des numéros de ligne}
+\FunctionTok{representation\_graph\_ind}\NormalTok{(comp\_prin, val\_prop\_jux, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\AttributeTok{aff\_noms =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{projet_statis_files/figure-latex/unnamed-chunk-16-1} \end{center}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Cosinus entre les tableaux et les composantes principales :
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calcul des cosinus entre Xt (resultats\_n) et chaque composante principale F\_k}
+\NormalTok{cosinus }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(X\_t, f\_k)\{}
+\NormalTok{  mat\_cos }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{, }\AttributeTok{nrow =} \FunctionTok{ncol}\NormalTok{(f\_k),}\AttributeTok{ncol =} \FunctionTok{ncol}\NormalTok{(f\_k))}
+  \ControlFlowTok{for}\NormalTok{ (k }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(f\_k))\{}
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(f\_k)) \{}
+           \CommentTok{\# Calcul du cosinus entre Xt et la kième composante F\_k}
+\NormalTok{           mat\_cos[k,j] }\OtherTok{=} \FunctionTok{sum}\NormalTok{(X\_t[,j] }\SpecialCharTok{*}\NormalTok{ f\_k[,k]) }\SpecialCharTok{/}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{(X\_t[,j]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)) }\SpecialCharTok{*}
+                                                      \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{(f\_k[,k]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))) }
+           
+\NormalTok{    \}}
+
+\NormalTok{  \}}
+  \FunctionTok{rownames}\NormalTok{(mat\_cos) }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(}\StringTok{"v"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\FunctionTok{ncol}\NormalTok{(mat\_cos), }\AttributeTok{sep =} \StringTok{""}\NormalTok{)}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{t}\NormalTok{(mat\_cos))}
+\NormalTok{\}}
+
+\CommentTok{\# Affichage du produit scalaire entre Xt et la ième composante principale }
+\FunctionTok{cosinus}\NormalTok{(mat\_jux, }\FunctionTok{composantes\_principales}\NormalTok{(vec\_prop\_jux, mat\_jux)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              v1         v2         v3          v4
+## [1,] -0.5611042 -0.5010173  0.5466167  0.36790472
+## [2,]  0.4740911 -0.6950906  0.2376074 -0.48541671
+## [3,]  0.7701035 -0.2381741 -0.1164127  0.58022566
+## [4,]  0.3998963  0.5797305  0.7094618 -0.02567956
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{representation\_graph\_var }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(vec\_prop, X\_t, val\_prop, k, l)\{}
+\NormalTok{  inert\_k }\OtherTok{=}\NormalTok{ val\_prop[k]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(val\_prop) }\SpecialCharTok{*} \DecValTok{100} \CommentTok{\#l\textquotesingle{}inertie captée par la comp k}
+\NormalTok{  inert\_l }\OtherTok{=}\NormalTok{ val\_prop[l]}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(val\_prop) }\SpecialCharTok{*} \DecValTok{100} \CommentTok{\#l\textquotesingle{}inertie captée par la comp k}
+  
+\NormalTok{  mat\_cos }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{cosinus}\NormalTok{(X\_t, }\FunctionTok{composantes\_principales}\NormalTok{(vec\_prop, X\_t)))}
+\NormalTok{  F\_k }\OtherTok{=}\NormalTok{ mat\_cos[,k] }\CommentTok{\# Récupération de la kième composante principale}
+\NormalTok{  F\_l }\OtherTok{=}\NormalTok{ mat\_cos[,l] }\CommentTok{\# Récupération de la lième composante principale}
+
+  
+  \CommentTok{\# Création des données pour le cercle unité}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{varabs =} \FunctionTok{cos}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi, }\AttributeTok{length.out =} \DecValTok{100}\NormalTok{)),}
+    \AttributeTok{varord =} \FunctionTok{sin}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi, }\AttributeTok{length.out =} \DecValTok{100}\NormalTok{))}
+\NormalTok{  )}
+  
+  \CommentTok{\# Créer le graphique en utilisant ggplot2}
+  \FunctionTok{ggplot}\NormalTok{(mat\_cos, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ F\_k, }\AttributeTok{y =}\NormalTok{ F\_l)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_segment}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xend =} \DecValTok{0}\NormalTok{, }\AttributeTok{yend =} \DecValTok{0}\NormalTok{), }\AttributeTok{color =} \StringTok{"\#445577"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{rownames}\NormalTok{(mat\_cos)), }\AttributeTok{hjust =} \DecValTok{0}\NormalTok{, }\AttributeTok{vjust =} \DecValTok{0}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \FloatTok{1.5}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme\_classic}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{coord\_fixed}\NormalTok{(}\AttributeTok{ratio =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dotted"}\NormalTok{, }\AttributeTok{lwd =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dotted"}\NormalTok{, }\AttributeTok{lwd =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \FunctionTok{paste}\NormalTok{(}\StringTok{"F"}\NormalTok{, k, }\StringTok{" ("}\NormalTok{, }\FunctionTok{round}\NormalTok{(inert\_k, }\DecValTok{2}\NormalTok{), }\StringTok{"\%)"}\NormalTok{),}
+         \AttributeTok{y =} \FunctionTok{paste}\NormalTok{(}\StringTok{"F"}\NormalTok{, l, }\StringTok{" ("}\NormalTok{, }\FunctionTok{round}\NormalTok{(inert\_l, }\DecValTok{2}\NormalTok{), }\StringTok{"\%)"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{ggtitle}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Représentation des variables dans le plan ("}\NormalTok{, k, }\StringTok{","}\NormalTok{, l, }\StringTok{")"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_path}\NormalTok{(}\AttributeTok{data =}\NormalTok{ df, }\FunctionTok{aes}\NormalTok{(varabs, varord), }\AttributeTok{color =} \StringTok{"\#222211"}\NormalTok{, }\AttributeTok{linewidth =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}  \CommentTok{\# Ajout du cercle unité}
+    \FunctionTok{xlim}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{ylim}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# Affichage de la représentation graphique des variables en plan principal (1,2)}
+\FunctionTok{representation\_graph\_var}\NormalTok{(vec\_prop\_jux, mat\_sym, val\_prop\_jux, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{projet_statis_files/figure-latex/unnamed-chunk-19-1} \end{center}
+
+\hypertarget{illustration-dun-acp-dun-tableau-juxtaposuxe9-duxe9pliant-le-tableau-cubique}{%
+\subsubsection{Illustration d'un ACP d'un tableau juxtaposé dépliant le
+tableau
+cubique}\label{illustration-dun-acp-dun-tableau-juxtaposuxe9-duxe9pliant-le-tableau-cubique}}
+
+Soit \(A\), \(B\) et \(C\) les matrices données comme suit:
+
+\[
+\text{A} = \begin{pmatrix}
+1 & 0  \\
+-1 & 1 \\
+2 & 2 
+\end{pmatrix}, \quad
+\text{B} = \begin{pmatrix}
+2 & -1  \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix}, \quad
+\text{C} = \begin{pmatrix}
+3 & 1  \\
+1 & -2 \\
+0 & -3 
+\end{pmatrix}
+\]
+
+En utilisant le produit scalaire défini par:
+
+\begin{align*}
+[A \mid B] &= \text{tr}(CA'WB) \\
+&= \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
+&= \text{tr}(\tilde{A}'\tilde{B})
+\end{align*}
+
+avec \(W:= \frac{1}{n}I_n\) la matrice de poids des individus et
+\(C:= \frac{1}{p}I_p\) la matrice de poids des variables.
+
+Nous allons calculer la matrice des coefficients RV d'Escoufier que l'on
+notera \(\Gamma\). Ci-dessous la formule permettant de calculer le
+coefficient RV entre deux matrices \(A\) et \(B\) de taille \(n,p\) ici
+\(n=3\) et \(p=2\):
+
+\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+
+Calculons les coefficients \(R(A ,B)\), \(R(A ,C)\) et \(R(B ,C)\).
+
+Procédons étape par étape:
+
+\[[ A \mid B] = \text{tr}(CA^tWB)= \frac{1}{6}\text{tr}(A^tB)\] Or,
+\[\frac{1}{6} \begin{pmatrix}
+1 & -1 & 2 \\
+0 & 1 & 2
+\end{pmatrix} \begin{pmatrix}
+2 & -1  \\
+-1 & 0 \\
+0 & 1 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+3 & 1  \\
+-1 & 2 
+\end{pmatrix}\]
+
+donc \([A \mid B] = \frac{5}{6}\)
+
+Pour \([A \mid C]\) :
+
+\[
+[A \mid C] = \frac{1}{6} \text{tr}(A^T C) \] Or,
+\[ \frac{1}{6} \begin{pmatrix} 
+1 & -1 & 2 \\ 
+0 & 1 & 2 
+\end{pmatrix} \begin{pmatrix} 
+3 & 1 \\ 
+1 & -2 \\ 
+0 & -3 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+2 & -3  \\
+1 & -8 
+\end{pmatrix}\]
+
+donc \([A \mid C] = \frac{-6}{6} = -1\)
+
+Pour \([B \mid C]\) :
+
+\[
+[B \mid C] = \frac{1}{6} \text{tr}(B^T C) \] Or,
+\[ \frac{1}{6} \begin{pmatrix} 
+2 & -1 & 0 \\ 
+-1 & 0 & 1 
+\end{pmatrix} \begin{pmatrix} 
+3 & 1 \\ 
+1 & -2 \\ 
+0 & -3 
+\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
+5 & 4  \\
+-3 & -4 
+\end{pmatrix}
+\]
+
+donc \([B \mid C] = \frac{1}{6}\). En utilisant la norme associée à ce
+produit scalaire on a:
+
+\(\left[\left| A \right|\right] = \sqrt{\frac{11}{6} }\),
+\(\left[\left| B \right|\right] = \sqrt{\frac{7}{6}}\) et
+\(\left[\left| C \right|\right] = \sqrt{\frac{24}{6}} = 2\).
+
+D'où
+
+\[R(A ,B) = \frac{ \frac{5}{6} }{ \sqrt{\frac{11}{6}} \sqrt{\frac{7}{6}} } \]
+
+\[R(A ,C) = \frac{ -1 }{ 2 \sqrt{\frac{11}{6}}} \] et
+\[R(B ,C) = \frac{ \frac{1}{6} }{ 2 \sqrt{\frac{7}{6}} } \]
+
+Par symétrie du produit scalaire, la matrice \(\Gamma\) des coefficients
+RV est donc égale à:
+
+\[\Gamma = \begin{pmatrix}
+1.0000000 & 0.56980288 & -0.36927447 \\
+0.5698029 & 1.00000000 & 0.07715167 \\
+-0.3692745 & 0.07715167 & 1.00000000 \\
+\end{pmatrix}\]
+
+Maintenant, considérons le dépliement des matrices juxtaposées :
+
+\[
+\text{X} = \begin{pmatrix}
+1 & 2 & 3 \\
+-1 & -1 & 1 \\
+2 & 0 & 0 \\
+0 & -1 & 1 \\
+1 & 0 & -2 \\
+2 & 1 & -3
+\end{pmatrix}
+\]
+
+où la première variable est la matrice A dépliée, la deuxième variable
+est la matrice B dépliée et la troisième variable est la matrice C
+dépliée.
+
+On pose \(M\) la matrice diagonale \(p,p\)
+(\(ici \quad p = 3, \quad n = 6 )\) dont le coefficient
+\(M_{ii} = \frac{1}{||X_i||_W}\) avec:
+
+\begin{itemize}
+\tightlist
+\item
+  \(W:= \frac{1}{n} I_n\)
+\item
+  \(X_i\) la ième variable
+\item
+  \(\|X_i\|_W = \sqrt{(X_i^tWX_i)}\)
+\end{itemize}
+
+Ici \(M\) sera donc égale à:
+
+\[M = \begin{pmatrix}
+\frac{1}{\sqrt{\frac{11}{6}}} & 0 & 0 \\
+0 & \frac{1}{\sqrt{\frac{7}{6}}} & 0 \\
+0 & 0 & \frac{1}{2} \\
+\end{pmatrix}\]
+
+On a alors:
+
+\[\Delta := M X^t W X  M = \Gamma \]
+
+La fonction ci-dessous fait les calculs matriciels puis nous donne la
+matrice obtenue delta qui est égale à la matrice des coefficients RV
+calculée précédemment.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Données}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}
+  \FunctionTok{c}\NormalTok{( }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{,}
+    \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{,}
+     \DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{,}
+     \DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{,}
+     \DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}
+     \DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{3}
+\NormalTok{  ), }\AttributeTok{nrow =} \DecValTok{6}\NormalTok{, }\AttributeTok{byrow =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Ajout des noms de lignes}
+\FunctionTok{rownames}\NormalTok{(X) }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"L"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)}
+
+\NormalTok{oper\_inert }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(X)\{}
+  
+\NormalTok{  p }\OtherTok{=} \FunctionTok{length}\NormalTok{(X[}\DecValTok{1}\NormalTok{,]) }\CommentTok{\# la dimension des individus}
+\NormalTok{  n }\OtherTok{=} \FunctionTok{length}\NormalTok{(X[,}\DecValTok{1}\NormalTok{]) }\CommentTok{\# la dimension des variables}
+\NormalTok{  W }\OtherTok{=} \FunctionTok{diag}\NormalTok{(n)}\SpecialCharTok{/}\NormalTok{n}
+\NormalTok{  M }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =}\NormalTok{ p, }\AttributeTok{ncol =}\NormalTok{ p)}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{p) \{}
+\NormalTok{    M[i,i] }\OtherTok{=} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{t}\NormalTok{(X[,i])}\SpecialCharTok{\%*\%}\NormalTok{W}\SpecialCharTok{\%*\%}\NormalTok{X[,i])}
+\NormalTok{  \}}
+  \FunctionTok{return}\NormalTok{(M }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(X) }\SpecialCharTok{\%*\%}\NormalTok{ W }\SpecialCharTok{\%*\%}\NormalTok{ X }\SpecialCharTok{\%*\%}\NormalTok{ M)}
+\NormalTok{\}}
+
+\CommentTok{\# Calcul de la matrice}
+\NormalTok{Delta }\OtherTok{\textless{}{-}} \FunctionTok{oper\_inert}\NormalTok{(X)}
+\FunctionTok{print}\NormalTok{(Delta)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]       [,2]        [,3]
+## [1,]  1.0000000 0.56980288 -0.36927447
+## [2,]  0.5698029 1.00000000  0.07715167
+## [3,] -0.3692745 0.07715167  1.00000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{result\_propre }\OtherTok{=} \FunctionTok{eigen}\NormalTok{(Delta)}\CommentTok{\# list ayant les valeurs et vecteurs propres}
+\NormalTok{valp }\OtherTok{=}\NormalTok{ result\_propre}\SpecialCharTok{$}\NormalTok{values }\CommentTok{\#valeurs propres}
+\NormalTok{vecp }\OtherTok{=}\NormalTok{ result\_propre}\SpecialCharTok{$}\NormalTok{vectors}
+\end{Highlighting}
+\end{Shaded}
+
+Finalement, on en déduit qu'il y a équivalence entre les matrices
+juxtaposées A, B et C avec la matrice X dont les variables sont les
+matrices A, B et C dépliées.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comp }\OtherTok{=} \FunctionTok{composantes\_principales}\NormalTok{(vecp,X)}
+\FunctionTok{representation\_graph\_ind}\NormalTok{(comp, valp, }\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{, }\AttributeTok{aff\_noms =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{projet_statis_files/figure-latex/unnamed-chunk-21-1} \end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{representation\_graph\_var}\NormalTok{(vecp,X,valp,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{projet_statis_files/figure-latex/unnamed-chunk-21-2} \end{center}
+
+\hypertarget{quelles-acp-dautres-duxe9pliages-du-tableau-cubique}{%
+\subsubsection{Quelles ACP d'autres ``dépliages'' du tableau cubique
+?}\label{quelles-acp-dautres-duxe9pliages-du-tableau-cubique}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Disons que l'on dispose d'un tableau cubique X(i,j,t). On peut le
+  déplier de trois manières différentes : Y((i,j),t) de façon à avoir
+  les individus et caractéristiques en fonction du temps. Pour avoir les
+  caractéristiques dans le temps pour chaque individu Y((j,t),i). Ou
+  pour avoir les individus dans le temps pour chaque caractéristique
+  Y((i,t),j).\\
+  Chacun de ces dépliages donnera une matrice différente et donc une ACP
+  différente. Mais chacun reste intéressant.
+\item
+  Selon le dépliage choisi, les individus et variables ne seront pas les
+  mêmes. En individus on peut avoir :\\
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Les individus par caractéristiques (ou caractéristiques par individus)
+  décrit dans le temps,\\
+\item
+  Les individus dans le temps (à un instant donné), décrit par les
+  caractéristiques,\\
+\item
+  Les caractéristiques dans le temps (à un instant donné), décrivant les
+  individus.\\
+  Les ACP à envisager dépendent du jeu de données que l'on souhaite
+  étudier. Ici les individus et variables ne sont pas clairement définit
+  car ne porte que des numéros. Ce qui est sûr c'est que les individus
+  regrouperont les tableaux dépliés. Les éléments à projeter en
+  supplémentaire dépendent, encore une fois, de ce que l'on souhaite
+  étudier.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Un inconvénient est qu'on perde une grosse partie de l'information qui
+  sera noyée dans le tableau déplié. Cependant, cela permet de mieux
+  visualiser les données et de les traiter plus facilement (utilisation
+  du produit matriciel possible). Le plus gros inconvénient reste la
+  perte de la symétrie, par exemple lors d'un dépliage de X(i,j,t) en
+  Y((i,j),t). En effet, les individus et variables ne sont plus
+  équivalents. Cela peut poser problème si l'on souhaite comparer les
+  individus et variables entre eux.
+\end{enumerate}
+
+L'idéal serait de réaliser les trois dépliages possibles et de les
+comparer pour voir lequel est le plus pertinent ! Tout dépend du tableau
+initial.
+
+\hypertarget{situation-2}{%
+\section{Situation 2}\label{situation-2}}
+
+\hypertarget{de-nouvelles-matrices-dans-un-nouvel-espace}{%
+\subsection{De nouvelles matrices dans un nouvel
+espace}\label{de-nouvelles-matrices-dans-un-nouvel-espace}}
+
+1.1.a) Calculons \(P_m\) en fonction de \(X_m\) et \(M_m\):
+\[P_m = X_m M_m X_m'\]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Les matrices \(P_m\) se trouvent dans l'espace
+  \(\mathbf{P} = \mathbf{M}_n(\mathbb{R})\) où \(n\) est le nombre
+  d'individus. Cet espace est de taille \(\frac{n(n+1)}{2}\) car
+  \(P_m = X_m M_m X_m'\) produit une matrice symétrique de taille n x n
+  contenant \(\frac{n(n+1)}{2}\) éléments indépendants.
+\end{enumerate}
+
+1.2.a) Les poids naturel des lignes de \(P_m\) serait
+\(W = \frac{1}{n}I_n\) même chose pour les colonnes.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  On peut munir \(\mathbf{P}\) du produit scalaire de Frobénius qui est
+  défini par:
+\end{enumerate}
+
+\[(P_m,P_k) = tr(P_m W P_k W) \quad (p)\]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\item
+  Les tableaux sont mesurés à des échelles différentes, on se doit donc
+  de normées les tableaux \(P_m\) afin de les ramenées sur la même
+  échelle. La normalisation permet de rendre les comparaisons moins
+  sensibles à l'échelle des données et plus centrées sur les relations
+  entre les individus.
+\item
+  Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on
+  utilise le produit scalaire \((p)\) afin de calculer le coefficient RV
+  entre \(P_m\) et \(P_k\). Si le coefficient est proche de 1 on pourra
+  dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées
+  fortement) et donc une similarité plus grande entre les ensembles
+  d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le
+  coefficient RV est proche de -1 on dira que les matrices \(X_m\) et
+  \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de
+  0, on dira que \(X_m\) et \(X_k\) sont décorrelées (on en peut pas
+  conclure).
+\end{enumerate}
+
+\hypertarget{statis-2}{%
+\subsection{STATIS 2}\label{statis-2}}
+
+On applique le programme de STATIS 1 à un ensemble de matrices \(P_m\)
+issues de tableaux thématiques décrivant les mêmes individus. On note
+\(F_1\),\ldots, \(F_k\) les composantes principales obtenues.
+
+\hypertarget{graphiques-directs-de-statis}{%
+\subsubsection{Graphiques directs de
+STATIS}\label{graphiques-directs-de-statis}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Pour projeter chacune des matrices \(P_m\) sur un graphe dont les
+  directions sont un couple de composantes principales \((F_k,F_l)\), on
+  peut utiliser la méthode de la projection orthogonale.\\
+  Tout d'abord, nous calculons les composantes principales \((F_k\) et
+  \(F_l)\) à partir de la matrice \(P\) résultant de l'analyse STATIS
+  1.\\
+  Ensuite, pour chaque \(P_m\), nous calculons les produits scalaires
+  entre \(P_m\) et les composantes principales \(F_k\) et \(F_l\).\\
+  Enfin, ces produits scalaires servent de coordonnées pour projeter les
+  points correspondant à \(P_m\) sur le plan défini par les composantes
+  principales \(F_k\) et \(F_l\).
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Tableau à trois dimension}
+\FunctionTok{data}\NormalTok{(chickenk)}
+
+\NormalTok{M }\OtherTok{=} \FunctionTok{as.matrix}\NormalTok{(chickenk}\SpecialCharTok{$}\NormalTok{Mortality)}
+\FunctionTok{rownames}\NormalTok{(M) }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{351}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{FS }\OtherTok{=} \FunctionTok{as.matrix}\NormalTok{(chickenk}\SpecialCharTok{$}\NormalTok{FarmStructure)}
+\FunctionTok{rownames}\NormalTok{(FS) }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{351}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{OFH }\OtherTok{=} \FunctionTok{as.matrix}\NormalTok{(chickenk}\SpecialCharTok{$}\NormalTok{OnFarmHistory)}
+\FunctionTok{rownames}\NormalTok{(OFH) }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{351}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{FC }\OtherTok{=} \FunctionTok{as.matrix}\NormalTok{(chickenk}\SpecialCharTok{$}\NormalTok{FlockCharacteristics)}
+\FunctionTok{rownames}\NormalTok{(FC) }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{351}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{CTS }\OtherTok{=} \FunctionTok{as.matrix}\NormalTok{(chickenk}\SpecialCharTok{$}\NormalTok{CatchingTranspSlaught)}
+\FunctionTok{rownames}\NormalTok{(CTS) }\OtherTok{=} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{351}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{data }\OtherTok{=} \FunctionTok{list}\NormalTok{(M, FS, OFH, FC, CTS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mat\_coldiff }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(X)\{}
+  
+\NormalTok{  p }\OtherTok{=} \FunctionTok{length}\NormalTok{(X[}\DecValTok{1}\NormalTok{,]) }\CommentTok{\# la dimension des individus}
+\NormalTok{  M }\OtherTok{=} \FunctionTok{diag}\NormalTok{(p)}\SpecialCharTok{/}\NormalTok{p}
+  
+\NormalTok{  Pm }\OtherTok{=}\NormalTok{ X }\SpecialCharTok{\%*\%}\NormalTok{ M }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(X)}
+  
+  \FunctionTok{return}\NormalTok{(Pm)}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{graphiques-projetant-les-individus-et-les-variables-initiales}{%
+\subsubsection{Graphiques projetant les individus et les variables
+initiales}\label{graphiques-projetant-les-individus-et-les-variables-initiales}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Pour montrer que les composantes principales sont des matrices
+  symétriques, nous devons rappeler que les matrices de covariance (ou
+  de corrélation) utilisées dans l'analyse des composantes principales
+  (ACP) sont symétriques. Les composantes principales sont calculées à
+  partir de ces matrices de covariance, ce qui garantit que les
+  composantes principales elles-mêmes seront symétriques.
+\item
+  Chaque composante principale peut être interprétée comme une matrice
+  de produits scalaires entre individus. En utilisant ces produits
+  scalaires, nous pouvons obtenir une image du nuage des individus dans
+  un plan de dimension réduite en utilisant des techniques de
+  visualisation telles que l'Analyse en Composantes Principales (PCA) ou
+  d'autres méthodes de réduction de dimensionnalité. Une fois que nous
+  avons cette représentation en deux dimensions des individus, nous
+  pouvons mettre en relation cette image avec les variables des tableaux
+  en examinant les poids des variables dans chaque composante
+  principale. Les variables qui contribuent le plus aux composantes
+  principales sont celles qui ont le plus d'influence sur la position
+  des individus dans l'espace réduit.
+\item
+\end{enumerate}
+
+\hypertarget{aides-uxe0-linterpruxe9tation}{%
+\subsubsection{Aides à
+l'interprétation}\label{aides-uxe0-linterpruxe9tation}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Le cosinus carré entre une matrice \(P_m\) et une composante
+  principale \(F_k\) peut être calculé comme suit :\\
+  \[cos^2(P_m,F_k) = \frac{Var(P_m\cdot F_k)}{Var(P_m)\cdot Var(F_k)}\]
+\item
+  Le calcul de \(QLT_k(P_m)\), qui mesure la qualité de la
+  représentation de \(P_m\) par rapport aux premières \(k\) composantes
+  principales, est simplement le cosinus carré moyen de \(P_m\) pra
+  rapport à ces \(k\) composantes principales :\\
+  \[QLT_k(P_m) = \frac{1}{k} \sum_{l=1}^{k} cos^2(P_m,F_l)\]
+\item
+  Le CTR (Cumulative Total RV) de la \(k\)-ième composante principale
+  pour \(P_m\) peut être calculée comme suit:\\
+  \[CTR_k(P_m) = 1-QLT(P_m)\] Ce score mesure la proportion de variance
+  de \(P_m\) qui n'est pas expliquée par les \(k\) premières composantes
+  principales.
+\item
+  Tentative de programmation des fonctions (à retravailler ):
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Définition des fonctions}
+\NormalTok{cos\_square }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(P, F) \{}
+\NormalTok{  P\_dot\_F }\OtherTok{\textless{}{-}}\NormalTok{ P }\SpecialCharTok{*}\NormalTok{ F}
+\NormalTok{  var\_P\_dot\_F }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(P\_dot\_F)}
+\NormalTok{  var\_P }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(P)}
+\NormalTok{  var\_F }\OtherTok{\textless{}{-}} \FunctionTok{var}\NormalTok{(F)}
+  \FunctionTok{return}\NormalTok{(var\_P\_dot\_F }\SpecialCharTok{/}\NormalTok{ (var\_P }\SpecialCharTok{*}\NormalTok{ var\_F))}
+\NormalTok{\}}
+
+\NormalTok{QLT\_k }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(P, Fs) \{}
+\NormalTok{  k }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(Fs)}
+\NormalTok{  cos\_squares }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(Fs, }\ControlFlowTok{function}\NormalTok{(F) }\FunctionTok{cos\_square}\NormalTok{(P, F))}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{mean}\NormalTok{(cos\_squares[}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k]))}
+\NormalTok{\}}
+
+\NormalTok{CTR\_k }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(P, Fs) \{}
+  \FunctionTok{return}\NormalTok{(}\DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{QLT\_k}\NormalTok{(P, Fs))}
+\NormalTok{\}}
+
+\CommentTok{\# Appliquer les fonctions au tableau de données d\textquotesingle{}application}
+\CommentTok{\# Supposons que P\_m représente les données projetées sur une composante principale}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)  }\CommentTok{\# pour la reproductibilité des résultats}
+\NormalTok{P\_m }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{runif}\NormalTok{(}\DecValTok{100}\SpecialCharTok{*}\DecValTok{2}\NormalTok{), }\AttributeTok{ncol=}\DecValTok{2}\NormalTok{)  }\CommentTok{\# Exemple de données projetées (100 individus, 2 dimensions)}
+\NormalTok{Fs }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(}\DecValTok{5}\NormalTok{, }\FunctionTok{matrix}\NormalTok{(}\FunctionTok{runif}\NormalTok{(}\DecValTok{100}\SpecialCharTok{*}\DecValTok{2}\NormalTok{), }\AttributeTok{ncol=}\DecValTok{2}\NormalTok{), }\AttributeTok{simplify =} \ConstantTok{FALSE}\NormalTok{)  }\CommentTok{\# Exemple de 5 composantes principales}
+
+\ControlFlowTok{for}\NormalTok{ (k }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{) \{}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"CTR\_"}\NormalTok{, k, }\StringTok{"(P\_m): "}\NormalTok{, }\FunctionTok{CTR\_k}\NormalTok{(P\_m, Fs[}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k]), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## CTR_ 1 (P_m):  -4.949034 
+## CTR_ 2 (P_m):  -55.89409 
+## CTR_ 3 (P_m):  -72.87578 
+## CTR_ 4 (P_m):  -56.04714 
+## CTR_ 5 (P_m):  -45.76911
+\end{verbatim}
+
+\hypertarget{annexe}{%
+\section{Annexe}\label{annexe}}
+
+\hypertarget{programme-des-fonctions-prd_scalaire-et-norme}{%
+\subsubsection{Programme des fonctions prd\_scalaire et
+norme}\label{programme-des-fonctions-prd_scalaire-et-norme}}
+
+La fonction calculant le produit scalaire de Frobénius:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prd\_scalaire }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(A,B)\{}
+  \CommentTok{\# les dimension des matrices}
+\NormalTok{  na }\OtherTok{=} \FunctionTok{length}\NormalTok{(A[,}\DecValTok{1}\NormalTok{]); nb }\OtherTok{=} \FunctionTok{length}\NormalTok{(B[,}\DecValTok{1}\NormalTok{])}
+\NormalTok{  pa }\OtherTok{=} \FunctionTok{length}\NormalTok{(A[}\DecValTok{1}\NormalTok{,]); pb }\OtherTok{=} \FunctionTok{length}\NormalTok{(B[}\DecValTok{1}\NormalTok{,])}
+  
+  \CommentTok{\# Les matrices de ponderation}
+\NormalTok{  Wa }\OtherTok{=}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{na)}\SpecialCharTok{*}\FunctionTok{diag}\NormalTok{(na); Ca }\OtherTok{=}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{pa)}\SpecialCharTok{*}\FunctionTok{diag}\NormalTok{(pa)}
+\NormalTok{  Wb }\OtherTok{=}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{nb)}\SpecialCharTok{*}\FunctionTok{diag}\NormalTok{(na); Cb }\OtherTok{=}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{/}\NormalTok{pb)}\SpecialCharTok{*}\FunctionTok{diag}\NormalTok{(pb)}
+  
+  \CommentTok{\# Calcul des matrices A\_tild et B\_tild}
+\NormalTok{  A\_tild }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(Wa) }\SpecialCharTok{\%*\%}\NormalTok{ A }\SpecialCharTok{\%*\%} \FunctionTok{sqrt}\NormalTok{(Ca)}
+\NormalTok{  B\_tild }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(Wb) }\SpecialCharTok{\%*\%}\NormalTok{ B }\SpecialCharTok{\%*\%} \FunctionTok{sqrt}\NormalTok{(Cb)}
+  
+  \CommentTok{\# Produit scalaire}
+\NormalTok{  ps }\OtherTok{=} \FunctionTok{sum}\NormalTok{(}\FunctionTok{diag}\NormalTok{(}\FunctionTok{t}\NormalTok{(A\_tild)}\SpecialCharTok{\%*\%}\NormalTok{B\_tild))}
+  
+  \FunctionTok{return}\NormalTok{(ps)}
+\NormalTok{ \}}
+\end{Highlighting}
+\end{Shaded}
+
+La fonction calculant la norme d'une matrice A associée au produit
+scalaire de Frobénius
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norme }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(A)\{}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{prd\_scalaire}\NormalTok{(A,A)))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{coefficient-rv-1}{%
+\subsubsection{Coefficient RV}\label{coefficient-rv-1}}
+
+La fonction calculant le coefficient RV d'Escoufier:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coef\_RV }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(T\_tableaux) \{}
+\NormalTok{  t }\OtherTok{=} \FunctionTok{length}\NormalTok{(T\_tableaux)}
+\NormalTok{  mat\_rv }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{, t }\SpecialCharTok{*}\NormalTok{ t), }\AttributeTok{nrow =}\NormalTok{ t, }\AttributeTok{ncol =}\NormalTok{ t)}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(T\_tableaux)) \{}
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(T\_tableaux)) \{}
+      \CommentTok{\# Stocker le résultat dans une matrice}
+\NormalTok{      prd\_sclr }\OtherTok{=} \FunctionTok{prd\_scalaire}\NormalTok{(T\_tableaux[[i]], T\_tableaux[[j]])}
+\NormalTok{      norm\_i }\OtherTok{=} \FunctionTok{norme}\NormalTok{(T\_tableaux[[i]])}
+\NormalTok{      norm\_j }\OtherTok{=} \FunctionTok{norme}\NormalTok{(T\_tableaux[[j]])}
+\NormalTok{      mat\_rv[i, j] }\OtherTok{=}\NormalTok{ prd\_sclr }\SpecialCharTok{/}\NormalTok{ (norm\_j }\SpecialCharTok{*}\NormalTok{ norm\_i)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \FunctionTok{return}\NormalTok{(mat\_rv)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Fonction donnant les vecteurs \emph{u} solutions et les valeurs propres
+associées:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vecval\_prop }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(T\_tableau) \{}
+\NormalTok{  matrice }\OtherTok{=} \FunctionTok{coef\_RV}\NormalTok{(T\_tableau)}\CommentTok{\# on calcule la matrice contenant les coefs d\textquotesingle{}Escoufier}
+  
+\NormalTok{  resultat\_propre }\OtherTok{=} \FunctionTok{eigen}\NormalTok{(matrice)}\CommentTok{\# list ayant les valeurs et vecteurs propres}
+\NormalTok{  val\_prop }\OtherTok{=}\NormalTok{ resultat\_propre}\SpecialCharTok{$}\NormalTok{values }\CommentTok{\#valeurs propres}
+\NormalTok{  vec\_prop }\OtherTok{=}\NormalTok{ resultat\_propre}\SpecialCharTok{$}\NormalTok{vectors }\CommentTok{\#vecteurs propres associées}
+  
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{val\_prop =}\NormalTok{ val\_prop, }\AttributeTok{vec\_prop =}\NormalTok{ vec\_prop))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{duxe9pliage-du-tableau-cubique-en-un-tableau-juxtaposuxe9}{%
+\subsubsection{Dépliage du tableau cubique en un tableau juxtaposé
+:}\label{duxe9pliage-du-tableau-cubique-en-un-tableau-juxtaposuxe9}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oper\_inert }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(X)\{}
+  
+\NormalTok{  p }\OtherTok{=} \FunctionTok{length}\NormalTok{(X[}\DecValTok{1}\NormalTok{,]) }\CommentTok{\# la dimension des individus}
+\NormalTok{  n }\OtherTok{=} \FunctionTok{length}\NormalTok{(X[,}\DecValTok{1}\NormalTok{]) }\CommentTok{\# la dimension des variables}
+\NormalTok{  W }\OtherTok{=} \FunctionTok{diag}\NormalTok{(n)}\SpecialCharTok{/}\NormalTok{n}
+\NormalTok{  M }\OtherTok{=} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\AttributeTok{nrow =}\NormalTok{ p, }\AttributeTok{ncol =}\NormalTok{ p)}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{p) \{}
+\NormalTok{    M[i,i] }\OtherTok{=} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{t}\NormalTok{(X[,i])}\SpecialCharTok{\%*\%}\NormalTok{W}\SpecialCharTok{\%*\%}\NormalTok{X[,i])}
+\NormalTok{  \}}
+\NormalTok{  mat\_d }\OtherTok{=}\NormalTok{ M }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(X) }\SpecialCharTok{\%*\%}\NormalTok{ W }\SpecialCharTok{\%*\%}\NormalTok{ X }\SpecialCharTok{\%*\%}\NormalTok{ M}
+  \FunctionTok{return}\NormalTok{(mat\_d)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
