@@ -374,7 +374,7 @@ Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
 ### Programme
 
 
-a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps. L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\) représente l'inertie le long d'un axe \(< u >\), où \(u\) est un vecteur *I*-unitaire: \(\left|\left| u \right|\right|^2 = 1\). On cherche à projeter *I*-orthogonalement le nuage direct sur un espace \(E_k = < F_1,...,F_k >\) de dimension \(k < p\) où \(F_k\) est la \(k^{ème}\) composante principale. cela revient à maximiser l’inertie du nuage direct projeté sur \(< u >\). 
+a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps. L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\) représente l'inertie le long d'un axe \(< u >\), où \(u\) est un vecteur *I*-unitaire: \(\left|\left| u \right|\right|^2 = 1\). On cherche à projeter *I*-orthogonalement le nuage direct sur un espace \(E_k = < u_1,...,u_k >\) de dimension \(k < p\). cela revient à maximiser l’inertie du nuage direct projeté sur \(< u >\). 
 
 \begin{align*}
 \max_{\left|\left| u \right|\right|^2 = 1} \left[\left| \sum_{t=1}^{T} \frac{X_t}{\left[\left| X_t \right|\right]} u_t \right|\right]^2 &=
@@ -598,6 +598,12 @@ a_{m1}B & \cdots & a_{mn}B
 \end{pmatrix}
 \]
 
+Ou encore, en détaillant les coefficients,
+
+\[
+{\displaystyle A\otimes B={\begin{pmatrix}a_{11}b_{11}&a_{11}b_{12}&\cdots &a_{11}b_{1q}&\cdots &\cdots &a_{1n}b_{11}&a_{1n}b_{12}&\cdots &a_{1n}b_{1q}\\a_{11}b_{21}&a_{11}b_{22}&\cdots &a_{11}b_{2q}&\cdots &\cdots &a_{1n}b_{21}&a_{1n}b_{22}&\cdots &a_{1n}b_{2q}\\\vdots &\vdots &\ddots &\vdots &&&\vdots &\vdots &\ddots &\vdots \\a_{11}b_{p1}&a_{11}b_{p2}&\cdots &a_{11}b_{pq}&\cdots &\cdots &a_{1n}b_{p1}&a_{1n}b_{p2}&\cdots &a_{1n}b_{pq}\\\vdots &\vdots &&\vdots &\ddots &&\vdots &\vdots &&\vdots \\\vdots &\vdots &&\vdots &&\ddots &\vdots &\vdots &&\vdots \\a_{m1}b_{11}&a_{m1}b_{12}&\cdots &a_{m1}b_{1q}&\cdots &\cdots &a_{mn}b_{11}&a_{mn}b_{12}&\cdots &a_{mn}b_{1q}\\a_{m1}b_{21}&a_{m1}b_{22}&\cdots &a_{m1}b_{2q}&\cdots &\cdots &a_{mn}b_{21}&a_{mn}b_{22}&\cdots &a_{mn}b_{2q}\\\vdots &\vdots &\ddots &\vdots &&&\vdots &\vdots &\ddots &\vdots \\a_{m1}b_{p1}&a_{m1}b_{p2}&\cdots &a_{m1}b_{pq}&\cdots &\cdots &a_{mn}b_{p1}&a_{mn}b_{p2}&\cdots &a_{mn}b_{pq}\end{pmatrix}}}
+\]
+
 Maintenant, montrons que : 
 
 \[ [ X^s  |  X^t ] = \langle y^s | y^t \rangle_L \] 
@@ -625,22 +631,30 @@ D'autre part:
 
 Donc \([ X^s  |  X^t ] = \langle y^s | y^t \rangle_L\).
 
-Il en découle que \( X^t \) est "verticalisé" en \( {y^t}^* = y^t \) \(L\)-normé.\
+Il en découle que \( X^t \) est "verticalisé" en \( {y^t}^* = y^t \) \(L\)-normé.
 
-Par suite, on note \( Y = [ y^1, \ldots , y^T ] \). Un individu correspond à une ligne de ce tableau, correspondant donc à l'indice \( (j,i) \) dans le cube initial. Un individu est un vecteur de taille \( T \), dont les coordonnées sont les \( T \) valeurs de la case \( (i,j) \) du tableau \( X_t \) sur la période. C'est la trajectoire de cette case. Son poids est \( L_(j,i) = w_i c_j = \frac{1}{np} \).\
+Par suite, on note \( Y = [ y^1, \ldots , y^T ] \). Un individu correspond à une ligne de ce tableau, correspondant donc à l'indice \( (j,i) \) dans le cube initial. Un individu est un vecteur de taille \( T \), dont les coordonnées sont les \( T \) valeurs de la case \( (i,j) \) du tableau \( X_t \) sur la période. C'est la trajectoire de cette case. Son poids est \( L_(j,i) = w_i c_j = \frac{1}{np} \).
 
 Par exemple, pour un tableau cubique ventilant la valeur ajoutée d'une économie par région \( (i) \), secteur \( (j) \) et année \( (t) \), l'individu du tableau dépliant ainsi le cube serait la trajectoire dans le temps de la V.A. réalisée par le secteur \( j \) dans la région \( i \).
 
 Et on a :
 
-\[ \left[\left| \sum_{t=1}^{T} u_t \frac{X_t}{\left[\left| X_t \right|\right]} \right|\right]^2 = \| Y^* u \|_{W}^{2} = \| F \|_{W}^{2} \], où \( F = Y^* u \) est la composante associée à \( u \).
+\[ \left[\left| \sum_{t=1}^{T} u_t \frac{X_t}{\left[\left| X_t \right|\right]} \right|\right]^2 = \| Y^* u \|_{W}^{2} = \| F \|_{W}^{2} \], où \( Y^* = [ {y^1}^*, \ldots , {y^T}^* ] \) et \( F = Y^* u \) est la composante associée à \( u \).
 
+On remarque que:
+
+Métrique usuelle : Si \( M = I_T \) alors \( \langle {y^s}^*, {y^t}^* \rangle = \langle {y^s}, {y^t} \rangle_L \).
+
+Métrique réduite : Diviser les variables \(y^t\) par \( \sigma_t = \sqrt{\| y^t \|} \) est équivalent à prendre \( m_t = \frac{1}{{\sigma_t}^2} \). On a \( M_{\frac{1}{\sigma^2}} = M_{\frac{1}{\sigma}} M_{\frac{1}{\sigma}} \) et donc \( \langle {y^s} m_{\frac{1}{\sigma_s}} , {y^t} m_{\frac{1}{\sigma_t}} \rangle_L =  m_{\frac{1}{\sigma_s}} {y^s}' L {y^t} m_{\frac{1}{\sigma}_t} \).
+
+Travailler avec la métrique \( M_{\frac{1}{\sigma}^2} \) revient à utiliser la métrique \( L \) sur des variables \( M_{\frac{1}{\sigma}^2} \)-normées.
 
 b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) sont orthogonales au sens du produit scalaire convenable, nous devons considérer la façon dont ces composantes sont construites à partir des vecteurs propres obtenus.
 
 \begin{align*}
 \langle F_k | F_l \rangle_L &= F_k' L F_l \\
 &= u_k' {Y^*}' L Y^* u_l\\
+&= u_k' M_{\frac{1}{\sigma}} {Y}' L {Y} M_{\frac{1}{\sigma}} u_l\\
 &= 1 \quad \text{si} \quad k = l\\
 &= 0 \quad \text{si} \quad k \neq l 
 \end{align*}
