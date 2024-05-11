@@ -163,7 +163,6 @@ La fonction calculant le produit scalaire de Frobénius
 library(multiblock)
 library(ggplot2)
 library(ade4)
-data(simulated)
 ```
 
 ```{r,include=FALSE}
@@ -252,24 +251,34 @@ a) Géométriquement, le coefficient de RV représente le cosinus entre les matr
 
 b) Les fonctions pour calculer le coefficient de RV et fournir la matrice des coefficients de RV en \( (n,p) \) tableaux \(X_{(n,p)} \) seront présentées en Annexe. En revanche, ici, nous expliciterons un exemple d'application de celles-ci.
 
-```{r, include=FALSE}
-coef_RV = function(T_tableaux) {
+
+```{r}
+
+coef_RV <- function(Xi,Xj){
+      prd_sclr = prd_scalaire(Xi, Xj)
+      norm_i = norme(Xi)
+      norm_j = norme(Xj)
+      rv = prd_sclr / (norm_j * norm_i)
+      
+      return(rv)
+}
+
+matcoef_RV = function(T_tableaux) {
   t = length(T_tableaux)
   mat_rv = matrix(rep(NA, t * t), nrow = t, ncol = t)
   
   for (i in seq_along(T_tableaux)) {
     for (j in seq_along(T_tableaux)) {
       # Stocker le résultat dans une matrice
-      prd_sclr = prd_scalaire(T_tableaux[[i]], T_tableaux[[j]])
-      norm_i = norme(T_tableaux[[i]])
-      norm_j = norme(T_tableaux[[j]])
-      mat_rv[i, j] = prd_sclr / (norm_j * norm_i)
+      mat_rv[i, j] = coef_RV(T_tableaux[[i]],T_tableaux[[j]])
     }
   }
   
   return(mat_rv)
 }
+
 ```
+
 
 Supposons que nos matrices \( X_1, X_2, X_3 \) et \( X_4 \) sont toutes de dimension \( 3 \times 2 \):
 
@@ -353,10 +362,8 @@ D = simulated$D
 
 n_tableaux = list(A,B,C,D)
 
-resultats_n = coef_RV(n_tableaux)
+resultats_n = matcoef_RV(n_tableaux)
 ```
-Cette matrice donne les coefficients RV entre les différents tableaux. On a quatre tableaux donc on obtient une matrice de dimension $4\times 4$. Ici les tableaux 2 et 3 sont les plus corrélés. Les tableaux 1 et 3 sont les plus anti-corrélés. Les tableaux 2 et 4, et 1 et 2 sont les moins corrélés.
-Si l'on avait tournée le tableau d'une autre façon en le refaçonnant (3 manières de touner un tableau à trois entrées) les résultats auraient pu être différents.
 
 Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
 
@@ -373,6 +380,7 @@ Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
 ## Programme de STATIS 1
 
 ### Programme
+
 
 a) Dans le contexte de l'ACP des tableaux juxtaposés, les "variables" sont les différents tableaux $\mathbf{X_t}$, et les "individus" sont les observations à chaque période de temps. L'expression \(\left[\left| \sum_{t=1}^{T} \frac{u_t}{\left[\left| X_t \right|\right]} X_t \right|\right]^2\) représente l'inertie le long d'un axe \(< u >\), où \(u\) est un vecteur *I*-unitaire: \(\left|\left| u \right|\right|^2 = 1\). On cherche à projeter *I*-orthogonalement le nuage direct sur un espace \(E_k = < u_1,...,u_k >\) de dimension \(k < p\). cela revient à maximiser l’inertie du nuage direct projeté sur \(< u >\). 
 
@@ -427,7 +435,7 @@ ordre.
 
 ```{r,include=FALSE}
 vecval_prop = function(T_tableau) {
-  matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
+  matrice = matcoef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
   
   resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
   val_prop = resultat_propre$values #valeurs propres
@@ -658,7 +666,6 @@ b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) 
 &= 1 \quad \text{si} \quad k = l\\
 &= 0 \quad \text{si} \quad k \neq l 
 \end{align*}
-
 
 c) Dépliage du tableau cubique en un tableau juxtaposé :
 ```{r,include=FALSE}
@@ -1255,17 +1262,24 @@ norme = function(A){
                 
 La fonction calculant le coefficient RV d'Escoufier:                 
 ```{r}
-coef_RV = function(T_tableaux) {
+
+coef_RV <- function(Xi,Xj){
+      prd_sclr = prd_scalaire(Xi, Xj)
+      norm_i = norme(Xi)
+      norm_j = norme(Xj)
+      rv = prd_sclr / (norm_j * norm_i)
+      
+      return(rv)
+}
+
+matcoef_RV = function(T_tableaux) {
   t = length(T_tableaux)
   mat_rv = matrix(rep(NA, t * t), nrow = t, ncol = t)
   
   for (i in seq_along(T_tableaux)) {
     for (j in seq_along(T_tableaux)) {
       # Stocker le résultat dans une matrice
-      prd_sclr = prd_scalaire(T_tableaux[[i]], T_tableaux[[j]])
-      norm_i = norme(T_tableaux[[i]])
-      norm_j = norme(T_tableaux[[j]])
-      mat_rv[i, j] = prd_sclr / (norm_j * norm_i)
+      mat_rv[i, j] = coef_RV(T_tableaux[[i]],T_tableaux[[j]])
     }
   }
   
@@ -1278,7 +1292,7 @@ Fonction donnant les vecteurs *u* solutions et les valeurs propres associées:
 
 ```{r}
 vecval_prop = function(T_tableau) {
-  matrice = coef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
+  matrice = matcoef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
   
   resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
   val_prop = resultat_propre$values #valeurs propres
