@@ -252,7 +252,7 @@ a) Géométriquement, le coefficient de RV représente le cosinus entre les matr
 b) Les fonctions pour calculer le coefficient de RV et fournir la matrice des coefficients de RV en \( (n,p) \) tableaux \(X_{(n,p)} \) seront présentées en Annexe. En revanche, ici, nous expliciterons un exemple d'application de celles-ci.
 
 
-```{r}
+```{r,include=FALSE}
 
 coef_RV <- function(Xi,Xj){
       prd_sclr = prd_scalaire(Xi, Xj)
@@ -422,7 +422,7 @@ Les conditions de premier ordre donnent:
 \end{cases}
 \]
 
-On a par suite: \( u' \quad (*)\) et \( (**) \Rightarrow u'Ru = \lambda \).
+On a par suite: \( u'(*)\) et \( (**) \Rightarrow u'Ru = \lambda \).
 
 D'après, $(S)$ on en déduit que les vecteurs \(u\) solution de premier ordre sont les vecteurs propres de la matrice \(R = ((R(X_t,X_{\tau} )))_{t,\tau} \) des coefficients RV d'Escoufier entre T tableaux \(X_t(n , p)\). Or, pour tout vecteur propre $u$ de $R$ (tel que $\|u\| = 1$) de valeur propre $\lambda$, on a
 \( u'Ru = \lambda \).
@@ -506,7 +506,6 @@ u_i'Ru_j &= \lambda_j u_i' u_j\\
 
 On en déduit donc que les vecteurs \(u\) forment une base I-orthonormée.
 
-La fonction **"vecval_prop()"** ci-dessus nous donne les vecteurs propres \(u_i\) de la matrice des coefficients RV \(R\) associée  aux valeurs propres \(\lambda_i\). 
 
 ```{r,include=FALSE}
 # Fonction pour vérifier l'orthogonalité des vecteurs propres
@@ -586,7 +585,7 @@ x_{t,n}
 
 et de le réécrire sous forme "verticalisée":
 
-\[ y^t = \begin{pmatrix} x^{1}_{t} \\ \vdots \\ x^{p}_{t}) \end{pmatrix} \in \mathbb{R}^{np} \quad \text{où} \quad \forall j \in [|1,p|], x^{j}_{t} = \begin{pmatrix}
+\[ y^t = \begin{pmatrix} x^{1}_{t} \\ \vdots \\ x^{p}_{t} \end{pmatrix} \in \mathbb{R}^{np} \quad \text{où} \quad \forall j \in [|1,p|], x^{j}_{t} = \begin{pmatrix}
 x^{j}_{t,1} \\
 \vdots \\
 x^{j}_{t,n}
@@ -620,7 +619,7 @@ où \( L = C \otimes W (Produit de Kronecker) \).
 
 Sachant que, \(W = \frac{1}{n}I_n \) et \(C = \frac{1}{p}I_p \) on en déduit que \(L = \frac{1}{np}I_{np} \).
 
-D'une part, soit \( (s,t) \in [|1,T|] \):
+D'une part, soit \( (s,t) \in [|1,T|]^2 \):
 
 \begin{align*}
 [X_s \mid X_t] &= tr(\tilde{X_s}'\tilde{X_t})\\
@@ -667,7 +666,7 @@ b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) 
 &= 0 \quad \text{si} \quad k \neq l 
 \end{align*}
 
-c) Dépliage du tableau cubique en un tableau juxtaposé :
+c) 
 ```{r,include=FALSE}
 # Création des tableaux X_t dépliés
 A_jux <- matrix(A, ncol = 1)
@@ -699,120 +698,107 @@ mat_sym <- oper_inert(mat_jux)
   vec_prop_jux = result_propre$vectors #vecteurs propres associées
 ```
 
-
-Composantes principales des tableaux dépliés :
-```{r}
-# On veut donner la fonction des composantes principales correspondant aux vecteurx u (vec_prop)
-composantes_principales = function(u, X_t){
+La fonction calculant les composantes, la représentation des individus et celle des tableaux setrouvent en annexe. Nous verrons ci-dessous un exemple d'application de ces fonctions sur les données simulated.
+```{r,include=FALSE}
+cmp <- function(T_tabl,k){
   
-  p = length(X_t[1,]) # la dimension des individus
-  n = length(X_t[,1]) # la dimension des variables
-  W = diag(n)/n
-  M = matrix(0, nrow = p, ncol = p)
+  n <- length(T_tabl[[1]][,1])
+  p <- length(T_tabl[[1]][1,])
+  t <- length(T_tabl)
+  l <- n*p
+  Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
   
-  for (i in 1:p) {
-    M[i,i] = 1/sqrt(t(X_t[,i]) %*% W %*% X_t[,i])
+  for (i in 1:t ) {
+    a <- T_tabl[[i]]/norme(T_tabl[[i]])
+    Y_nrm[,i] <- matrix(a, ncol = 1)
   }
   
-  F <- X_t %*% M %*% u # calcul de la matrice des composantes principales
+  mat <- t(Y_nrm) %*% (diag(l)/l) %*% Y_nrm
   
-  return(F)
+  result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
+  lambda = result_propre$values #valeurs propres
+  u = result_propre$vectors #vecteurs propres associées
+  
+  cmp_k <- Y_nrm %*% u[,k]
+  F_k <- matrix(cmp_k, nrow = n, ncol = p)
+  rownames(F_k) <- rownames(a)
+  return(list(u = u, lambda = lambda, F_k = F_k))
 }
-comp_prin = composantes_principales(vec_prop_jux, mat_jux)
-print(comp_prin[1:8,1:3]) # Affichage de la première composante principale
+
+comp_prin = cmp(n_tableaux,1)$F_k
 ```
 
 
-```{r}
-# On veut maintenant programmer la fonction calculant la kième composante F_k ainsi que la 
-# composante normée f_k correspondante
-composante_k = function(u, X_t, k){
+```{r,fig.height=4.8,fig.width=5.5,fig.align='center',include=FALSE}
+representation_graph_ind <- function(F_t, k, l, 
+                                     aff_noms = FALSE, col = "navy", cex_titre = 1) {
+  if (l <= k) {
+    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    return(NULL)
+  }
   
-   # calcul des composantes principales
-  comp_prin = composantes_principales(u, X_t)
-  F_k = comp_prin[,k]
-
-  
-  f_k = F_k / sqrt(sum(F_k^2)) # calcul de la kième composante principale normée
-  
-  return(list(F_k = F_k, f_k = f_k))
-}
-
-pc1 <- composante_k(vec_prop, mat_jux, 1)$F_k
-pc1_nr <- composante_k(vec_prop, mat_jux, 1)$f_k
-
-# Affichage des premières lignes de la première composante principale et de sa version normée
-cat("Extrait de la 1ère composante :\n")
-print(head(pc1))
-
-cat("\nExtrait de la 1ère composante normée :\n")
-print(head(pc1_nr))
-
-```
-
-
-```{r,fig.height=4.8,fig.width=5.5,fig.align='center'}
-# Fonction donnant la représentation graphique des individus en plan principal (k,l)
-representation_graph_ind = function(comp_p, val_prop_dep, k, l, 
-                                    aff_noms = FALSE, col = "navy") {
   # Créer un data frame avec les composantes principales
-  df <- data.frame(F_k = comp_p[, 1], F_l = comp_p[, 2])
-  inert_k = val_prop_dep[k] / sum(val_prop_dep) * 100
-  inert_l = val_prop_dep[l] / sum(val_prop_dep) * 100
-  
-  # Récupérer les noms de lignes ou les numéros de ligne
-  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
+  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  rownames(df) <- rownames(F_t)
   
   # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$F_k)
-  y_limits <- range(df$F_l)
-  limits <- range(c(x_limits, y_limits))
+  x_limits <- range(df$PC_k)
+  y_limits <- range(df$PC_l)
+  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
   
   # Plot les composantes principales dans un plan avec l'origine au centre
-  plot(df$F_k, df$F_l, xlab = paste("F", k, " (", round(inert_k, 2), "%)"),
-       ylab = paste("F", l, " (", round(inert_l, 2), "%)"),
-       main = paste("Représentation des individus dans le plan (", k, ",", l, ")"),
-       xlim = limits, ylim = limits)
+  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l),xlim = limits,
+       ylim = limits, pch = 22,cex = 0.75, col = "black",bg = "#222211")
   
-  # Ajouter des lignes en pointillé pour les axes horizontal et vertical
-  abline(h = 0, lty = "dotted", lwd = 0.5)
-  abline(v = 0, lty = "dotted", lwd = 0.5)
+  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
+  abline(h = 0, col = "black", lty = "dotted", lwd = 0.5)
+  abline(v = 0, col = "black", lty = "dotted", lwd = 0.5)
   
   # Afficher les noms de lignes ou les numéros de ligne si demandé
-  if (aff_noms) {
-    text(df$F_k, df$F_l, labels = row_names, pos = 1, cex = 0.8, col = col)
+  if (aff_noms == TRUE) {
+    text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
   }
+  
+  # Réglage de la taille du titre
+  title(main = paste("Représentation des individus dans le plan (", k, ",", l, ")"), cex.main = cex_titre)
 }
+```
 
-# Exemple d'utilisation sans afficher les noms de lignes ou les numéros de ligne
-representation_graph_ind(comp_prin, val_prop_jux, 1, 2)
-# Exemple d'utilisation avec l'affichage des noms de lignes ou des numéros de ligne
-representation_graph_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = TRUE)
 
+```{r,fig.height=4.5,fig.width=4.9,fig.align='center'}
+
+# Afficher les graphiques pour les composantes principales de 1 à 10
+for (i in 1:4) {
+  Ft <- cmp(n_tableaux,i)$F_k
+  representation_graph_ind(Ft, 1, 2, aff_noms = TRUE,cex_titre = 0.65)
+}
 ```
 
 
 ```{r,include=FALSE}
-geo_ind = function(comp_p, val_prop, k, l, col_points = "black", 
+geo_ind = function(F_t, k, l, col_points = "black", 
                    col_noms = "navy", aff_noms = FALSE) {
+  if (l <= k) {
+    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    return(NULL)
+  }
   
   # Créer un data frame avec les composantes principales
-  df <- data.frame(PCk = comp_p[, k], PCl = comp_p[, l])
-  inert_k = val_prop[k]/sum(val_prop) * 100
-  inert_l = val_prop[l]/sum(val_prop) * 100
+  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  rownames(df) <- rownames(F_t)
   
   # Récupérer les noms de lignes ou les numéros de ligne
   row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
   
   # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PCk)
-  y_limits <- range(df$PCl)
-  limits <- range(c(x_limits, y_limits))
+  x_limits <- range(df$PC_k)
+  y_limits <- range(df$PC_l)
+  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
   
   # Afficher les composantes principales dans un plan avec l'origine au centre
-  plot <- ggplot(df, aes(x = PCk, y = PCl)) +
+  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
     geom_point(color = col_points) +
-    labs(x = paste("PC", k, " (", round(inert_k, 2), "%)"), y = paste("PC", l, " (", round(inert_l, 2), "%)")) +
+    labs(x = paste("PC", k), y = paste("PC", l)) +
     ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
     theme_classic() +
     geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
@@ -827,45 +813,45 @@ geo_ind = function(comp_p, val_prop, k, l, col_points = "black",
   
 }
 
-# Exemple d'utilisation sans afficher les noms de lignes ou les numéros de ligne
-geo_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = FALSE)
-
 # Exemple d'utilisation avec l'affichage des noms de lignes ou des numéros de ligne
-geo_ind(comp_prin, val_prop_jux, 1, 2, aff_noms = TRUE)
+geo_ind(Ft, 1, 2, aff_noms = TRUE)
 
 ```
 
 
-d) Cosinus entre les tableaux et les composantes principales :
+d) Cosinus entre les tableaux et les composantes principales : La fonction calculant le cosinus entre le tableau \(X_t\) et la composante \(F_k\) se trouve en annexe.
 
-```{r}
+```{r,include=FALSE}
 # Calcul des cosinus entre Xt (resultats_n) et chaque composante principale F_k
-cosinus = function(X_t, f_k){
-  mat_cos = matrix(NA, nrow = ncol(f_k),ncol = ncol(f_k))
-  for (k in 1:ncol(f_k)){
-    for (j in 1:ncol(f_k)) {
-           # Calcul du cosinus entre Xt et la kième composante F_k
-           mat_cos[k,j] = sum(X_t[,j] * f_k[,k]) / (sqrt(sum(X_t[,j]^2)) *
-                                                      sqrt(sum(f_k[,k]^2))) 
-           
-    }
-
-  }
-  rownames(mat_cos) <- paste("v", 1:ncol(mat_cos), sep = "")
-  return(t(mat_cos))
+cosinus = function(X_t, F_k){
+  return(coef_RV(X_t,F_k))
 }
 
 # Affichage du produit scalaire entre Xt et la ième composante principale 
-cosinus(mat_jux, composantes_principales(vec_prop_jux, mat_jux)) 
+cosinus(A,cmp(n_tableaux,1)$F_k) 
 ```
 
 
-```{r,fig.height=4.3,fig.width=5.4,fig.align='center'}
-representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
-  inert_k = val_prop[k]/sum(val_prop) * 100 #l'inertie captée par la comp k
-  inert_l = val_prop[l]/sum(val_prop) * 100 #l'inertie captée par la comp k
+```{r,fig.height=3.9,fig.width=4.8,fig.align='center',include=FALSE}
+representation_graph_tab = function(T_tab, k, l){
+  if (l <= k) {
+    print("Le 1er axe doit être strictement plus petit que le 2nd ")
+    return(NULL)
+  }
   
-  mat_cos = data.frame(cosinus(X_t, composantes_principales(vec_prop, X_t)))
+  t <- length(T_tab)
+  mat_cos <- matrix(NA, nrow = t, ncol = t)
+  for (i in 1:t) {
+    for (j in 1:t) {
+      mat_cos[i,j] <- cosinus(T_tab[[i]],cmp(T_tab,j)$F_k)
+    }
+  }
+  
+  # Récupérer les noms des tableaux ou les nommer par défaut
+  row_names <- if (is.null(names(T_tab))) paste("X", 1:t) else names(T_tab)
+  mat_cos <- as.data.frame(mat_cos)
+  rownames(mat_cos) <- row_names
+
   F_k = mat_cos[,k] # Récupération de la kième composante principale
   F_l = mat_cos[,l] # Récupération de la lième composante principale
 
@@ -885,16 +871,20 @@ representation_graph_var = function(vec_prop, X_t, val_prop, k, l){
     coord_fixed(ratio = 1) +
     geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
     geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
-    labs(x = paste("F", k, " (", round(inert_k, 2), "%)"),
-         y = paste("F", l, " (", round(inert_l, 2), "%)")) +
-    ggtitle(paste("Représentation des variables dans le plan (", k, ",", l, ")")) +
+    labs(x = paste("PC", k),
+         y = paste("PC", l)) +
+    ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
     geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
     ylim(-1, 1)
 }
+```
 
-# Affichage de la représentation graphique des variables en plan principal (1,2)
-representation_graph_var(vec_prop_jux, mat_sym, val_prop_jux, 3, 4)
+
+```{r}
+
+# Exemple d'utilisation avec les tableaux n_tableaux et les composantes principales 3 et 4
+representation_graph_tab(n_tableaux, 1, 2)
 
 ```
 
@@ -1007,9 +997,9 @@ et
 Par symétrie du produit scalaire, la matrice \(\Gamma \) des coefficients RV est donc égale à:
 
 \[\Gamma = \begin{pmatrix}
-1.0000000 & 0.56980288 & -0.36927447 \\
-0.5698029 & 1.00000000 & 0.07715167 \\
--0.3692745 & 0.07715167 & 1.00000000 \\
+1.0000 & 0.5698 & -0.3692 \\
+0.5698 & 1.0000 & 0.0771 \\
+-0.3692 & 0.0771 & 1.0000 \\
 \end{pmatrix}\]
 
 
@@ -1026,7 +1016,7 @@ Maintenant, considérons le dépliement des matrices juxtaposées :
 \end{pmatrix}
 \]
 
-où la première variable est la matrice A dépliée, la deuxième variable est la matrice B dépliée et la troisième variable est la matrice C dépliée.
+où la première variable est la matrice \(A\) dépliée, la deuxième variable est la matrice \(B\) dépliée et la troisième variable est la matrice \(C\) dépliée.
 
 On pose \(M\) la matrice diagonale \(p,p\) (\(ici \quad p = 3, \quad n = 6 )\) dont le coefficient \(M_{ii} = \frac{1}{||X_i||_W} \) avec:
 
@@ -1044,7 +1034,8 @@ Ici \(M\) sera donc égale à:
 
 On a alors:
 
-\[\Delta := M X^t W X  M = \Gamma \]
+\[\Delta := M X' W X M = {X*}' W X* = \Gamma \]
+où, \(X*\) est la matrice dont les variable sont normée.
 
 La fonction ci-dessous fait les calculs matriciels puis nous donne la matrice obtenue delta qui est égale à la matrice des coefficients RV calculée précédemment.
 
@@ -1059,37 +1050,21 @@ X <- matrix(
      2, 1,-3
   ), nrow = 6, byrow = TRUE)
 
-# Ajout des noms de lignes
-rownames(X) <- paste0("L", 1:6)
-
-oper_inert = function(X){
-  
-  p = length(X[1,]) # la dimension des individus
-  n = length(X[,1]) # la dimension des variables
-  W = diag(n)/n
-  M = matrix(0, nrow = p, ncol = p)
-  
-  for (i in 1:p) {
-    M[i,i] = 1/sqrt(t(X[,i])%*%W%*%X[,i])
-  }
-  return(M %*% t(X) %*% W %*% X %*% M)
+L <- list()
+for (i in 1:3) {
+  L[[i]] <- matrix(X[,i], nrow = 3, ncol = 2)
+  # Ajout des noms de lignes
+  rownames(L[[i]]) <- paste0("L", 1:3)
 }
 
-# Calcul de la matrice
-Delta <- oper_inert(X)
-print(Delta)
-
-result_propre = eigen(Delta)# list ayant les valeurs et vecteurs propres
-valp = result_propre$values #valeurs propres
-vecp = result_propre$vectors
 ```
 
 Finalement, on en déduit qu'il y a équivalence entre les matrices juxtaposées A, B et C avec la matrice X dont les variables sont les matrices A, B et C dépliées.
 
 ```{r,fig.height=4.3,fig.width=5.4,fig.align='center'}
-comp = composantes_principales(vecp,X)
-representation_graph_ind(comp, valp, 1, 3, aff_noms = T)
-representation_graph_var(vecp,X,valp,2,3)
+Ft <- cmp(L,1)$F_k
+representation_graph_ind(Ft, 1, 2, aff_noms = TRUE)
+representation_graph_tab(L, 1, 2)
 ```
 
 ### Quelles ACP d'autres "dépliages" du tableau cubique ?
@@ -1127,39 +1102,19 @@ c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de 
 d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\). Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement) et donc une similarité plus grande entre les ensembles d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées (on en peut pas conclure).
 
 ## STATIS 2
+
 On applique le programme de STATIS 1 à un ensemble de matrices $P_m$ issues de tableaux thématiques décrivant les mêmes individus. On note $F_1$,..., $F_k$ les composantes principales obtenues.
 
 ### Graphiques directs de STATIS
+
 a) Pour projeter chacune des matrices \(P_m\) sur un graphe dont les directions sont un couple de composantes principales \((F_k,F_l)\), on peut utiliser la méthode de la projection orthogonale. \
 Tout d'abord, nous calculons les composantes principales \((F_k\) et \(F_l)\) à partir de la matrice \(P\) résultant de l'analyse STATIS 1. \
 Ensuite, pour chaque \(P_m\), nous calculons les produits scalaires entre \(P_m\) et les composantes principales $F_k$ et $F_l$. \
 Enfin, ces produits scalaires servent de coordonnées pour projeter les points correspondant à $P_m$ sur le plan défini par les composantes principales $F_k$ et $F_l$.
 
 b) 
-```{r}
-# Tableau à trois dimension
-data(chickenk)
 
-M = as.matrix(chickenk$Mortality)
-rownames(M) = seq(1,351,1)
-
-FS = as.matrix(chickenk$FarmStructure)
-rownames(FS) = seq(1,351,1)
-
-OFH = as.matrix(chickenk$OnFarmHistory)
-rownames(OFH) = seq(1,351,1)
-
-FC = as.matrix(chickenk$FlockCharacteristics)
-rownames(FC) = seq(1,351,1)
-
-CTS = as.matrix(chickenk$CatchingTranspSlaught)
-rownames(CTS) = seq(1,351,1)
-
-data = list(M, FS, OFH, FC, CTS)
-```
-
-
-```{r}
+```{r,include=FALSE}
 mat_coldiff = function(X){
   
   p = length(X[1,]) # la dimension des individus
@@ -1172,7 +1127,58 @@ mat_coldiff = function(X){
 }
 ```
 
+
+```{r,include=FALSE}
+data("friday87")
+Tab_friday <- function() {
+  
+  t_tab <- friday87$fau
+  v <- c(0,11, 18, 31, 35, 48, 70, 74, 77, 85, 91)
+  noms <- friday87$tab.names
+  n_result <- list()
+  
+  for (i in 2:11) {
+    nom_tableau <- noms[i-1]  # Nom du tableau
+    tableau <- as.matrix.data.frame(t_tab[, (v[i-1]+1):v[i]])  # Extraction des colonnes
+    n_result[[nom_tableau]] <- tableau  # Stocker le tableau nommé dans n_result
+  }
+  
+  return(n_result)
+}
+
+```
+
+
+```{r,include=FALSE}
+# Créer une liste vide
+lst <- list()
+
+# Boucle sur les éléments de Tab_friday
+for (i in 1:length(Tab_friday())) {
+  nom <- friday87$tab.names  # Créer un nom unique pour chaque élément de la liste
+  tableau <- mat_coldiff(Tab_friday()[[i]])  # Calculer le tableau
+  lst[[nom[i]]] <- tableau  # Ajouter le tableau à la liste
+}
+
+cmp(lst,1)$F_k
+```
+
+
+```{r}
+# Définir la disposition en grille des graphiques
+par(mfrow = c(1, 2))
+
+# Afficher les graphiques pour les composantes principales de 1 à 10
+for (i in 1:4) {
+  Ft <- cmp(lst, i)$F_k
+  representation_graph_ind(Ft, 1, 2, aff_noms = TRUE,cex_titre = 0.75)
+}
+
+representation_graph_tab(lst, 1, 2)
+```
+
 ### Graphiques projetant les individus et les variables initiales
+
 a) Pour montrer que les composantes principales sont des matrices symétriques, nous devons rappeler que les matrices de covariance (ou de corrélation) utilisées dans l'analyse des composantes principales (ACP) sont symétriques. Les composantes principales sont calculées à partir de ces matrices de covariance, ce qui garantit que les composantes principales elles-mêmes seront symétriques.
 
 b) Chaque composante principale peut être interprétée comme une matrice de produits scalaires entre individus. En utilisant ces produits scalaires, nous pouvons obtenir une image du nuage des individus dans un plan de dimension réduite en utilisant des techniques de visualisation telles que l'Analyse en Composantes Principales (PCA) ou d'autres méthodes de réduction de dimensionnalité. Une fois que nous avons cette représentation en deux dimensions des individus, nous pouvons mettre en relation cette image avec les variables des tableaux en examinant les poids des variables dans chaque composante principale. Les variables qui contribuent le plus aux composantes principales sont celles qui ont le plus d'influence sur la position des individus dans l'espace réduit.
@@ -1180,6 +1186,7 @@ b) Chaque composante principale peut être interprétée comme une matrice de pr
 c) 
 
 ### Aides à l'interprétation
+
 a) Le cosinus carré entre une matrice $P_m$ et une composante principale $F_k$ peut être calculé comme suit : \
 $$cos^2(P_m,F_k) = \frac{Var(P_m\cdot F_k)}{Var(P_m)\cdot Var(F_k)}$$
 
@@ -1224,6 +1231,8 @@ for (k in 1:5) {
 ```
 
 # Annexe
+
+## Situation 1
 
 ### Programme des fonctions prd_scalaire et norme
 
@@ -1303,7 +1312,7 @@ vecval_prop = function(T_tableau) {
 
 ```
 
-### Dépliage du tableau cubique en un tableau juxtaposé :
+### Dépliage du tableau cubique en un tableau juxtaposé et Composantes principales:
 
 ```{r}
 oper_inert = function(X){
@@ -1319,4 +1328,236 @@ oper_inert = function(X){
   mat_d = M %*% t(X) %*% W %*% X %*% M
   return(mat_d)
 }
+```
+
+
+```{r,include=FALSE}
+cmp <- function(T_tabl,k){
+  
+  n <- length(T_tabl[[1]][,1])
+  p <- length(T_tabl[[1]][1,])
+  t <- length(T_tabl)
+  l <- n*p
+  Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
+  
+  for (i in 1:t ) {
+    a <- T_tabl[[i]]/norme(T_tabl[[i]])
+    Y_nrm[,i] <- matrix(a, ncol = 1)
+  }
+  
+  mat <- t(Y_nrm) %*% (diag(l)/l) %*% Y_nrm
+  
+  result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
+  lambda = result_propre$values #valeurs propres
+  u = result_propre$vectors #vecteurs propres associées
+  
+  cmp_k <- Y_nrm %*% u[,k]
+  F_k <- matrix(cmp_k, nrow = n, ncol = p)
+  rownames(F_k) <- rownames(a)
+  return(list(u = u, lambda = lambda, F_k = F_k))
+}
+
+```
+
+### La représentation des individus et des tableaux
+
+Représentation des individus:
+
+```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
+representation_graph_ind <- function(F_t, k, l, 
+                                     aff_noms = FALSE, col = "navy") {
+  if (l <= k) {
+    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    return(NULL)
+  }
+  
+  # Créer un data frame avec les composantes principales
+  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  rownames(df) <- rownames(F_t)
+  
+  # Trouver les limites des axes x et y pour centrer l'origine
+  x_limits <- range(df$PC_k)
+  y_limits <- range(df$PC_l)
+  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
+  
+  # Plot les composantes principales dans un plan avec l'origine au centre
+  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l),
+       main = paste("Représentation des individus dans le plan (", k, ",", l, ")"),
+       xlim = limits, ylim = limits, pch = 22, cex = 0.75, col = "black", 
+       bg = "#222211")
+  
+  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
+  abline(h = 0, col = "black", lty = "dotted", lwd = 0.5)
+  abline(v = 0, col = "black", lty = "dotted", lwd = 0.5)
+  
+  # Afficher les noms de lignes ou les numéros de ligne si demandé
+  if (aff_noms == TRUE) {
+    text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
+  }
+}
+
+```
+
+
+```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
+geo_ind = function(F_t, k, l, col_points = "black", 
+                   col_noms = "navy", aff_noms = FALSE) {
+  if (l <= k) {
+    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    return(NULL)
+  }
+  
+  # Créer un data frame avec les composantes principales
+  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  rownames(df) <- rownames(F_t)
+  
+  # Récupérer les noms de lignes ou les numéros de ligne
+  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
+  
+  # Trouver les limites des axes x et y pour centrer l'origine
+  x_limits <- range(df$PC_k)
+  y_limits <- range(df$PC_l)
+  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
+  
+  # Afficher les composantes principales dans un plan avec l'origine au centre
+  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+    geom_point(color = col_points) +
+    labs(x = paste("PC", k), y = paste("PC", l)) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme_classic() +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
+  
+  # Afficher les noms de lignes ou les numéros de ligne si demandé
+  if (aff_noms) {
+    plot <- plot + geom_text(aes(label = row_names), color = col_noms, size = 3, hjust = -0.2, vjust = -0.2)
+  }
+  
+  plot + xlim(limits) + ylim(limits)
+  
+}
+
+```
+
+Cosinus entre les tableaux et les composantes principales :
+
+```{r}
+# Calcul des cosinus entre Xt (resultats_n) et chaque composante principale F_k
+cosinus = function(X_t, F_k){
+  return(coef_RV(X_t,F_k))
+}
+
+```
+
+Représentation des tableaux:
+
+```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
+representation_graph_tab = function(T_tab, k, l){
+  if (l <= k) {
+    print("Le 1er axe doit être strictement plus petit que le 2nd ")
+    return(NULL)
+  }
+  
+  t <- length(T_tab)
+  mat_cos <- matrix(NA, nrow = t, ncol = t)
+  for (i in 1:t) {
+    for (j in 1:t) {
+      mat_cos[i,j] <- cosinus(T_tab[[i]],cmp(T_tab,j)$F_k)
+    }
+  }
+  
+  # Récupérer les noms des tableaux ou les nommer par défaut
+  row_names <- if (is.null(names(T_tab))) paste("X", 1:t) else names(T_tab)
+  mat_cos <- as.data.frame(mat_cos)
+  rownames(mat_cos) <- row_names
+
+  F_k = mat_cos[,k] # Récupération de la kième composante principale
+  F_l = mat_cos[,l] # Récupération de la lième composante principale
+
+  
+  # Création des données pour le cercle unité
+  df <- data.frame(
+    varabs = cos(seq(0, 2 * pi, length.out = 100)),
+    varord = sin(seq(0, 2 * pi, length.out = 100))
+  )
+  
+  # Créer le graphique en utilisant ggplot2
+  ggplot(mat_cos, aes(x = F_k, y = F_l)) +
+    geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
+    geom_text(aes(label = rownames(mat_cos)), hjust = 0, vjust = 0) +
+    geom_point(color = "red", size = 1.5) +
+    theme_classic() +
+    coord_fixed(ratio = 1) +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
+    labs(x = paste("PC", k),
+         y = paste("PC", l)) +
+    ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
+    geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
+    xlim(-1, 1) +
+    ylim(-1, 1)
+}
+
+```
+
+## Situation 2
+
+### Les données partitionné en thèmes
+
+```{r}
+# Tableau à trois dimension
+data(chickenk)
+
+M = as.matrix(chickenk$Mortality)
+rownames(M) = seq(1,351,1)
+
+FS = as.matrix(chickenk$FarmStructure)
+rownames(FS) = seq(1,351,1)
+
+OFH = as.matrix(chickenk$OnFarmHistory)
+rownames(OFH) = seq(1,351,1)
+
+FC = as.matrix(chickenk$FlockCharacteristics)
+rownames(FC) = seq(1,351,1)
+
+CTS = as.matrix(chickenk$CatchingTranspSlaught)
+rownames(CTS) = seq(1,351,1)
+
+data = list(M, FS, OFH, FC, CTS)
+```
+
+
+```{r}
+data("friday87")
+Tab_friday <- function() {
+  
+  t_tab <- friday87$fau
+  v <- c(0,11, 18, 31, 35, 48, 70, 74, 77, 85, 91)
+  noms <- friday87$tab.names
+  n_result <- list()
+  
+  for (i in 2:11) {
+    nom_tableau <- noms[i-1]  # Nom du tableau
+    tableau <- as.matrix.data.frame(t_tab[, (v[i-1]+1):v[i]])  # Extraction des colonnes
+    n_result[[nom_tableau]] <- tableau  # Stocker le tableau nommé dans n_result
+  }
+  
+  return(n_result)
+}
+
+```
+
+
+```{r}
+# Créer une liste vide
+lst <- list()
+
+# Boucle sur les éléments de Tab_friday
+for (i in 1:length(Tab_friday())) {
+  nom <- friday87$tab.names  # Créer un nom unique pour chaque élément de la liste
+  tableau <- mat_coldiff(Tab_friday()[[i]])  # Calculer le tableau
+  lst[[nom[i]]] <- tableau  # Ajouter le tableau à la liste
+}
+
+
 ```

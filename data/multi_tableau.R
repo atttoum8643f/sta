@@ -7,6 +7,28 @@ data("chickenk")
 data("simulated")
 data("friday87")
 
+```{r}
+# Tableau à trois dimension
+data(chickenk)
+
+M = as.matrix(chickenk$Mortality)
+rownames(M) = seq(1,351,1)
+
+FS = as.matrix(chickenk$FarmStructure)
+rownames(FS) = seq(1,351,1)
+
+OFH = as.matrix(chickenk$OnFarmHistory)
+rownames(OFH) = seq(1,351,1)
+
+FC = as.matrix(chickenk$FlockCharacteristics)
+rownames(FC) = seq(1,351,1)
+
+CTS = as.matrix(chickenk$CatchingTranspSlaught)
+rownames(CTS) = seq(1,351,1)
+
+data = list(M, FS, OFH, FC, CTS)
+```
+
 # Les données qui illustreront ce premier emploi de la méthode STATIS sont publiées par Friday6 
 # (friday87 du pakage ade4). Elles sont formées de 10 tableaux faunistiques regroupant un total de 91
 # taxons et 16 étangs. Il y a respectivement 11, 7, 13, 4, 13, 22, 4, 3, 8 et 6 taxons par
