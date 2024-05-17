@@ -353,14 +353,14 @@ Pour appliquer la fonction coeff_RV, nous utiliserons les données citées en in
 
 ```{r}
 # Tableau à trois dimension
-data(simulated)
+donnees_2021 <- read.csv("2021_filtre.csv", stringsAsFactors = FALSE, row.names=1)
+donnees_2021 <- as.matrix(apply(donnees_2021, 2, as.numeric))
+donnees_2022 <- read.csv("2022_filtre.csv", stringsAsFactors = FALSE, row.names=1)
+donnees_2022 <- as.matrix(apply(donnees_2022, 2, as.numeric))
+donnees_2023 <- read.csv("2023_filtre.csv", stringsAsFactors = FALSE, row.names=1)
+donnees_2023 <- as.matrix(apply(donnees_2023, 2, as.numeric))
 
-A = simulated$A
-B = simulated$B
-C = simulated$C
-D = simulated$D
-
-n_tableaux = list(A,B,C,D)
+n_tableaux = list(donnees_2021,donnees_2022,donnees_2023)
 
 resultats_n = matcoef_RV(n_tableaux)
 ```
