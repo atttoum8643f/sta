@@ -349,7 +349,7 @@ R = \begin{pmatrix}
 \end{pmatrix} 
 \]
 
-Pour appliquer la fonction coeff_RV, nous utiliserons les données citées en introduction, à savoir les données "simulated" du package "multiblock".
+Pour quelques visualisations nous allons utiliser un tableau à trois entrées représentant la pollution en occitanie de 2021 à 2023. Les individus $i$ sont des stations de mesures (on en a 9), les variables $j$ sont les polluants (NO=monoxyde d'azote, NO2=dioxyde d'azote, O2=oxygène et PM10=particules inférieures) et les tableaux $k$ sont les années (2021, 2022, 2023).
 
 ```{r}
 # Tableau à trois dimension
@@ -1083,6 +1083,12 @@ c) Un inconvénient est qu'on perde une grosse partie de l'information qui sera 
 L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent ! Tout dépend du tableau initial.
 
 # Situation 2
+Dans cette partie allons utilier les data "chickenk" du package "ade4" qui contient les données de 351 poulets sur 5 différents groupes de vairables. Les 5 tableaux décrivent : \
+- la mortalité en 4 variables, \
+- la strucuture de la ferme dans laquelle ils on été élevé en 5 variables, \
+- les charactéristiques de son troupeau au placement du poulet en 4 variables, \
+- les charactéristiques du troupeau pendant l'élevage en 6 variables, \
+- et les conditions de transport, d'entreposage, d'abattoir et d'inspection en 5 variables). 
 
 ## De nouvelles matrices dans un nouvel espace
 
