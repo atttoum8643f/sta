@@ -160,9 +160,10 @@ d) La fonction "prd_scalaire" est définie en Annexe. Toutefois, pour mieux comp
 
 La fonction calculant le produit scalaire de Frobénius
 ```{r,include=FALSE}
-library(multiblock)
-library(ggplot2)
+# Chargement des bibliothèques
 library(ade4)
+library(ggplot2)
+library(ggrepel)
 ```
 
 ```{r,include=FALSE}
@@ -691,10 +692,11 @@ comp_prin = cmp(filtre,1)$F_k
 
 
 ```{r,fig.height=4.8,fig.width=5.5,fig.align='center',include=FALSE}
-representation_graph_ind <- function(F_t, k, l, 
-                                     aff_noms = FALSE, col = "navy", cex_titre = 1) {
+representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
+                                     cex_titre = 1, repel = FALSE) {
+  
   if (l <= k) {
-    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
@@ -702,36 +704,41 @@ representation_graph_ind <- function(F_t, k, l,
   df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
   rownames(df) <- rownames(F_t)
   
-  # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PC_k)
-  y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
-  
   # Plot les composantes principales dans un plan avec l'origine au centre
-  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l),xlim = limits,
-       ylim = limits, pch = 22,cex = 0.75, col = "black",bg = "#222211")
+  p <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+    geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
+    theme_classic() +
+    labs(x = paste("PC", k), y = paste("PC", l)) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
   
   # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
-  abline(h = 0, col = "black", lty = "dotted", lwd = 0.5)
-  abline(v = 0, col = "black", lty = "dotted", lwd = 0.5)
+  p <- p + geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)
   
-  # Afficher les noms de lignes ou les numéros de ligne si demandé
   if (aff_noms == TRUE) {
-    text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
+    if (repel) {
+      # Ajouter les étiquettes avec repulsion
+      p <- p + geom_text_repel(aes(label = rownames(df)), size = 3, color = col)
+    } else {
+      # Ajouter les étiquettes sans repulsion
+      p <- p + geom_text(aes(label = rownames(df)), size = 3, color = col)
+    }
   }
   
-  # Réglage de la taille du titre
-  title(main = paste("Représentation des individus dans le plan (", k, ",", l, ")"), cex.main = cex_titre)
+  print(p)
 }
+
+
 ```
 
 
 ```{r,fig.height=4.5,fig.width=4.9,fig.align='center'}
 
-# Afficher les graphiques pour les composantes principales de 1 à 10
+# Afficher les graphiques pour les composantes principales de 1 à 
 for (i in 1:3) {
   Ft <- cmp(filtre,i)$F_k
-  representation_graph_ind(Ft, 1, 2, aff_noms = TRUE,cex_titre = 0.80)
+  representation_graph_ind(Ft, 1, 2, aff_noms = TRUE,cex_titre = 0.80, repel = T)
 }
 ```
 
@@ -794,9 +801,9 @@ cosinus(X1,cmp(filtre,1)$F_k)
 
 
 ```{r,fig.height=3.9,fig.width=4.8,fig.align='center',include=FALSE}
-representation_graph_tab = function(T_tab, k, l){
+representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy", cex_titre = 1, repel = FALSE) {
   if (l <= k) {
-    print("Le 1er axe doit être strictement plus petit que le 2nd ")
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
@@ -804,18 +811,17 @@ representation_graph_tab = function(T_tab, k, l){
   mat_cos <- matrix(NA, nrow = t, ncol = t)
   for (i in 1:t) {
     for (j in 1:t) {
-      mat_cos[i,j] <- cosinus(T_tab[[i]],cmp(T_tab,j)$F_k)
+      mat_cos[i, j] <- cosinus(T_tab[[i]], cmp(T_tab, j)$F_k)
     }
   }
   
   # Récupérer les noms des tableaux ou les nommer par défaut
-  row_names <- if (is.null(names(T_tab))) paste("X", 1:t) else names(T_tab)
+  row_names <- if (is.null(names(T_tab))) paste("X", 1:t, sep = "_") else names(T_tab)
   mat_cos <- as.data.frame(mat_cos)
   rownames(mat_cos) <- row_names
-
-  F_k = mat_cos[,k] # Récupération de la kième composante principale
-  F_l = mat_cos[,l] # Récupération de la lième composante principale
-
+  
+  F_k <- mat_cos[, k]  # Récupération de la kième composante principale
+  F_l <- mat_cos[, l]  # Récupération de la lième composante principale
   
   # Création des données pour le cercle unité
   df <- data.frame(
@@ -823,10 +829,8 @@ representation_graph_tab = function(T_tab, k, l){
     varord = sin(seq(0, 2 * pi, length.out = 100))
   )
   
-  # Créer le graphique en utilisant ggplot2
-  ggplot(mat_cos, aes(x = F_k, y = F_l)) +
+  p <- ggplot(mat_cos, aes(x = F_k, y = F_l)) +
     geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
-    geom_text(aes(label = rownames(mat_cos)), hjust = 0, vjust = 0) +
     geom_point(color = "red", size = 1.5) +
     theme_classic() +
     coord_fixed(ratio = 1) +
@@ -837,15 +841,28 @@ representation_graph_tab = function(T_tab, k, l){
     ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
     geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
-    ylim(-1, 1)
+    ylim(-1, 1) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
+  
+  if (aff_noms) {
+    if (repel) {
+      p <- p + geom_text_repel(aes(label = rownames(mat_cos)), color = col, size = 3)
+    } else {
+      p <- p + geom_text(aes(label = rownames(mat_cos)), color = col, size = 3, 
+                         hjust = ifelse(F_k >= 0, 0, 1), vjust = ifelse(F_l >= 0, 0, 1))
+    }
+  }
+  
+  print(p)
 }
+
 ```
 
 
 ```{r}
 
 # Exemple d'utilisation avec les tableaux n_tableaux et les composantes principales 3 et 4
-representation_graph_tab(filtre, 1, 2)
+representation_graph_tab(filtre, 1, 2, aff_noms = T, repel = TRUE)
 
 ```
 
@@ -1030,7 +1047,7 @@ representation_graph_tab(L, 1, 2)
 
 ### Quelles ACP d'autres "dépliages" du tableau cubique ?
 
-a) Disons que l'on dispose d'un tableau cubique X(i,j,t). On peut le déplier de trois manières différentes : Y((i,j),t) de façon à avoir les individus et caractéristiques en fonction du temps. Pour avoir les caractéristiques dans le temps pour chaque individu Y((j,t),i). Ou pour avoir les individus dans le temps pour chaque caractéristique Y((i,t),j). \
+a) Disons que l'on dispose d'un tableau cubique \(X(i,j,t)\). On peut le déplier de trois manières différentes : \(Y((i,j),t)\) de façon à avoir les individus et caractéristiques en fonction du temps. Pour avoir les caractéristiques dans le temps pour chaque individu \(Y((j,t),i)\). Ou pour avoir les individus dans le temps pour chaque caractéristique \(Y((i,t),j)\). \
 Chacun de  ces dépliages donnera une matrice différente et donc une ACP différente. Mais chacun reste intéressant.
 
 b) Selon le dépliage choisi, les individus et variables ne seront pas les mêmes. En individus on peut avoir : \
@@ -1039,34 +1056,85 @@ b) Selon le dépliage choisi, les individus et variables ne seront pas les même
 - Les caractéristiques dans le temps (à un instant donné), décrivant les individus. \
 Les ACP à envisager dépendent du jeu de données que l'on souhaite étudier. Ici les individus et variables ne sont pas clairement définit car ne porte que des numéros. Ce qui est sûr c'est que les individus regrouperont les tableaux dépliés. Les éléments à projeter en supplémentaire dépendent, encore une fois, de ce que l'on souhaite étudier.
 
-c) Un inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement (utilisation du produit matriciel possible). Le plus gros inconvénient reste la perte de la symétrie, par exemple lors d'un dépliage de X(i,j,t) en Y((i,j),t). En effet, les individus et variables ne sont plus équivalents. Cela peut poser problème si l'on souhaite comparer les individus et variables entre eux.
+c) Un inconvénient est qu'on perde une grosse partie de l'information qui sera noyée dans le tableau déplié. Cependant, cela permet de mieux visualiser les données et de les traiter plus facilement (utilisation du produit matriciel possible). Le plus gros inconvénient reste la perte de la symétrie, par exemple lors d'un dépliage de \(X(i,j,t)\) en \(Y((i,j),t)\). En effet, les individus et variables ne sont plus équivalents. Cela peut poser problème si l'on souhaite comparer les individus et variables entre eux.
 
 L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent ! Tout dépend du tableau initial.
 
 # Situation 2
-Dans cette partie allons utilier les data "chickenk" du package "ade4" qui contient les données de 351 poulets sur 5 différents groupes de vairables. Les 5 tableaux décrivent : \
-- la mortalité en 4 variables, \
-- la strucuture de la ferme dans laquelle ils on été élevé en 5 variables, \
-- les charactéristiques de son troupeau au placement du poulet en 4 variables, \
-- les charactéristiques du troupeau pendant l'élevage en 6 variables, \
-- et les conditions de transport, d'entreposage, d'abattoir et d'inspection en 5 variables). 
+
+## Les données traitées
+
+Les données qui illustreront ce premier emploi de la méthode STATIS sont publiées par Friday. Ces données correspondent à des observations faunistiques effectuées dans plusieurs étangs, où différents taxons ont été identifiés.\
+
+Définition des taxons:
+
+Un taxon est une unité taxonomique utilisée pour classer les organismes vivants. Il peut représenter un groupe d'espèces, de genres, de familles, etc. Voici quelques exemples de taxons courants :
+
+  - **Ordre** : une catégorie de rang élevé dans la classification biologique, regroupant des familles apparentées. Par exemple, les libellules et les cigales appartiennent à l'ordre des Hemiptera.
+  
+  - **Famille** : un niveau de classification plus spécifique que l'ordre, regroupant des genres similaires. Par exemple, les coléoptères, ou scarabées, appartiennent à la famille des Coleoptera.
+  
+  - **Genre** : une catégorie encore plus spécifique, regroupant des espèces étroitement liées. Par exemple, le genre *Apis* regroupe les abeilles.
+  
+  - **Espèce** : la plus petite unité taxonomique, représentant un groupe d'organismes qui peuvent se reproduire entre eux et produire une descendance fertile. Par exemple, l'abeille domestique (*Apis mellifera*) est une espèce d'abeille.
+
+
+Répartition des taxons par groupe:
+
+  - **Groupe 1 (Hemiptera)** : 11 taxons (ordre d'insectes comprenant des espèces telles que les punaises et les cigales)
+  
+  - **Groupe 2 (Odonata)** : 7 taxons (ordre d'insectes comprenant les libellules et les demoiselles)
+  
+  - **Groupe 3 (Trichoptera)** : 13 taxons (ordre d'insectes comprenant les trichoptères, ou phryganes, souvent appelés "mouches à caddis")
+  
+  - **Groupe 4 (Ephemeroptera)** : 4 taxons (ordre d'insectes comprenant les éphémères)
+  
+  - **Groupe 5 (Coleoptera)** : 13 taxons ( ordre d'insectes comprenant les coléoptères, ou scarabées)
+  
+  - **Groupe 6 (Diptera)** : 22 taxons (ordre d'insectes comprenant les diptères, ou mouches)
+  
+  - **Groupe 7 (Hydracarina)** : 4 taxons ( sous-classe d'acariens aquatiques, également connue sous le nom de "tiques d'eau" ou "tiques de mare")
+  
+  - **Groupe 8 (Malacostraca)** : 3 taxons (classe d'arthropodes comprenant des crustacés comme les crabes, les crevettes et les homards)
+  
+  - **Groupe 9 (Mollusca)** : 8 taxons (embranchement d'animaux incluant les mollusques, comme les escargots, les moules et les calmars)
+  
+  - **Groupe 10 (Oligochaeta)** : 6 taxons (classe de vers annélides comprenant les oligochètes, comme les vers de terre)
+
+Identification des tableaux:
+
+Chaque tableau de données est identifié par le groupe de taxons qu'il contient. Par exemple, le tableau 1 contient des données sur le groupe de taxons Hemiptera, le tableau 2 sur le groupe de taxons Odonata, et ainsi de suite jusqu'au tableau 10 pour le groupe de taxons Oligochaeta.\
+
+Identification des étangs:
+
+Les 16 étangs sont étiquetés par les lettres Q, P, R, J, E, C, D, K, B, A, G, M, L, F, H, N.\
+
+Le groupe \( t \) représente l'indexation des différents tableaux de données, allant de 1 à 10 dans cet exemple. Chaque tableau \( t \) correspond à un groupe taxonomique spécifique.\
+Les observations (étangs) sont représentées par l'index \( i \), allant de 1 à 16.\
+Les variables (taxons) sont représentées par l'index \( j \), dont le nombre de variables peut varier d'un groupe taxonomique à l'autre. Les valeurs de \( j \) vont de 1 à \( p_t \), où \( p_t \) est le nombre de variables dans le groupe taxonomique \( t \). 
 
 ## De nouvelles matrices dans un nouvel espace
 
-1.1.a) Calculons \(P_m\) en fonction de \(X_m\) et \(M_m\):
-\[P_m = X_m M_m X_m'\]
+1.1.a) On souhaite exprimer la matrice \( P_m \) en fonction des matrices \( X_m \) et \( M_m \). La formule est donnée par :
 
-b) Les matrices \(P_m\) se trouvent dans l'espace \(\mathbf{P} = \mathbf{M}_n(\mathbb{R})\) où \(n\) est le nombre d'individus. Cet espace est de taille \(\frac{n(n+1)}{2}\) car \(P_m = X_m M_m X_m'\) produit une matrice symétrique de taille n x n contenant \(\frac{n(n+1)}{2}\) éléments indépendants.
+\[ P_m = X_m M_m X_m' \]
 
-1.2.a) Les poids naturel des lignes de \(P_m\) serait \(W = \frac{1}{n}I_n \) même chose pour les colonnes.
+où \( X_m \) est une matrice des données de dimension \((n,p_m)\) , \( M_m \) est une matrice de pondération de dimension \((p_m,p_m)\), et \( X_m' \) est la transposée de \( X_m \).
+
+b) L'espace \( P \) est l'ensemble des matrices \( n \times n \). Cet espace est noté :
+
+\[ P = \mathbb{R}^{n \times n} \]
+
+La dimension de cet espace est \( n^2 \), car une matrice \( n \times n \) possède \( n^2 \) éléments indépendants.
+1.2.a) Les lignes et les colonnes de \( P_m \) représentent les individus. Le poids naturel des lignes et des colonnes est donc le même, noté \( W \) de dimension \((n,n)\).
 
 b) On peut munir \(\mathbf{P}\) du produit scalaire de Frobénius qui est défini par:
 
 \[(P_m,P_k) = tr(P_m W P_k W) \quad (p)\]
 
-c) Les tableaux sont mesurés à des échelles différentes, on se doit donc de normées les tableaux \(P_m\) afin de les ramenées sur la même échelle. La normalisation permet de rendre les comparaisons moins sensibles à l'échelle des données et plus centrées sur les relations entre les individus.
+c) Les matrices \( X_m \) peuvent avoir des dimensions différentes, et les matrices \( M_m \) peuvent varier. Cela signifie que les individus des tableaux \( X_m \) résident dans des espaces euclidiens différents selon le tableau. Leurs produits scalaires ne sont donc pas directement comparables d'un tableau à l'autre. Pour rendre les matrices \( P_m \) comparables, il est nécessaire de les normer.
 
-d) Pour mesurer la proximité entre deux matrices \(P_m\) et \(P_k\) on utilise le produit scalaire \((p) \) afin de calculer le coefficient RV entre \(P_m\) et \(P_k\). Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement) et donc une similarité plus grande entre les ensembles d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées (on en peut pas conclure).
+d) Une fois les matrices \( P_m \) normées, elles se situent toutes sur la sphère unité de \( P \). La proximité entre deux matrices peut être mesurée par le cosinus de l'angle entre elles, noté \( RV \). Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement) et donc une similarité plus grande entre les ensembles d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées.
 
 ## STATIS 2
 
@@ -1074,10 +1142,7 @@ On applique le programme de STATIS 1 à un ensemble de matrices $P_m$ issues de 
 
 ### Graphiques directs de STATIS
 
-a) Pour projeter chacune des matrices \(P_m\) sur un graphe dont les directions sont un couple de composantes principales \((F_k,F_l)\), on peut utiliser la méthode de la projection orthogonale. \
-Tout d'abord, nous calculons les composantes principales \((F_k\) et \(F_l)\) à partir de la matrice \(P\) résultant de l'analyse STATIS 1. \
-Ensuite, pour chaque \(P_m\), nous calculons les produits scalaires entre \(P_m\) et les composantes principales $F_k$ et $F_l$. \
-Enfin, ces produits scalaires servent de coordonnées pour projeter les points correspondant à $P_m$ sur le plan défini par les composantes principales $F_k$ et $F_l$.
+a) Pour projeter chaque \( P_m \) sur un graphe dont les directions sont un couple de composantes principales (\( F_k, F_l \)), on utilise leurs cosinus (RV) avec ces composantes.
 
 b) 
 
@@ -1132,41 +1197,40 @@ cmp(lst,1)$F_k
 
 
 ```{r}
-# Définir la disposition en grille des graphiques
-par(mfrow = c(1, 2))
-
-# Afficher les graphiques pour les composantes principales de 1 à 10
-for (i in 1:4) {
-  Ft <- cmp(lst, i)$F_k
-  representation_graph_ind(Ft, 1, 2, aff_noms = TRUE,cex_titre = 0.75)
-}
-
-representation_graph_tab(lst, 1, 2)
+representation_graph_tab(lst, 1, 2,aff_noms = TRUE, repel = TRUE)
 ```
 
 ### Graphiques projetant les individus et les variables initiales
 
-a) Pour montrer que les composantes principales sont des matrices symétriques, nous devons rappeler que les matrices de covariance (ou de corrélation) utilisées dans l'analyse des composantes principales (ACP) sont symétriques. Les composantes principales sont calculées à partir de ces matrices de covariance, ce qui garantit que les composantes principales elles-mêmes seront symétriques.
+a) Pour montrer que les composantes principales sont des matrices symétriques, nous devons rappeler que les matrices de produits scalaires \(P_m\) sont symétriques. Les composantes principales sont calculées à partir de ces matrices de produits scalaires, ce qui garantit que les composantes principales seront symétriques. En effet, Les composantes principales \(F_k\) sont des combinaisons linéaires des matrices \( P_m \) qui sont elles-mêmes symétriques.
 
-b) Chaque composante principale peut être interprétée comme une matrice de produits scalaires entre individus. En utilisant ces produits scalaires, nous pouvons obtenir une image du nuage des individus dans un plan de dimension réduite en utilisant des techniques de visualisation telles que l'Analyse en Composantes Principales (PCA) ou d'autres méthodes de réduction de dimensionnalité. Une fois que nous avons cette représentation en deux dimensions des individus, nous pouvons mettre en relation cette image avec les variables des tableaux en examinant les poids des variables dans chaque composante principale. Les variables qui contribuent le plus aux composantes principales sont celles qui ont le plus d'influence sur la position des individus dans l'espace réduit.
+b) En interprétant chaque composante principale comme une matrice de produits scalaires entre individus, on peut obtenir une image du nuage des individus dans un plan de dimension réduite. Pour cela, on diagonalise chaque matrice \( F_k \) :
 
-c) 
+\[ F_k = U_k \Lambda_k U_k' = (U_k \Lambda_k^{1/2})(U_k \Lambda_k^{1/2})' \]
+
+Les coordonnées des individus sur les axes principaux sont données par \( U_k \Lambda_k^{1/2} \), fournissant une représentation euclidienne hiérarchisée.
+
+c) On applique cette méthode de représentation au tableau de données d'application pour obtenir une visualisation des individus.
 
 ### Aides à l'interprétation
 
-a) Le cosinus carré entre une matrice $P_m$ et une composante principale $F_k$ peut être calculé comme suit : \
-$$cos^2(P_m,F_k) = \frac{Var(P_m\cdot F_k)}{Var(P_m)\cdot Var(F_k)}$$
+a) La formule pour calculer le cosinus carré \( \cos^2(P_m, F_k) \) entre \( P_m \) et \( F_k \) est :
 
-b) Le calcul de $QLT_k(P_m)$, qui mesure la qualité de la représentation de $P_m$ par rapport aux premières $k$ composantes principales, est simplement le cosinus carré moyen de $P_m$ pra rapport à ces $k$ composantes principales : \
-$$QLT_k(P_m) = \frac{1}{k} \sum_{l=1}^{k} cos^2(P_m,F_l)$$
+\[ \cos^2(P_m, F_k) = \frac{[ P_m \mid F_k]^2}{\left[\left| P_m \right|\right]^2 \left[\left| F_k \right|\right]^2 } \]
 
-c) Le CTR (Cumulative Total RV) de la $k$-ième composante principale pour $P_m$ peut être calculée comme suit: \
-$$CTR_k(P_m) = 1-QLT(P_m)$$
-Ce score mesure la proportion de variance de $P_m$ qui n'est pas expliquée par les $k$ premières composantes principales.
+b) On en déduit le calcul du \( QLT_k(P_m) \), qui est la somme des cosinus carrés jusqu'à la composante \( k \) :
 
-d) Tentative de programmation des fonctions (à retravailler ):
+\[ QLT_k(P_m) = \cos^2(P_m, \langle F_1, \ldots, F_k \rangle) = \sum_{j=1}^k \cos^2(P_m, F_j) \]
 
-```{r}
+c) Le calcul de la contribution \( CTR_k(P_m) \) est donné par :
+
+\[ CTR_k(P_m) = \frac{\cos^2(P_m, F_k)}{\lambda_k} \]
+
+d) Programmation et application.
+
+Il est nécessaire de programmer ces fonctions et de les appliquer au tableau de données d'application pour obtenir des mesures quantitatives de la proximité et de la contribution des matrices \( P_m \) aux composantes principales \( F_k \).
+
+```{r, include=FALSE}
 # Définition des fonctions
 cos_square <- function(Pm, Fk) {
   rv <- coef_RV(Pm,Fk)
@@ -1184,7 +1248,10 @@ QLT_k <- function(Pm, lst_Fs) {
   } 
   return(cos)
 }
+```
 
+
+```{r}
 
 CTR_k <- function(Pm, Fk, lambda_k) {
   c <- cos_square(Pm,Fk)/lambda_k
@@ -1341,10 +1408,9 @@ cmp <- function(T_tabl,k){
 Représentation des individus:
 
 ```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
-representation_graph_ind <- function(F_t, k, l, 
-                                     aff_noms = FALSE, col = "navy") {
+representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy", cex_titre = 1, repel = FALSE) {
   if (l <= k) {
-    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
@@ -1355,32 +1421,50 @@ representation_graph_ind <- function(F_t, k, l,
   # Trouver les limites des axes x et y pour centrer l'origine
   x_limits <- range(df$PC_k)
   y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
+  limits <- range(c(-x_limits, x_limits, -y_limits, y_limits))
   
   # Plot les composantes principales dans un plan avec l'origine au centre
-  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l),
-       main = paste("Représentation des individus dans le plan (", k, ",", l, ")"),
-       xlim = limits, ylim = limits, pch = 22, cex = 0.75, col = "black", 
-       bg = "#222211")
+  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l), xlim = limits,
+       ylim = limits, pch = 22, cex = 0.75, col = "black", bg = "#222211")
   
   # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
   abline(h = 0, col = "black", lty = "dotted", lwd = 0.5)
   abline(v = 0, col = "black", lty = "dotted", lwd = 0.5)
   
-  # Afficher les noms de lignes ou les numéros de ligne si demandé
   if (aff_noms == TRUE) {
-    text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
+    if (repel) {
+      # Calculer les positions pour les étiquettes en repoussant légèrement les points
+      offset <- 0.05 * max(diff(range(df$PC_k)), diff(range(df$PC_l)))
+      text_positions <- data.frame(
+        x = df$PC_k + ifelse(df$PC_k >= 0, offset, -offset),
+        y = df$PC_l + ifelse(df$PC_l >= 0, offset, -offset)
+      )
+      
+      # Ajuster les positions pour que les étiquettes ne sortent pas des limites du graphique
+      text_positions$x <- pmax(pmin(text_positions$x, max(limits) - offset), min(limits) + offset)
+      text_positions$y <- pmax(pmin(text_positions$y, max(limits) - offset), min(limits) + offset)
+      
+      for (i in 1:nrow(df)) {
+        text(text_positions$x[i], text_positions$y[i], labels = rownames(df)[i], cex = 0.85, col = col)
+      }
+    } else {
+      text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
+    }
   }
+  
+  # Réglage de la taille du titre
+  title(main = paste("Représentation des individus dans le plan (", k, ",", l, ")"), cex.main = cex_titre)
 }
 
 ```
 
 
 ```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
-geo_ind = function(F_t, k, l, col_points = "black", 
-                   col_noms = "navy", aff_noms = FALSE) {
+representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
+                                     cex_titre = 1, repel = FALSE) {
+  
   if (l <= k) {
-    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
@@ -1388,31 +1472,31 @@ geo_ind = function(F_t, k, l, col_points = "black",
   df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
   rownames(df) <- rownames(F_t)
   
-  # Récupérer les noms de lignes ou les numéros de ligne
-  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
-  
-  # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PC_k)
-  y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
-  
-  # Afficher les composantes principales dans un plan avec l'origine au centre
-  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
-    geom_point(color = col_points) +
+  # Plot les composantes principales dans un plan avec l'origine au centre
+  p <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+    geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
+    theme_classic() +
     labs(x = paste("PC", k), y = paste("PC", l)) +
     ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
-    theme_classic() +
-    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
-    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
   
-  # Afficher les noms de lignes ou les numéros de ligne si demandé
-  if (aff_noms) {
-    plot <- plot + geom_text(aes(label = row_names), color = col_noms, size = 3, hjust = -0.2, vjust = -0.2)
+  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
+  p <- p + geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)
+  
+  if (aff_noms == TRUE) {
+    if (repel) {
+      # Ajouter les étiquettes avec repulsion
+      p <- p + geom_text_repel(aes(label = rownames(df)), size = 3, color = col)
+    } else {
+      # Ajouter les étiquettes sans repulsion
+      p <- p + geom_text(aes(label = rownames(df)), size = 3, color = col)
+    }
   }
   
-  plot + xlim(limits) + ylim(limits)
-  
+  print(p)
 }
+
 
 ```
 
@@ -1429,9 +1513,9 @@ cosinus = function(X_t, F_k){
 Représentation des tableaux:
 
 ```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
-representation_graph_tab = function(T_tab, k, l){
+representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy", cex_titre = 1, repel = FALSE) {
   if (l <= k) {
-    print("Le 1er axe doit être strictement plus petit que le 2nd ")
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
@@ -1439,18 +1523,17 @@ representation_graph_tab = function(T_tab, k, l){
   mat_cos <- matrix(NA, nrow = t, ncol = t)
   for (i in 1:t) {
     for (j in 1:t) {
-      mat_cos[i,j] <- cosinus(T_tab[[i]],cmp(T_tab,j)$F_k)
+      mat_cos[i, j] <- cosinus(T_tab[[i]], cmp(T_tab, j)$F_k)
     }
   }
   
   # Récupérer les noms des tableaux ou les nommer par défaut
-  row_names <- if (is.null(names(T_tab))) paste("X", 1:t) else names(T_tab)
+  row_names <- if (is.null(names(T_tab))) paste("X", 1:t, sep = "_") else names(T_tab)
   mat_cos <- as.data.frame(mat_cos)
   rownames(mat_cos) <- row_names
-
-  F_k = mat_cos[,k] # Récupération de la kième composante principale
-  F_l = mat_cos[,l] # Récupération de la lième composante principale
-
+  
+  F_k <- mat_cos[, k]  # Récupération de la kième composante principale
+  F_l <- mat_cos[, l]  # Récupération de la lième composante principale
   
   # Création des données pour le cercle unité
   df <- data.frame(
@@ -1458,10 +1541,8 @@ representation_graph_tab = function(T_tab, k, l){
     varord = sin(seq(0, 2 * pi, length.out = 100))
   )
   
-  # Créer le graphique en utilisant ggplot2
-  ggplot(mat_cos, aes(x = F_k, y = F_l)) +
+  p <- ggplot(mat_cos, aes(x = F_k, y = F_l)) +
     geom_segment(aes(xend = 0, yend = 0), color = "#445577") +
-    geom_text(aes(label = rownames(mat_cos)), hjust = 0, vjust = 0) +
     geom_point(color = "red", size = 1.5) +
     theme_classic() +
     coord_fixed(ratio = 1) +
@@ -1472,7 +1553,19 @@ representation_graph_tab = function(T_tab, k, l){
     ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
     geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
-    ylim(-1, 1)
+    ylim(-1, 1) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
+  
+  if (aff_noms) {
+    if (repel) {
+      p <- p + geom_text_repel(aes(label = rownames(mat_cos)), color = col, size = 3)
+    } else {
+      p <- p + geom_text(aes(label = rownames(mat_cos)), color = col, size = 3, 
+                         hjust = ifelse(F_k >= 0, 0, 1), vjust = ifelse(F_l >= 0, 0, 1))
+    }
+  }
+  
+  print(p)
 }
 
 ```
@@ -1537,4 +1630,26 @@ for (i in 1:length(Tab_friday())) {
 }
 
 
+```
+
+### Aides à l'interprétation
+
+```{r, include=FALSE}
+# Définition des fonctions
+cos_square <- function(Pm, Fk) {
+  rv <- coef_RV(Pm,Fk)
+  cos2 <- rv^2
+  return(cos2)
+}
+
+
+QLT_k <- function(Pm, lst_Fs) {
+  k <- length(lst_Fs)
+  cos <- 0
+  
+  for (j in 1:k) {
+    cos <- cos_square(Pm,lst_Fs[[j]]) + cos
+  } 
+  return(cos)
+}
 ```
