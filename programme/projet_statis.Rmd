@@ -1041,8 +1041,8 @@ Finalement, on en déduit qu'il y a équivalence entre les matrices juxtaposées
 
 ```{r,fig.height=4.3,fig.width=5.4,fig.align='center'}
 Ft <- cmp(L,1)$F_k
-representation_graph_ind(Ft, 1, 2, aff_noms = TRUE)
-representation_graph_tab(L, 1, 2)
+representation_graph_ind(Ft, 1, 2, aff_noms = TRUE, repel = TRUE)
+representation_graph_tab(L, 1, 2, repel = TRUE)
 ```
 
 ### Quelles ACP d'autres "dépliages" du tableau cubique ?
@@ -1248,16 +1248,17 @@ QLT_k <- function(Pm, lst_Fs) {
   } 
   return(cos)
 }
-```
 
-
-```{r}
 
 CTR_k <- function(Pm, Fk, lambda_k) {
   c <- cos_square(Pm,Fk)/lambda_k
   return(c)
 }
 
+```
+
+
+```{r}
 # Appliquer les fonctions au tableau de données d'application
 # Supposons que P_m représente les données projetées sur une composante principale
 set.seed(123) 
@@ -1407,59 +1408,7 @@ cmp <- function(T_tabl,k){
 
 Représentation des individus:
 
-```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
-representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy", cex_titre = 1, repel = FALSE) {
-  if (l <= k) {
-    print("Le 1er axe doit être strictement plus petit que le 2nd")
-    return(NULL)
-  }
-  
-  # Créer un data frame avec les composantes principales
-  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
-  rownames(df) <- rownames(F_t)
-  
-  # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PC_k)
-  y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits, y_limits))
-  
-  # Plot les composantes principales dans un plan avec l'origine au centre
-  plot(df$PC_k, df$PC_l, xlab = paste("PC", k), ylab = paste("PC", l), xlim = limits,
-       ylim = limits, pch = 22, cex = 0.75, col = "black", bg = "#222211")
-  
-  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
-  abline(h = 0, col = "black", lty = "dotted", lwd = 0.5)
-  abline(v = 0, col = "black", lty = "dotted", lwd = 0.5)
-  
-  if (aff_noms == TRUE) {
-    if (repel) {
-      # Calculer les positions pour les étiquettes en repoussant légèrement les points
-      offset <- 0.05 * max(diff(range(df$PC_k)), diff(range(df$PC_l)))
-      text_positions <- data.frame(
-        x = df$PC_k + ifelse(df$PC_k >= 0, offset, -offset),
-        y = df$PC_l + ifelse(df$PC_l >= 0, offset, -offset)
-      )
-      
-      # Ajuster les positions pour que les étiquettes ne sortent pas des limites du graphique
-      text_positions$x <- pmax(pmin(text_positions$x, max(limits) - offset), min(limits) + offset)
-      text_positions$y <- pmax(pmin(text_positions$y, max(limits) - offset), min(limits) + offset)
-      
-      for (i in 1:nrow(df)) {
-        text(text_positions$x[i], text_positions$y[i], labels = rownames(df)[i], cex = 0.85, col = col)
-      }
-    } else {
-      text(df$PC_k, df$PC_l, labels = rownames(df), cex = 0.85, col = col, pos = ifelse(df$PC_k >= 0, 4, 2))
-    }
-  }
-  
-  # Réglage de la taille du titre
-  title(main = paste("Représentation des individus dans le plan (", k, ",", l, ")"), cex.main = cex_titre)
-}
-
-```
-
-
-```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
+```{r,fig.height=4.8,fig.width=5.5,fig.align='center',include=FALSE}
 representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
                                      cex_titre = 1, repel = FALSE) {
   
@@ -1497,6 +1446,47 @@ representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
   print(p)
 }
 
+```
+
+
+```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
+geo_ind = function(F_t, k, l, col_points = "black", 
+                   col_noms = "navy", aff_noms = FALSE) {
+  if (l <= k) {
+    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    return(NULL)
+  }
+  
+  # Créer un data frame avec les composantes principales
+  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  rownames(df) <- rownames(F_t)
+  
+  # Récupérer les noms de lignes ou les numéros de ligne
+  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
+  
+  # Trouver les limites des axes x et y pour centrer l'origine
+  x_limits <- range(df$PC_k)
+  y_limits <- range(df$PC_l)
+  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
+  
+  # Afficher les composantes principales dans un plan avec l'origine au centre
+  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+    geom_point(color = col_points) +
+    labs(x = paste("PC", k), y = paste("PC", l)) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme_classic() +
+    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
+  
+  # Afficher les noms de lignes ou les numéros de ligne si demandé
+  if (aff_noms) {
+    plot <- plot + geom_text(aes(label = row_names), color = col_noms, 
+                             size = 3, hjust = -0.2, vjust = -0.2)
+  }
+  
+  plot + xlim(limits) + ylim(limits)
+  
+}
 
 ```
 
