@@ -15,11 +15,14 @@ header-includes:
 
 **\textbf{\large Introduction}** \
 \newline
-  L'ACP que nous avons l'habitude de voir est une méthode d'analyse de données qui permet de résumer les informations contenues dans un tableau de données. Dans le cas de plusieurs tableaux, il nous faut trouver une méthode permettant d'analyser les données dans leur ensemble. \
-  On se propose d'étendre l'ACP à l'analyse d'un multi-tableau. L'objectif est de comparer les individus et les variables de plusieurs tableaux. Il existe plusieurs façons de la faire, STATIS en est une. STATIS est une méthode qui permet de synthétiser les informations contenues dans les différents tableaux en une seule représentation. 
-Il existe aussi plusieurs types de multi-tableaux. Nous en distinguons deux : les multi-tableaux à trois entrées (situation 1) et les multi-tableaux avec partition thématique (situation 2). \
-- Le tableau à trois entréees est un tableau de taille \(n \times p \times T\), où \(n\) est le nombre d'individus, \(p\) le nombre de variables et \(T\) les différentes dates. Les indices seront notés $1\leq i\leq n$ , $1\leq j\leq p$ et $1\leq t\leq T$ \
-- Le tableau avec partition thématique est composé de $q$ tableaux décrivants les $n$ individus à l'aide de groupes de variables différents, chaque groupe appartenant conceptuellement à un thème précis. Chacun de ces tableaux $X_m$, avec $1\leq m\leq q$, possède $p_m$ variables (colonnes). 
+ L'Analyse en Composantes Principales (ACP), ou Principal Component Analysis (PCA) en anglais, est une technique statistique utilisée pour réduire la dimensionnalité d'un ensemble de données tout en conservant autant que possible la variance présente dans les données d'origine. Elle transforme les variables d'origine en un nouvel ensemble de variables non corrélées appelées composantes principales. En réduisant la complexité des données tout en préservant leur essence, elle permet de mieux comprendre les structures sous-jacentes des données et de préparer ces dernières pour une analyse plus approfondie. L'ACP trouve des applications dans de nombreux domaines, allant de la reconnaissance de formes et de la bioinformatique à la finance et au marketing, illustrant sa polyvalence et son importance dans le domaine de l'analyse des données.  \\
+\newline
+L'ACP que nous avons l'habitude de voir est utilisable sur des tableaux de données à deux entrées. Mais que faire dans le cas de tableaux à trois dimensions ? Il nous faut trouver une méthode permettant d'analyser les données dans leur ensemble. \\
+On se propose d'étendre l'ACP à l'analyse d'un multi-tableau. L'objectif est de comparer les individus et les variables de plusieurs sous-tableaux. Il existe plusieurs façons de la faire, STATIS en est une. STATIS est une méthode qui permet de synthétiser les informations contenues dans les différents tableaux en une seule représentation. \\
+\newline
+Il existe aussi plusieurs types de multi-tableaux. Nous en distinguons deux : les multi-tableaux à trois entrées (situation 1) et les multi-tableaux avec partition thématique (situation 2). \\
+- Le tableau à trois entrées est un tableau de taille \(n \times p \times T\), où \(n\) est le nombre d'individus, \(p\) le nombre de variables et \(T\) les différentes dates. Les indices seront notés $1\leq i\leq n$ , $1\leq j\leq p$ et $1\leq t\leq T$ \\
+- Le tableau avec partition thématique est composé de $q$ tableaux décrivants les $n$ individus à l'aide de groupes de variables différents, chaque groupe appartenant conceptuellement à un thème précis est regoupé dans un sous-tableau composant le multi-tableau. Chacun de ces sous-tableaux $X_m$, avec $1\leq m\leq q$, possède $p_m$ variables (colonnes). 
 
 # Situation 1
   Dans cette première partie nous utilisons les tableaux à trois entrées. Un tel tableau peut être décomposé en $T$ tableaux juxtaposés de dimensions identiques \((n,p)\). Cette identité de dimension entre les $T$ tableaux homologues permet une extension de l'ACP dans laquelle on considère chaque tableau comme une "variable" décrivant \(n \times p\) "individus" \((i,j)\). \ Nous formalisons d'abord cette extension de l'ACP, STATIS 1.
@@ -187,41 +190,44 @@ prd_scalaire = function(A,B){
  }
 ```
 
-Considérons à présent un exemple d'application de ma fonction **prd_scalaire** (le produit scalaire de Frobénius) ci-dessous:
+onsidérons à présent un exemple d'application du produit scalaire de Frobénius ci-dessous: \\
 
-Nous commençons par initialiser les matrices \(A\) et \(B\) avec les valeurs suivantes :
-
+Nous commençons par définir les matrices \(X_1\) et \(X_2\) avec les valeurs suivantes choisies. Les matrices $X_1$ et $X_2$ sont les mêmes à l'exception d'une valeur (qui n'est pas loin des autres), et les matrices $X_3$ et $X_4$ sont au contraire bien différentes avec une valeur de la deuxième matrice qui se rapproche légèrement de la première :
 \[
-A = \begin{pmatrix}
-0 & -1 & 0 \\
-1 & 0 & -1 \\
-1 & 1 & 0 \\
-0 & 2 & -1 
+X_1 = \begin{pmatrix}
+1 & 1 \\
+1 & 1 \\
+1 & 1
 \end{pmatrix}
 \]
 \[
-B = \begin{pmatrix}
--1 & 1 & 2 \\
--1 & 0 & 1 \\
-1 & 0 & 0 \\
-0 & 1 & -1 
+X_2 = \begin{pmatrix}
+1 & 0 \\
+1 & 1 \\
+1 & 1
+\end{pmatrix}
+X_3 = \begin{pmatrix}
+-1 & -1 \\
+-1 & -1 \\
+-0.5 & -1
 \end{pmatrix}
 \]
+\newline
 
-Maintenant que les matrices \(A\) et \(B\) sont initialisées, nous pouvons appliquer la fonction prd_scalaire pour calculer le produit scalaire de Frobenius entre elles.
+Maintenant que les matrices \(X_1\) et \(X_2\) sont initialisées, nous pouvons appliquer la fonction prd_scalaire pour calculer le produit scalaire de Frobenius entre elles.
 
 ```{r}
 # Initialisation de A et B
 a <- c(0,1,1,0,-1,0,1,2,0,-1,0,-1)
 b <- c(-1,-1,1,0,1,0,0,1,2,1,0,-1)
-A  = matrix(a, nrow =4)
-B = matrix(b, nrow =4)
+X_1  = matrix(a, nrow =4)
+X_2 = matrix(b, nrow =4)
 
 # On applique la fonction prd_scalaire
-resultat = prd_scalaire(A,B)
+resultat = prd_scalaire(X_1,X_2)
 ```
 
-Suite à l'application de la fonction prd_scalaire sur les matrices \(A\) et \(B\), le résultat obtenu est 0.08333333, donc \([A \mid B] = 0.08333333\).
+Ainsi nous pouvons appliquer le produit scalaire de Frobenius entre les matrices $X_1$ et $X_2$, et $X_1$ et $X_3$. On obtient les résultats suivants : \([X_1 \mid X_2] = 0.83333\) et \([X_1 \mid X_3] = -0.91667\). Comme un produit scalaire élevé indique que les matrices son orientées de de manière similaire dans l'espace multidimensionnel des éléments, plus le résultats est élevé, plus les matrices sont similaires en termes de direction et de magnitude des éléments correspondants. Cette définition est bien illustrée ici.
 
 ```{r,include=FALSE}
 norme = function(A){
@@ -229,26 +235,26 @@ norme = function(A){
 }
 ```
 
-Après avoir calculé le produit scalaire de Frobenius entre les matrices \(A\) et \(B\), nous allons maintenant calculer la norme associée à ce produit scalaire (\(\left[\left| \cdot \right|\right] = \sqrt{ [\cdot \mid \cdot]} \)) pour chaque matrice, \(A\) et \(B\). La fonction pour calculer la norme associée à ce produit est définie en Annexe.
-
+La fonction pour calculer la norme associée à ce produit est définie en Annexe.
 
 ```{r}
 # On utilise les matrices précédente afin de calculer leurs normes
-rn1 = norme(A)
-rn2 = norme(B)
+rn1 = norme(X_1)
+rn2 = norme(X_2)
 
 ```
 
+Après avoir calculé le produit scalaire de Frobenius entre les matrices \(X_1\),$X_2$ et $X_3$, nous allons maintenant calculer la norme associée à ce produit scalaire (\(\left[\left| \cdot \right|\right] = \sqrt{ [\cdot \mid \cdot]} \)) pour chaque matrice, \(X_1\) et \(X_2\). La fonction \textbf{norme }pour calculer la norme associée à ce produit est définie en Annexe. \\
 Nous obtenons après calcul les résultats suivants:
-\(\left[\left| A \right|\right] = 0.9128709\) et \(\left[\left| B \right|\right] = 0.9574271\)
+\(\left[\left| X_2 \right|\right] = 0.9128709 \) et \(\left[\left| X_3 \right|\right] = 0.9354143\). De toute évidence les norme de $X_1$ est égale à 1.\\
 
 ### Coefficient RV
 
-On définit le coefficient de RV d'Escoufier entre deux matrices \( A \) et \( B \) de taille \( (n , p) \) par :
+On définit le coefficient de RV d'Escoufier entre deux matrices \( X_t \) et \( X_s \) de taille \( (n , p) \) par :
 
-\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+\[ R(X_t ,X_s) = \frac{[ X_t \mid X_s]}{\left[\left| X_t \right|\right] \left[\left| X_s \right|\right] } \]
 
-a) Géométriquement, le coefficient de RV représente le cosinus entre les matrices \( A \) et \( B \).
+a) Géométriquement, le coefficient de RV représente le cosinus entre les matrices \( X_t \) et \( X_s \).
 
 b) Les fonctions pour calculer le coefficient de RV et fournir la matrice des coefficients de RV en \( (n,p) \) tableaux \(X_{(n,p)} \) seront présentées en Annexe. En revanche, ici, nous expliciterons un exemple d'application de celles-ci.
 
@@ -281,59 +287,53 @@ matcoef_RV = function(T_tableaux) {
 ```
 
 
-Supposons que nos matrices \( X_1, X_2, X_3 \) et \( X_4 \) sont toutes de dimension \( 3 \times 2 \):
-
+On définit le coefficient de RV d'Escoufier entre deux matrices \( X_t \) et \( X_s \) de taille \( (n , p) \) par :
+\[ R(X_t ,X_s) = \frac{[ X_t \mid X_s]}{\left[\left| X_t \right|\right] \left[\left| X_s \right|\right] } \]
+Le coefficient de RV représente le cosinus entre les matrices \( X_t \) et \( X_s \). Cette interprétation souligne la similarité géométrique entre les ensembles de variables.\\
+\newline
+Reprenons nos trois matrices précédentes \( X_1, X_2\) et \( X_3 \) de dimension \( 3 \times 2 \) pour illustrer ce coefficient : \\
 \[
 X_1 = \begin{pmatrix}
-2 & -1 \\
-0 & -2 \\
+1 & 1 \\
+1 & 1 \\
 1 & 1 
 \end{pmatrix}, \quad
 X_2 = \begin{pmatrix}
-1 & -2 \\
--1 & 0 \\
-0 & 1 
+1 & 0 \\
+1 & 1 \\
+1 & 1
 \end{pmatrix}, \quad
 X_3 = \begin{pmatrix}
--1 & 0 \\
-2 & 1 \\
-0 & -1 
-\end{pmatrix}, \quad
-X_4 = \begin{pmatrix}
-0 & -1 \\
-1 & 2 \\
--2 & 0 
+-1 & -1 \\
+-1 & -1 \\
+-0.5 & -1 
 \end{pmatrix}
 \]
-
-\[ [X_1|X_2] = \text{tr}(C X_1'W X_2) \]
-
+\newline
+\[ [X_1|X_2] = \text{tr}(C X_1'W_B X_2) \]
+\newline
 \[ \frac{1}{6} \begin{pmatrix}
-2 & 0 & 1 \\
--1 & -2 & 1
+1 & 1 & 1 \\
+1 & 1 & 1
 \end{pmatrix} \begin{pmatrix}
-1 & -2 \\
--1 & 0 \\
-0 & 1 
+1 & 0 \\
+1 & 1 \\
+1 & 1 
 \end{pmatrix} = \frac{1}{6} \begin{pmatrix}
-2 & -3 \\
-1 & 3
+3 & 2 \\
+3 & 2
 \end{pmatrix}
 \]
+\newline
+donc \( [X_1|X_2] = \frac{5}{6} \). Or, \( \left\| X_1 \right\| = 1 \) et \( \left\| X_2 \right\| = \sqrt{\frac{5}{6}} \), donc \( R(X_1 ,X_2) = \frac{[ X_1 \mid X_2]}{\left\| X_1 \right\| \left\| X_2 \right\| } = \frac{ \frac{5}{6} }{ \sqrt{\frac{5}{6}} } = \sqrt{\frac{5}{6}} \approx 0.9128709 \) \\
 
-donc \( [X_1|X_2] = \frac{5}{6} \). Or, \( \left\| X_1 \right\| = \frac{11}{6} \) et \( \left\| X_2 \right\| = \frac{7}{6} \), donc \( R(X_1 ,X_2) = \frac{[ X_1 \mid X_2]}{\left\| X_1 \right\| \left\| X_2 \right\| } = \frac{ \frac{5}{6} }{ \frac{11}{6} \frac{7}{6} } = \frac{30}{77} \)
+De manière analogue, on obtient les résultats suivants: \\
+  - \( [X_1|X_3] = \frac{-5.5}{6} \) \\
+  - \( [X_2|X_3] = \frac{-3}{4} \)\\
+  - \(R(X_1,X_3) \approx -0.97996\) \\
+  - \(R(X_2,X_3) \approx -0.87831\)
 
-De manière analogue, on obtient les résultats suivants:
-
-  - \( [X_1|X_3] = \frac{-5}{6} \)
-  - \( [X_1|X_4] = \frac{-5}{6} \)
-  - \( [X_2|X_3] = \frac{-4}{6} \)
-  - \( [X_2|X_4] = \frac{1}{6} \)
-  - \( [X_3|X_4] = \frac{11}{6} \)
-  - \( \left\| X_3 \right\| = \frac{7}{6} \)
-  - \( \left\| X_4 \right\| = \frac{10}{6} \)
-  
-En notant \(R_{ij}\) le terme général de la matrice \(R\) des coefficients RV, on a:
+En notant \(R_{ij}\) le terme général de la matrice \(R\) des coefficients RV, on a: \\
 
 \[
 R_{ij} = \frac{[ X_i \mid X_j]}{\left\| X_i \right\| \left\| X_j \right\| }
@@ -343,14 +343,14 @@ On en déduit alors que:
 
 \[
 R = \begin{pmatrix}
-1 & \frac{30}{77} & \frac{-30}{77} & \frac{-30}{110}\\
-\frac{30}{77} & 1 & \frac{-24}{49} & \frac{6}{70}\\
-\frac{-30}{77} & \frac{-24}{49} & 1 & \frac{24}{70}\\
-\frac{-30}{110} & \frac{6}{70} & \frac{24}{70} & 1
+1 & 0.91287 & -0.97996 \\
+0.91287 & 1 & -0.87831 \\
+-0.97996 & -0.87831 & 1
 \end{pmatrix} 
 \]
 
-Pour appliquer la fonction coeff_RV, nous utiliserons les données citées en introduction.
+Un coeffecient proche de 1 signifie une forte similarité entre deux matrices. A contrario un coefficient proche de -1 indique une faible similarité. Chaque ligne et chaque colonne représente une matrice, reflétée par rapport à la diagonale en raison de la symétrie de la matrice $R$. Par conséquent, le coefficient RV entre la deuxième et la troisième matrice peut être trouvé à la fois sur la deuxième ligne, troisième colonne, et sur la troisième ligne, deuxième colonne.\\
+
 
 ```{r}
 X1 = as.matrix(read.csv("2021_filtre.csv", row.names = 1, header = T))
@@ -362,15 +362,18 @@ filtre <- list(X1 = X1, X2 = X2, X3 = X3)
 resultats_n = matcoef_RV(filtre)
 ```
 
-Le résultat obtenu est la matrice suivante arrondie à \(10^{-4}\) :
-
+Jusqu'ici les calculs étaient faisables à la main. Cependant il arrive plus souvent dans la vraie vie de devoir utiliser ces outils à plus grande dimension. Pour cela nous avons coder une fonction en R donnant directement la matrice des coefficients RV à partir des fonctions codées précédemment pour le produit scalaire et la somme. Les fonctions \textbf{coef\_RV} et \textbf{matcoef\_RV} pour calculer respectivement le coefficient RV et fournir la matrice des coefficients de RV en \( (n,p) \) tableaux \(X_{(n,p)} \) seront présentées en Annexe. Nous utiliserons les données citées en introduction, à savoir les données de pollution en Occitanie sur 3 années, pour interpréter de vrais résultats de cette fonction. \\
+\newline
+Le résultat obtenu est la matrice suivante arrondie à \(10^{-5}\) :
 \[
 \begin{pmatrix}
-1.0000 & 0.9992 & 0.9989 \\
-0.9992 & 1.0000 & 0.9991 \\
-0.9989 & 0.9991 & 1.0000 
+1.0000 & 0.99928 & 0.99892 \\
+0.99928 & 1.0000 & 0.99915 \\
+0.99892 & 0.99915 & 1.0000 \\
 \end{pmatrix}
 \]
+Cette matrice donne les coefficients RV entre les différents tableaux. On a trois tableaux donc on obtient une matrice de dimension $3\times 3$. Ici les tableaux 2 et 3 sont les plus corrélés. Les tableaux 1 et 3 sont les moins corrélés. Il faut remettre les données dans leur contexte, s'agissant d'une évolution de la pollution sur trois années, avec chaque matrice $((i,j),t)$ représentant le taux de pollution par station et par polluant pour chaque année, il est normal de trouver une forte corrélation entre les matrices des années proches et une corrélation légèrement moins forte pour les matrices des années plus éloignées. On en déduit que la pollution en Occitanie n'a pas beaucoup évoluée sur ces trois années. \\
+Toutefois, si l'on avait tournée le tableau d'une autre façon (matrices $((i,t),j)$ des stations par années pour chaque polluant, ou matrices $((j,t),i)$ des polluants par années pour chaque station) en le refaçonnant (3 manières de touner un tableau à trois entrées) les résultats auraient pu être différents. \\
 
 
 ## Programme de STATIS 1
@@ -430,9 +433,8 @@ ordre.
 
 
 ```{r,include=FALSE}
-vecval_prop = function(T_tableau) {
-  matrice = matcoef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
-  
+vecval_prop = function(matrice) {
+   
   resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
   val_prop = resultat_propre$values #valeurs propres
   vec_prop = resultat_propre$vectors #vecteurs propres associées
@@ -445,8 +447,8 @@ vecval_prop = function(T_tableau) {
 Considérons un exemple d'application de la fonction vecval_prop:
 
 ```{r}
-# on applique vecval_prop aux données simulated
-vecval = vecval_prop(filtre)
+# on applique vecval_prop aux données spolution en Occitanie sur 3 années
+vecval = vecval_prop(resultats_n)
 
 val_prop <- vecval$val_prop
 vec_prop <- vecval$vec_prop
@@ -467,7 +469,7 @@ Aprés exécution de la fonction vecval_prop les résultats suivants:
 où, \(U\) est la matrice des vecteurs propres et \(\lambda\) les valeurs propres associées arrondie à \(10^{-4}\).
 
 
-Montrons à présent que les vecteurs u obtenus forment une base *I*-orthonormée.
+Montrons à présent que les vecteurs \(u\) obtenus forment une base *I*-orthonormée.
 
 Reprenons la matrice \(R\) des coefficients RV précédente. Soient \(u_i\) et \(u_j\) des vecteurs propres de \(R\) associés aux valeurs propres \(\lambda_i\) et \(\lambda_j\) distinctes. Comme \(u_i\) et \(u_j\) sont des solutions du problème suivant :
 
@@ -662,32 +664,62 @@ b) Pour déduire que les composantes principales \( F^1, \ldots, F^k, \ldots \) 
 
 c) La fonction calculant les composantes, la représentation des individus et celle des tableaux setrouvent en annexe. Nous verrons ci-dessous un exemple d'application de ces fonctions sur les données simulated.
 ```{r,include=FALSE}
-cmp <- function(T_tabl,k){
-  
-  n <- length(T_tabl[[1]][,1])
-  p <- length(T_tabl[[1]][1,])
-  t <- length(T_tabl)
-  l <- n*p
-  Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
+# fonction dépliant un ensemble de matrice X_t
+dep_mat <- function(T_tabl){
+    n <- length(T_tabl[[1]][,1])# dimension des variables
+    p <- length(T_tabl[[1]][1,])# dimension des individus
+    t <- length(T_tabl) # nombre de tableaux
+    
+    # initialisation d'une matrice dont les vecteurs sont les matrices X_t normées
+    Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
   
   for (i in 1:t ) {
     a <- T_tabl[[i]]/norme(T_tabl[[i]])
     Y_nrm[,i] <- matrix(a, ncol = 1)
   }
   
+  return(Y_nrm)  
+}
+
+composante_principale <- function(Y_nrm,k){
+  
+  l = length(Y_nrm[,1])
   mat <- t(Y_nrm) %*% (diag(l)/l) %*% Y_nrm
   
   result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
   lambda = result_propre$values #valeurs propres
   u = result_propre$vectors #vecteurs propres associées
   
-  cmp_k <- Y_nrm %*% u[,k]
-  F_k <- matrix(cmp_k, nrow = n, ncol = p)
-  rownames(F_k) <- rownames(a)
+  F_k <- Y_nrm %*% u[,k]
   return(list(u = u, lambda = lambda, F_k = F_k))
 }
 
-comp_prin = cmp(filtre,1)$F_k
+cmp <- function(T_tabl,k){
+  
+  l <- length(T_tabl) # le nombre de tableaux
+  n <- nrow(T_tabl[[1]])
+  p <- ncol(T_tabl[[1]])
+  mat <- matcoef_RV(T_tabl) # la matrice des coefficient RV
+  
+  result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
+  lambda = result_propre$values #valeurs propres
+  u = result_propre$vectors #vecteurs propres associées
+  
+  F_k <- matrix(0,nrow = n, ncol = p)
+  for (i in 1:l) {
+    F_k  <- F_k + ((T_tabl[[i]]/norme(T_tabl[[i]])) * u[,k][i])
+  }
+  
+  if(is.null(rownames(T_tabl[[k]]))){
+    rownames(F_k) <- paste("L", 1:n, sep = "")
+  }else{
+    rownames(F_k) <- rownames(T_tabl[[k]])
+  }
+  
+  return(list(u = u, lambda = lambda, F_k = F_k))
+}
+
+composante_principale(dep_mat(filtre),1)
 ```
 
 
@@ -701,14 +733,14 @@ representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
   }
   
   # Créer un data frame avec les composantes principales
-  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  df <- data.frame(f_k = F_t[, k], f_l = F_t[, l])
   rownames(df) <- rownames(F_t)
   
   # Plot les composantes principales dans un plan avec l'origine au centre
-  p <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+  p <- ggplot(df, aes(x = f_k, y = f_l)) +
     geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
     theme_classic() +
-    labs(x = paste("PC", k), y = paste("PC", l)) +
+    labs(x = paste("F", k, sep = ""), y = paste("F", l, sep = "")) +
     ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
     theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
   
@@ -733,7 +765,7 @@ representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
 ```
 
 
-```{r,fig.height=4.5,fig.width=4.9,fig.align='center'}
+```{r,fig.height=3.3,fig.width=4,fig.align='center'}
 
 # Afficher les graphiques pour les composantes principales de 1 à 
 for (i in 1:3) {
@@ -743,47 +775,51 @@ for (i in 1:3) {
 ```
 
 
-```{r,include=FALSE}
-geo_ind = function(F_t, k, l, col_points = "black", 
-                   col_noms = "navy", aff_noms = FALSE) {
+```{r,fig.height=4.8,fig.width=5.5,fig.align='center',include=FALSE}
+geo_ind <- function(Y_nrm, k, l, aff_noms = FALSE, col = "navy", cex_titre = 1, repel = FALSE) {
+  
   if (l <= k) {
-    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
   # Créer un data frame avec les composantes principales
-  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
-  rownames(df) <- rownames(F_t)
-  
-  # Récupérer les noms de lignes ou les numéros de ligne
-  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
-  
-  # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PC_k)
-  y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
-  
-  # Afficher les composantes principales dans un plan avec l'origine au centre
-  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
-    geom_point(color = col_points) +
-    labs(x = paste("PC", k), y = paste("PC", l)) +
-    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
-    theme_classic() +
-    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
-    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
-  
-  # Afficher les noms de lignes ou les numéros de ligne si demandé
-  if (aff_noms) {
-    plot <- plot + geom_text(aes(label = row_names), color = col_noms, size = 3, hjust = -0.2, vjust = -0.2)
+  df <- data.frame(F_k = composante_principale(Y_nrm, k)$F_k, F_l = composante_principale(Y_nrm, l)$F_k)
+  if (is.null(rownames(Y_nrm))) {
+    rownames(df) <- paste("L", 1:nrow(Y_nrm), sep = "")
+  } else {
+    rownames(df) <- rownames(Y_nrm)
   }
   
-  plot + xlim(limits) + ylim(limits)
   
+  # Plot les composantes principales dans un plan avec l'origine au centre
+  p <- ggplot(df, aes(x = F_k, y = F_l)) +
+    geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
+    theme_classic() +
+    labs(x = paste("F", k, sep = ""), y = paste("F", l, sep = "")) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
+  
+  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
+  p <- p + geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)
+  
+  if (aff_noms == TRUE) {
+    if (repel) {
+      # Ajouter les étiquettes avec repulsion
+      p <- p + geom_text_repel(aes(label = rownames(df)), size = 3, color = col, box.padding = unit(0.2, "lines"))
+    } else {
+      # Ajouter les étiquettes sans repulsion
+      p <- p + geom_text(aes(label = rownames(df)), size = 3, color = col, nudge_x = 0.2, nudge_y = 0.2)
+    }
+  }
+  
+  print(p)
 }
 
-# Exemple d'utilisation avec l'affichage des noms de lignes ou des numéros de ligne
-geo_ind(Ft, 1, 2, aff_noms = TRUE)
-
+# Afficher les graphiques pour les composantes principales de 1 à 3
+Y <- dep_mat(filtre)
+geo_ind(Y, 1, 2, aff_noms = TRUE, cex_titre = 0.80, repel = TRUE)
 ```
 
 
@@ -836,9 +872,10 @@ representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy",
     coord_fixed(ratio = 1) +
     geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
     geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
-    labs(x = paste("PC", k),
-         y = paste("PC", l)) +
+    labs(x = paste("F", k, sep = ""),
+         y = paste("F", l, sep = "")) +
     ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))+
     geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
     ylim(-1, 1) +
@@ -859,189 +896,119 @@ representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy",
 ```
 
 
-```{r}
+```{r,fig.height=3.3,fig.width=4,fig.align='center'}
 
 # Exemple d'utilisation avec les tableaux n_tableaux et les composantes principales 3 et 4
-representation_graph_tab(filtre, 1, 2, aff_noms = T, repel = TRUE)
+representation_graph_tab(filtre, 1, 2, cex_titre = 0.80, repel = TRUE)
 
 ```
 
 ### Illustration d'un ACP d'un tableau juxtaposé dépliant le tableau cubique
 
-Soit \( A \), \( B \) et \( C \) les matrices données comme suit:
+Maintenant que nous avons tous les outils pour réaliser une ACP sur un tableau à trois entrées, il nous faut visualiser les résultats pour les interpréter. On propose l'exemple suivant réalisé à la main sur nos premières matrices $X_1$, $X_2$ et $X_3$: \\
 
 \[
-\text{A} = \begin{pmatrix}
+X_1 = \begin{pmatrix}
+1 & 1  \\
+1 & 1 \\
+1 & 1 
+\end{pmatrix}, \quad
+X_2 = \begin{pmatrix}
 1 & 0  \\
--1 & 1 \\
-2 & 2 
+1 & 1 \\
+1 & 1 
 \end{pmatrix}, \quad
-\text{B} = \begin{pmatrix}
-2 & -1  \\
--1 & 0 \\
-0 & 1 
-\end{pmatrix}, \quad
-\text{C} = \begin{pmatrix}
-3 & 1  \\
-1 & -2 \\
-0 & -3 
+X_3 = \begin{pmatrix}
+-1 & -1  \\
+-1 & -1 \\
+-0.5 & -1 
 \end{pmatrix}
 \]
 
-En utilisant le produit scalaire défini par:
 
+On rappel le produit scalaire de Frobénius :\\
 \begin{align*}
-[A \mid B] &= \text{tr}(CA'WB) \\
-&= \text{tr}(C^{\frac{1}{2}} A'W^{\frac{1}{2}} W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
-&= \text{tr}((W^{\frac{1}{2}} A C^{\frac{1}{2}})' W^{\frac{1}{2}} B C^{\frac{1}{2}}) \\
-&= \text{tr}(\tilde{A}'\tilde{B})
+[X_t \mid X_s] &= \text{tr}(CX_t'WX_s) \\
+&= \text{tr}(\tilde{X_t}'\tilde{X_s})
 \end{align*}
 
-avec \(W:= \frac{1}{n}I_n\) la matrice de poids des individus et \(C:= \frac{1}{p}I_p\) la matrice de poids des variables.
 
-Nous allons calculer la matrice des coefficients RV d'Escoufier que l'on notera \(\Gamma\). Ci-dessous la formule permettant de calculer le coefficient RV entre deux matrices \(A\) et \(B\) de taille \(n,p\) ici \(n=3\) et \(p=2\):
+avec \(W:= \frac{1}{n}I_n\) la matrice de poids des individus et \(C:= \frac{1}{p}I_p\) la matrice de poids des variables. \\
 
-\[ R(A ,B) = \frac{[ A \mid B]}{\left[\left| A \right|\right] \left[\left| B \right|\right] } \]
+On avait trouvé la matrice des coefficients RV d'Escoufier que l'on notera \(\Gamma\).\\
 
-Calculons les coefficients \(R(A ,B)\), \(R(A ,C)\) et \(R(B ,C)\).
+Ci-dessous la formule permettant de calculer le coefficient RV entre deux matrices \(X_t\) et \(X_s\) de taille \((n,p)\) (ici \(n=3\) et \(p=2\)) :\\
+\[ R(X_t ,X_s) = \frac{[ X_t \mid X_s]}{\left[\left| X_t \right|\right] \left[\left| X_s \right|\right] } \]
 
-Procédons étape par étape:
-
-\[[ A \mid B] = \text{tr}(CA^tWB)= \frac{1}{6}\text{tr}(A^tB)\]
-Or, 
-\[\frac{1}{6} \begin{pmatrix}
-1 & -1 & 2 \\
-0 & 1 & 2
-\end{pmatrix} \begin{pmatrix}
-2 & -1  \\
--1 & 0 \\
-0 & 1 
-\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
-3 & 1  \\
--1 & 2 
-\end{pmatrix}\]
-
-donc \( [A \mid B] = \frac{5}{6} \)
-
-Pour \( [A \mid C] \) :
-
-\[
-[A \mid C] = \frac{1}{6} \text{tr}(A^T C) \]
-Or, 
-\[ \frac{1}{6} \begin{pmatrix} 
-1 & -1 & 2 \\ 
-0 & 1 & 2 
-\end{pmatrix} \begin{pmatrix} 
-3 & 1 \\ 
-1 & -2 \\ 
-0 & -3 
-\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
-2 & -3  \\
-1 & -8 
-\end{pmatrix}\]
-
-donc \( [A \mid C] = \frac{-6}{6} = -1 \)
-
-Pour \( [B \mid C] \) :
-
-\[
-[B \mid C] = \frac{1}{6} \text{tr}(B^T C) \]
-Or, 
-\[ \frac{1}{6} \begin{pmatrix} 
-2 & -1 & 0 \\ 
--1 & 0 & 1 
-\end{pmatrix} \begin{pmatrix} 
-3 & 1 \\ 
-1 & -2 \\ 
-0 & -3 
-\end{pmatrix} = \frac{1}{6} \begin{pmatrix}
-5 & 4  \\
--3 & -4 
-\end{pmatrix}
-\]
-
-donc \( [B \mid C] = \frac{1}{6} \). En utilisant la norme associée à ce produit scalaire on a:
-
-\(\left[\left| A \right|\right] = \sqrt{\frac{11}{6} } \), \(\left[\left| B \right|\right] = \sqrt{\frac{7}{6}} \) et \(\left[\left| C \right|\right] = \sqrt{\frac{24}{6}} = 2 \).
-
-D'où 
-
-\[R(A ,B) = \frac{ \frac{5}{6} }{ \sqrt{\frac{11}{6}} \sqrt{\frac{7}{6}} } \]
-
-\[R(A ,C) = \frac{ -1 }{ 2 \sqrt{\frac{11}{6}}} \]
-et
-\[R(B ,C) = \frac{ \frac{1}{6} }{ 2 \sqrt{\frac{7}{6}} } \]
-
-Par symétrie du produit scalaire, la matrice \(\Gamma \) des coefficients RV est donc égale à:
+Ainsi,
 
 \[\Gamma = \begin{pmatrix}
-1.0000 & 0.5698 & -0.3692 \\
-0.5698 & 1.0000 & 0.0771 \\
--0.3692 & 0.0771 & 1.0000 \\
+1 & 0.91287 & -0.97996 \\
+0.91287 & 1 & -0.87831 \\
+-0.97996 & -0.87831 & 1
 \end{pmatrix}\]
 
-
-Maintenant, considérons le dépliement des matrices juxtaposées :
+Maintenant, considérons le dépliage des matrices juxtaposées :
 
 \[
 \text{X} = \begin{pmatrix}
-1 & 2 & 3 \\
--1 & -1 & 1 \\
-2 & 0 & 0 \\
-0 & -1 & 1 \\
-1 & 0 & -2 \\
-2 & 1 & -3
+1 & 1 & -1 \\
+1 & 1 & -1 \\
+1 & 1 & -0.5 \\
+1 & 0 & -1 \\
+1 & 1 & -1 \\
+1 & 1 & -1
 \end{pmatrix}
 \]
 
-où la première variable est la matrice \(A\) dépliée, la deuxième variable est la matrice \(B\) dépliée et la troisième variable est la matrice \(C\) dépliée.
 
-On pose \(M\) la matrice diagonale \(p,p\) (\(ici \quad p = 3, \quad n = 6 )\) dont le coefficient \(M_{ii} = \frac{1}{||X_i||_W} \) avec:
+où la première colonne est la matrice $X_1$ dépliée, la deuxième colonne est la matrice $X_2$ dépliée et la troisième colonne est la matrice $X_3$ dépliée.\\
 
-   - \(W:= \frac{1}{n} I_n\)
+On pose \(M\) la matrice diagonale \(t,t\)  dont le coefficient \(m_{ii} = \frac{1}{||X_i||_L} \) avec:
+   
+   - \(t\) le nombre de tableau (ici \(t = 3\))
+   - \(L:= W \otimes C = \frac{1}{np} I_{np}\)
    - \(X_i\) la ième variable
-   - \(\|X_i\|_W = \sqrt{(X_i^tWX_i)}\)
+   - \(\|X_i\|_L = \sqrt{(X_i' L X_i)}\) (la norme associée au produit scalaire d'après la partie 1)
 
 Ici \(M\) sera donc égale à:
 
 \[M = \begin{pmatrix}
-\frac{1}{\sqrt{\frac{11}{6}}} & 0 & 0 \\
-0 & \frac{1}{\sqrt{\frac{7}{6}}} & 0 \\
-0 & 0 & \frac{1}{2} \\
+1 & 0 & 0 \\
+0 & \sqrt{\frac{6}{5}} & 0 \\
+0 & 0 & \sqrt{\frac{8}{7}} 
 \end{pmatrix}\]
 
 On a alors:
 
-\[\Delta := M X' W X M = {X*}' W X* = \Gamma \]
-où, \(X*\) est la matrice dont les variable sont normée.
+\[\Delta := M X^t W X  M = \Gamma \]
 
-La fonction ci-dessous fait les calculs matriciels puis nous donne la matrice obtenue delta qui est égale à la matrice des coefficients RV calculée précédemment.
+
+Nous avons codé des fonctions qui font les calculs matriciels puis nous donnent la matrice obtenue delta qui est égale à la matrice des coefficients RV calculée précédemment. Cette fonction se trouve en Annexe.\\
+
 
 ```{r}
 # Données
-X <- matrix(
-  c( 1, 2, 3,
-    -1,-1, 1,
-     2, 0, 0,
-     0,-1, 1,
-     1, 0,-2,
-     2, 1,-3
-  ), nrow = 6, byrow = TRUE)
+# Initialisation de X_1 et X_2
+a <- c(1,1,1,1,1,1)
+b <- c(1,1,1,0,1,1)
+c <- c(-1,-1,0.5,-1,-1,-1)
 
-L <- list()
-for (i in 1:3) {
-  L[[i]] <- matrix(X[,i], nrow = 3, ncol = 2)
-  # Ajout des noms de lignes
-  rownames(L[[i]]) <- paste0("L", 1:3)
-}
+X_1  = matrix(a, nrow =3)
+X_2 = matrix(b, nrow =3)
+X_3 = matrix(c, nrow =3)
+
+
+L <- list(X_1 = X_1, X_2 = X_2, X_3 = X_3)
+
 
 ```
 
-Finalement, on en déduit qu'il y a équivalence entre les matrices juxtaposées A, B et C avec la matrice X dont les variables sont les matrices A, B et C dépliées.
+Finalement, on en déduit qu'il y a équivalence entre les matrices juxtaposées \(X_1\) , \(X_2\) et \(X_3\) avec la matrice \(X\) dont les variables sont les matrices \(X_1\) , \(X_2\) et \(X_3\) dépliées.
 
 ```{r,fig.height=4.3,fig.width=5.4,fig.align='center'}
-Ft <- cmp(L,1)$F_k
-representation_graph_ind(Ft, 1, 2, aff_noms = TRUE, repel = TRUE)
+Yt <- dep_mat(L)
+geo_ind(Yt, 1, 2, aff_noms = TRUE, cex_titre = 0.80, repel = TRUE)
 representation_graph_tab(L, 1, 2, repel = TRUE)
 ```
 
@@ -1060,58 +1027,9 @@ c) Un inconvénient est qu'on perde une grosse partie de l'information qui sera 
 
 L'idéal serait de réaliser les trois dépliages possibles et de les comparer pour voir lequel est le plus pertinent ! Tout dépend du tableau initial.
 
+
 # Situation 2
 
-## Les données traitées
-
-Les données qui illustreront ce premier emploi de la méthode STATIS sont publiées par Friday. Ces données correspondent à des observations faunistiques effectuées dans plusieurs étangs, où différents taxons ont été identifiés.\
-
-Définition des taxons:
-
-Un taxon est une unité taxonomique utilisée pour classer les organismes vivants. Il peut représenter un groupe d'espèces, de genres, de familles, etc. Voici quelques exemples de taxons courants :
-
-  - **Ordre** : une catégorie de rang élevé dans la classification biologique, regroupant des familles apparentées. Par exemple, les libellules et les cigales appartiennent à l'ordre des Hemiptera.
-  
-  - **Famille** : un niveau de classification plus spécifique que l'ordre, regroupant des genres similaires. Par exemple, les coléoptères, ou scarabées, appartiennent à la famille des Coleoptera.
-  
-  - **Genre** : une catégorie encore plus spécifique, regroupant des espèces étroitement liées. Par exemple, le genre *Apis* regroupe les abeilles.
-  
-  - **Espèce** : la plus petite unité taxonomique, représentant un groupe d'organismes qui peuvent se reproduire entre eux et produire une descendance fertile. Par exemple, l'abeille domestique (*Apis mellifera*) est une espèce d'abeille.
-
-
-Répartition des taxons par groupe:
-
-  - **Groupe 1 (Hemiptera)** : 11 taxons (ordre d'insectes comprenant des espèces telles que les punaises et les cigales)
-  
-  - **Groupe 2 (Odonata)** : 7 taxons (ordre d'insectes comprenant les libellules et les demoiselles)
-  
-  - **Groupe 3 (Trichoptera)** : 13 taxons (ordre d'insectes comprenant les trichoptères, ou phryganes, souvent appelés "mouches à caddis")
-  
-  - **Groupe 4 (Ephemeroptera)** : 4 taxons (ordre d'insectes comprenant les éphémères)
-  
-  - **Groupe 5 (Coleoptera)** : 13 taxons ( ordre d'insectes comprenant les coléoptères, ou scarabées)
-  
-  - **Groupe 6 (Diptera)** : 22 taxons (ordre d'insectes comprenant les diptères, ou mouches)
-  
-  - **Groupe 7 (Hydracarina)** : 4 taxons ( sous-classe d'acariens aquatiques, également connue sous le nom de "tiques d'eau" ou "tiques de mare")
-  
-  - **Groupe 8 (Malacostraca)** : 3 taxons (classe d'arthropodes comprenant des crustacés comme les crabes, les crevettes et les homards)
-  
-  - **Groupe 9 (Mollusca)** : 8 taxons (embranchement d'animaux incluant les mollusques, comme les escargots, les moules et les calmars)
-  
-  - **Groupe 10 (Oligochaeta)** : 6 taxons (classe de vers annélides comprenant les oligochètes, comme les vers de terre)
-
-Identification des tableaux:
-
-Chaque tableau de données est identifié par le groupe de taxons qu'il contient. Par exemple, le tableau 1 contient des données sur le groupe de taxons Hemiptera, le tableau 2 sur le groupe de taxons Odonata, et ainsi de suite jusqu'au tableau 10 pour le groupe de taxons Oligochaeta.\
-
-Identification des étangs:
-
-Les 16 étangs sont étiquetés par les lettres Q, P, R, J, E, C, D, K, B, A, G, M, L, F, H, N.\
-
-Le groupe \( t \) représente l'indexation des différents tableaux de données, allant de 1 à 10 dans cet exemple. Chaque tableau \( t \) correspond à un groupe taxonomique spécifique.\
-Les observations (étangs) sont représentées par l'index \( i \), allant de 1 à 16.\
-Les variables (taxons) sont représentées par l'index \( j \), dont le nombre de variables peut varier d'un groupe taxonomique à l'autre. Les valeurs de \( j \) vont de 1 à \( p_t \), où \( p_t \) est le nombre de variables dans le groupe taxonomique \( t \). 
 
 ## De nouvelles matrices dans un nouvel espace
 
@@ -1126,25 +1044,26 @@ b) L'espace \( P \) est l'ensemble des matrices \( n \times n \). Cet espace est
 \[ P = \mathbb{R}^{n \times n} \]
 
 La dimension de cet espace est \( n^2 \), car une matrice \( n \times n \) possède \( n^2 \) éléments indépendants.
+
 1.2.a) Les lignes et les colonnes de \( P_m \) représentent les individus. Le poids naturel des lignes et des colonnes est donc le même, noté \( W \) de dimension \((n,n)\).
 
-b) On peut munir \(\mathbf{P}\) du produit scalaire de Frobénius qui est défini par:
+b) Pour munir l'espace \( P \) d'un produit scalaire, on utilise la trace :
 
-\[(P_m,P_k) = tr(P_m W P_k W) \quad (p)\]
+\[ [X_t \mid X_s] = \text{tr}(W X_t' W X_s) \]
+
 
 c) Les matrices \( X_m \) peuvent avoir des dimensions différentes, et les matrices \( M_m \) peuvent varier. Cela signifie que les individus des tableaux \( X_m \) résident dans des espaces euclidiens différents selon le tableau. Leurs produits scalaires ne sont donc pas directement comparables d'un tableau à l'autre. Pour rendre les matrices \( P_m \) comparables, il est nécessaire de les normer.
 
-d) Une fois les matrices \( P_m \) normées, elles se situent toutes sur la sphère unité de \( P \). La proximité entre deux matrices peut être mesurée par le cosinus de l'angle entre elles, noté \( RV \). Si le coefficient est proche de 1 on pourra dire que la matrice \(X_m\) et \(X_k\) sont similaire (correlées fortement) et donc une similarité plus grande entre les ensembles d'individus représentés par \(X_m\) et \(X_k\). En revanche, si le coefficient RV est proche de -1 on dira que  les matrices \(X_m\) et \(X_k\) sont anticorrelées. Enfin, si le coefficient RV est proche de 0, on dira que \(X_m\) et \(X_k\) sont décorrelées.
+d) Une fois les matrices \( P_m \) normées, elles se situent toutes sur la sphère unité de \( P \). La proximité entre deux matrices peut être mesurée par le cosinus de l'angle entre elles, noté \( RV \).
 
-## STATIS 2
+## 2. STATIS 2
 
-On applique le programme de STATIS 1 à un ensemble de matrices $P_m$ issues de tableaux thématiques décrivant les mêmes individus. On note $F_1$,..., $F_k$ les composantes principales obtenues.
+On applique le programme de STATIS 1 à un ensemble de matrices \( P_m \) issues de tableaux thématiques décrivant les mêmes individus. On note \( F_1, \ldots, F_k \) les composantes principales obtenues.
 
-### Graphiques directs de STATIS
+2.1.a) Pour projeter chaque \( P_m \) sur un graphe dont les directions sont un couple de composantes principales (\( F_k, F_l \)), on utilise leurs cosinus (RV) avec ces composantes.
 
-a) Pour projeter chaque \( P_m \) sur un graphe dont les directions sont un couple de composantes principales (\( F_k, F_l \)), on utilise leurs cosinus (RV) avec ces composantes.
+b) On projette les matrices \( P_m \) sur le graphe pour visualiser les données thématiques partitionnées en thèmes.
 
-b) 
 
 ```{r,include=FALSE}
 mat_coldiff = function(X){
@@ -1161,48 +1080,42 @@ mat_coldiff = function(X){
 
 
 ```{r,include=FALSE}
-data("friday87")
-Tab_friday <- function() {
-  
-  t_tab <- friday87$fau
-  v <- c(0,11, 18, 31, 35, 48, 70, 74, 77, 85, 91)
-  noms <- friday87$tab.names
-  n_result <- list()
-  
-  for (i in 2:11) {
-    nom_tableau <- noms[i-1]  # Nom du tableau
-    tableau <- as.matrix.data.frame(t_tab[, (v[i-1]+1):v[i]])  # Extraction des colonnes
-    n_result[[nom_tableau]] <- tableau  # Stocker le tableau nommé dans n_result
-  }
-  
-  return(n_result)
-}
+# Tableau à trois dimension
+data(chickenk)
 
-```
+M = as.matrix(chickenk$Mortality)
+rownames(M) = paste("L",1:351,sep = "")
 
+FS = as.matrix(chickenk$FarmStructure)
+rownames(FS) = paste("L",1:351,sep = "")
 
-```{r,include=FALSE}
-# Créer une liste vide
+OFH = as.matrix(chickenk$OnFarmHistory)
+rownames(OFH) = paste("L",1:351,sep = "")
+
+FC = as.matrix(chickenk$FlockCharacteristics)
+rownames(FC) = paste("L",1:351,sep = "")
+
+CTS = as.matrix(chickenk$CatchingTranspSlaught)
+rownames(CTS) = paste("L",1:351,sep = "")
+
+data = list(M = M, FS = FS, OFH = OFH, FC = FC, CTS = CTS)
+
+t <- length(data)
 lst <- list()
-
-# Boucle sur les éléments de Tab_friday
-for (i in 1:length(Tab_friday())) {
-  nom <- friday87$tab.names  # Créer un nom unique pour chaque élément de la liste
-  tableau <- mat_coldiff(Tab_friday()[[i]])  # Calculer le tableau
-  lst[[nom[i]]] <- tableau  # Ajouter le tableau à la liste
+nom <- c("M", "FS", "OFH", "FC", "CTS")
+for (i in 1:t) {
+  lst[[nom[i]]] <- mat_coldiff(data[[i]])
 }
 
-cmp(lst,1)$F_k
+
+representation_graph_tab(lst, 1, 2, repel = TRUE)
+F1_theme <- cmp(lst,1)$F_k
+lambda_k <- cmp(lst,1)$lambda[1]
+spect_F1_theme <- vecval_prop(F1_theme)$val_prop
+
 ```
 
-
-```{r}
-representation_graph_tab(lst, 1, 2,aff_noms = TRUE, repel = TRUE)
-```
-
-### Graphiques projetant les individus et les variables initiales
-
-a) Pour montrer que les composantes principales sont des matrices symétriques, nous devons rappeler que les matrices de produits scalaires \(P_m\) sont symétriques. Les composantes principales sont calculées à partir de ces matrices de produits scalaires, ce qui garantit que les composantes principales seront symétriques. En effet, Les composantes principales \(F_k\) sont des combinaisons linéaires des matrices \( P_m \) qui sont elles-mêmes symétriques.
+2.2.a) Les composantes principales sont des matrices symétriques car elles sont des combinaisons linéaires des matrices \( P_m \) qui sont elles-mêmes symétriques.
 
 b) En interprétant chaque composante principale comme une matrice de produits scalaires entre individus, on peut obtenir une image du nuage des individus dans un plan de dimension réduite. Pour cela, on diagonalise chaque matrice \( F_k \) :
 
@@ -1212,7 +1125,176 @@ Les coordonnées des individus sur les axes principaux sont données par \( U_k 
 
 c) On applique cette méthode de représentation au tableau de données d'application pour obtenir une visualisation des individus.
 
-### Aides à l'interprétation
+Afin d'illustrer plus clairement cette situasion, nous allons maintenant réaliser un exemple d'application à la main. Cela permettra de mieux comprendre le processus et les calculs impliqués dans la transformation des tableaux thématiques en un espace commun, ainsi que dans la comparaison des matrices \(P_m\).
+
+Prenons quatre matrices \( X_1, X_2 \) et \( X_3 \)  de dimension respective \( (3 , 2) \), \( (3 , 3) \) et \( (3 , 4 )\).
+
+\[
+X_1 = \begin{pmatrix}
+0 & -1 \\
+-1 & 2 \\
+1 & 1 
+\end{pmatrix}, \quad
+X_2 = \begin{pmatrix}
+-1 & 2 & 1 \\
+0 & 1 & 0 \\
+0 & -1 & -2 
+\end{pmatrix}, \quad
+X_3 = \begin{pmatrix}
+1 & 0 & 2 & 2 \\
+1 & -1 & -1 & 0 \\
+0 & -2 & 0 & -2 
+\end{pmatrix}
+\]
+
+On note respectivement: \(M_1 = \frac{1}{2} I_2\), \(M_2 = \frac{1}{3}I_3\) et \(M_ = \frac{1}{4}I_4\) les matrices de poids des colonnes.
+
+Comme la seule chose commune à ces tableaux est les individus qu'ils décrivent, l'espace recherché ne peut que dépendre de ces individus. On définit pour \(m \in {1, \ldots, 3} \) \(P_m := X_m M_m {X_m}'\) la matrice des produits scalaires des tableaux \(X_m\).
+
+Les matrices \(P_m\) se trouvent dans l'espace \(\mathcal{P} = \mathbb{R^{3\times3}}\), de dimension \(3^2\).
+
+Calculons à présent les matrices \(P_m\):
+
+\[P_1 = X_1 M_1 {X_1}' = \frac{1}{2} \begin{pmatrix}
+0 & -1 \\
+-1 & 2 \\
+1 & 1 
+\end{pmatrix} \begin{pmatrix}
+0 & -1 & 1 \\
+-1 & 2 & 1 
+\end{pmatrix} = \frac{1}{2} \begin{pmatrix}
+1 & -2 & -1 \\
+-2 & 5 & 1 \\
+-1 & 1 & 2 
+\end{pmatrix}\]
+
+\[P_2 = X_2 M_2 {X_2}' = \frac{1}{3} \begin{pmatrix}
+-1 & 2 & 1 \\
+0 & 1 & 0 \\
+0 & -1 & -2 
+\end{pmatrix} \begin{pmatrix}
+-1 & 0 & 0 \\
+2 & 1 & -1 \\
+1 & 0 & -2
+\end{pmatrix} = \frac{1}{3} \begin{pmatrix}
+6 & 2 & -4 \\
+2 & 1 & -1 \\
+-4 & -1 & 5 
+\end{pmatrix}\]
+
+\[P_3 = X_3 M_3 {X_3}' = \frac{1}{4} \begin{pmatrix}
+1 & 0 & 2 & 2 \\
+1 & -1 & -1 & 0 \\
+0 & -2 & 0 & -2 
+\end{pmatrix} \begin{pmatrix}
+1 & 1 & 0 \\
+0 & -1 & -2 \\
+2 & -1 & 0 \\
+2 & 0 & -2
+\end{pmatrix} = \frac{1}{4} \begin{pmatrix}
+9 & -1 & -4 \\
+-1 & 3 & 2 \\
+-4 & 2 & 5 
+\end{pmatrix}\]
+
+Dans la situation 1, nous avons défini le produit scalaire entre deux matrices \( X_t \) et \( X_s \) de taille \( (n, p) \) en utilisant les matrices de poids diagonales \( W = \frac{1}{n} I_n \) pour les individus et \( C = \frac{1}{p} I_p \) pour les colonnes. 
+
+Le produit scalaire entre deux matrices \( X_t \) et \( X_s \) de taille \( (n, p) \) est donné par :
+
+\[ [X_t|X_s] = \text{tr}(CX_t'WX_s) \]
+
+Cependant, dans la situation ici présente où les colonnes ont la même dimension que les lignes, nous prenons \( C = W \). Ainsi, le produit scalaire devient :
+
+\[ [P_t|P_s] = \text{tr}(WP_t'WP_s) \]
+
+La norme d'une matrice \( P_t \) correspondant à ce produit scalaire sera toujours notée \( \left[\left| P_t \right|\right] \).
+
+Nous allons maintenant calculer les normes des matrices \( P_m \) afin de les normer. En effet, les dimensions des \( X_m \) ne sont pas les mêmes, ainsi que celles des matrices \( M_m \). Autrement dit, les individus des tableaux \( X_m \) vivent dans un espace différent selon le tableau. Leurs produits scalaires n'ont donc pas une mesure comparable d'un tableau à l'autre. Pour rendre les \( P_m \) comparables, il faut donc les normer.
+
+On a, \(\left[\left| P_t \right|\right] =  \sqrt{\text{tr}(WP_t'WP_t)} =  \sqrt{\frac{1}{9} \text{tr}(X_t'X_t)} \), on en déduit donc que :
+
+\[ \left[\left| P_1 \right|\right] =  \sqrt{\frac{1}{9} \text{tr}(P_1'P_1)} \]
+
+Or,
+
+\[ P_1'P_1 = \frac{1}{4} \begin{pmatrix}
+1 & -2 & -1 \\
+-2 & 5 & 1 \\
+-1 & 1 & 2 
+\end{pmatrix} \begin{pmatrix}
+1 & -2 & -1 \\
+-2 & 5 & 1 \\
+-1 & 1 & 2
+\end{pmatrix} = \frac{1}{4} \begin{pmatrix}
+6 & -13 & -6 \\
+-13 & 30 & 9 \\
+-6 & 9 & 6 
+\end{pmatrix} \]
+
+Donc, \(\text{tr}(P_1'P_1) = \frac{42}{4} \Rightarrow \left[\left| P_1 \right|\right] = \sqrt{\frac{1}{9} \frac{42}{4} } = \sqrt{\frac{7}{6} } \).
+
+En procédant de manière analogue, on obtient :
+
+\[ P_2'P_2 = \frac{1}{9} \begin{pmatrix}
+56 & 18 & -46 \\
+18 & 6 & -14 \\
+-46 & -14 & 42 
+\end{pmatrix} \quad \text{et} \quad 
+P_3'P_3 = \frac{1}{16} \begin{pmatrix}
+118 & -20 & -70 \\
+-20 & 14 & 26 \\
+-70 & 26 & 84 
+\end{pmatrix} \]
+
+D'où, \(\left[\left| P_2 \right|\right] = \sqrt{\frac{104}{9}} \) et \(\left[\left| P_3 \right|\right] =  \sqrt{\frac{113}{16}} \).
+
+Une fois les \( P_m \) normées \(( {P_m}^* = \frac{P_m}{\left[\left| P_m \right|\right]} )\), elles se trouvent toutes sur la sphère unité de \(\mathcal{P}\). Leur proximité est donc mesurable par le cosinus de l'angle qu'elles forment entre elles.
+
+On applique le programme STATIS 1 aux matrices \({P_m}\) décrivant les mêmes individus. On notera \(F_1, \ldots, F_T\) les composantes principales obtenues.
+
+Les calculs manuels des coefficients RV des matrices peuvent être très laborieux et sujets à des erreurs, c'est pourquoi nous allons maintenant utiliser des fonctions pour automatiser ces calculs. Nous allons calculer la matrice \( Z \) des coefficients RV en utilisant la fonction `matcoeff_RV`, puis nous diagonaliserons \( Z \) afin d'obtenir \( U \), les vecteurs propres de \( Z \), et \( \nu \), les valeurs propres. Enfin, nous en déduirons en utilisant la fonction `cmp` les composantes principales \( F_k = \sum_{i = 1}^T {u_k}^{(i)} {P_m}^* \) .
+
+Àprès exécution de ces fonctions on obtient les résultats suivants:
+
+\[
+Z = \begin{pmatrix}
+1,0000 & 0,1511 & 0,4838 \\
+0,1511 & 1,0000 & 0.8272 \\
+0.4838 & 0.8272 & 1.0000 
+\end{pmatrix}, \quad
+U = \begin{pmatrix}
+-0,4093 & 0,8659 & 0,2875 \\
+-0,6074 & -0,4937 & 0,6223 \\
+-0,6808 & -0.0801 & -0,7281 
+\end{pmatrix}, \quad
+\nu = \begin{pmatrix}
+2,0289  \\
+0,8691  \\
+0,1020  
+\end{pmatrix}
+\]
+
+Les composantes principales sont:
+
+\[F_1 = \begin{pmatrix}
+-2.5217 & 0.3060 & 1.8027 \\
+0.3060 & -1.2028 & -0.3205 \\
+1.8027 & -0.3205 & -1.8876
+\end{pmatrix}, \quad
+F_2 = \begin{pmatrix}
+-0.5801 & -1.0969 & 0.3701 \\
+-1.0969 & 1.8769 & 0.7659 \\
+0.3701 & 0.7659 & -0.3299
+\end{pmatrix}\\ 
+F_3 = \begin{pmatrix}
+0.2497 & -0.2872 & 0.1416 \\
+-0.2872 & -0.6014 & 0.3731 \\
+0.1416 & 0.3731 & 0.1003
+\end{pmatrix}
+\]
+
+
+### 2.3. Aides à l'interprétation
 
 a) La formule pour calculer le cosinus carré \( \cos^2(P_m, F_k) \) entre \( P_m \) et \( F_k \) est :
 
@@ -1227,8 +1309,6 @@ c) Le calcul de la contribution \( CTR_k(P_m) \) est donné par :
 \[ CTR_k(P_m) = \frac{\cos^2(P_m, F_k)}{\lambda_k} \]
 
 d) Programmation et application.
-
-Il est nécessaire de programmer ces fonctions et de les appliquer au tableau de données d'application pour obtenir des mesures quantitatives de la proximité et de la contribution des matrices \( P_m \) aux composantes principales \( F_k \).
 
 ```{r, include=FALSE}
 # Définition des fonctions
@@ -1261,17 +1341,9 @@ CTR_k <- function(Pm, Fk, lambda_k) {
 ```{r}
 # Appliquer les fonctions au tableau de données d'application
 # Supposons que P_m représente les données projetées sur une composante principale
-set.seed(123) 
-# Exemple de données projetées (100 individus, 2 dimensions)
-P_m <- matrix(runif(100), ncol=10)  
-# Exemple de 5 composantes principales
-Fs <- replicate(5, matrix(runif(100), ncol=10), simplify = FALSE)  
-# Exemple de valeurs propres
-lambda <- c(6.47, 3.98, 1.42, 0.88, 0.08)
-for (k in 1:5) {
-  l <- lambda[k]
-  cat("CTR_", k, "(P_m): ", CTR_k(P_m, Fs[[k]],lambda_k = l), "\n")
-}
+cos_square(lst$M,F1_theme)
+QLT_k(lst$M,lst)
+CTR_k(lst$M,F1_theme,lambda_k)
 
 ```
 
@@ -1345,9 +1417,8 @@ matcoef_RV = function(T_tableaux) {
 Fonction donnant les vecteurs *u* solutions et les valeurs propres associées:
 
 ```{r}
-vecval_prop = function(T_tableau) {
-  matrice = matcoef_RV(T_tableau)# on calcule la matrice contenant les coefs d'Escoufier
-  
+vecval_prop = function(matrice) {
+   
   resultat_propre = eigen(matrice)# list ayant les valeurs et vecteurs propres
   val_prop = resultat_propre$values #valeurs propres
   vec_prop = resultat_propre$vectors #vecteurs propres associées
@@ -1377,28 +1448,59 @@ oper_inert = function(X){
 
 
 ```{r,include=FALSE}
-cmp <- function(T_tabl,k){
-  
-  n <- length(T_tabl[[1]][,1])
-  p <- length(T_tabl[[1]][1,])
-  t <- length(T_tabl)
-  l <- n*p
-  Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
+# fonction dépliant un ensemble de matrice X_t
+dep_mat <- function(T_tabl){
+    n <- length(T_tabl[[1]][,1])# dimension des variables
+    p <- length(T_tabl[[1]][1,])# dimension des individus
+    t <- length(T_tabl) # nombre de tableaux
+    
+    # initialisation d'une matrice dont les vecteurs sont les matrices X_t normées
+    Y_nrm <- matrix(NA, nrow = n*p, ncol = t)
   
   for (i in 1:t ) {
     a <- T_tabl[[i]]/norme(T_tabl[[i]])
     Y_nrm[,i] <- matrix(a, ncol = 1)
   }
   
+  return(Y_nrm)  
+}
+
+composante_principale <- function(Y_nrm,k){
+  
+  l = length(Y_nrm[,1])
   mat <- t(Y_nrm) %*% (diag(l)/l) %*% Y_nrm
   
   result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
   lambda = result_propre$values #valeurs propres
   u = result_propre$vectors #vecteurs propres associées
   
-  cmp_k <- Y_nrm %*% u[,k]
-  F_k <- matrix(cmp_k, nrow = n, ncol = p)
+  F_k <- Y_nrm %*% u[,k]
   rownames(F_k) <- rownames(a)
+  return(list(u = u, lambda = lambda, F_k = F_k))
+}
+
+cmp <- function(T_tabl,k){
+  
+  l <- length(T_tabl) # le nombre de tableaux
+  n <- nrow(T_tabl[[1]])
+  p <- ncol(T_tabl[[1]])
+  mat <- matcoef_RV(T_tabl) # la matrice des coefficient RV
+  
+  result_propre = eigen(mat)# list ayant les valeurs et vecteurs propres
+  lambda = result_propre$values #valeurs propres
+  u = result_propre$vectors #vecteurs propres associées
+  
+  F_k <- matrix(0,nrow = n, ncol = p)
+  for (i in 1:l) {
+    F_k  <- F_k + ((T_tabl[[i]]/norme(T_tabl[[i]])) * u[,k][i])
+  }
+  
+  if(is.null(rownames(T_tabl[[k]]))){
+    rownames(F_k) <- paste("L", 1:n, sep = "")
+  }else{
+    rownames(F_k) <- rownames(T_tabl[[k]])
+  }
+  
   return(list(u = u, lambda = lambda, F_k = F_k))
 }
 
@@ -1418,14 +1520,14 @@ representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
   }
   
   # Créer un data frame avec les composantes principales
-  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
+  df <- data.frame(f_k = F_t[, k], f_l = F_t[, l])
   rownames(df) <- rownames(F_t)
   
   # Plot les composantes principales dans un plan avec l'origine au centre
-  p <- ggplot(df, aes(x = PC_k, y = PC_l)) +
+  p <- ggplot(df, aes(x = f_k, y = f_l)) +
     geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
     theme_classic() +
-    labs(x = paste("PC", k), y = paste("PC", l)) +
+    labs(x = paste("F", k, sep = ""), y = paste("F", l, sep = "")) +
     ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
     theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
   
@@ -1450,42 +1552,45 @@ representation_graph_ind <- function(F_t, k, l, aff_noms = FALSE, col = "navy",
 
 
 ```{r,fig.height=3.9,fig.width=4.8,fig.align='center'}
-geo_ind = function(F_t, k, l, col_points = "black", 
-                   col_noms = "navy", aff_noms = FALSE) {
+geo_ind <- function(Y_nrm, k, l, aff_noms = FALSE, col = "navy", cex_titre = 1, repel = FALSE) {
+  
   if (l <= k) {
-    print(paste("Le 1er axe doit être strictement plus petit que le 2nd "))
+    print("Le 1er axe doit être strictement plus petit que le 2nd")
     return(NULL)
   }
   
   # Créer un data frame avec les composantes principales
-  df <- data.frame(PC_k = F_t[, k], PC_l = F_t[, l])
-  rownames(df) <- rownames(F_t)
-  
-  # Récupérer les noms de lignes ou les numéros de ligne
-  row_names <- if (is.null(rownames(df))) 1:nrow(df) else rownames(df)
-  
-  # Trouver les limites des axes x et y pour centrer l'origine
-  x_limits <- range(df$PC_k)
-  y_limits <- range(df$PC_l)
-  limits <- range(c(-x_limits, x_limits, -y_limits,y_limits))
-  
-  # Afficher les composantes principales dans un plan avec l'origine au centre
-  plot <- ggplot(df, aes(x = PC_k, y = PC_l)) +
-    geom_point(color = col_points) +
-    labs(x = paste("PC", k), y = paste("PC", l)) +
-    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
-    theme_classic() +
-    geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) + # Axe horizontal
-    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)   # Axe vertical
-  
-  # Afficher les noms de lignes ou les numéros de ligne si demandé
-  if (aff_noms) {
-    plot <- plot + geom_text(aes(label = row_names), color = col_noms, 
-                             size = 3, hjust = -0.2, vjust = -0.2)
+  df <- data.frame(F_k = composante_principale(Y_nrm, k)$F_k, F_l = composante_principale(Y_nrm, l)$F_k)
+  if (is.null(rownames(Y_nrm))) {
+    rownames(df) <- paste("L", 1:nrow(Y_nrm), sep = "")
+  } else {
+    rownames(df) <- rownames(Y_nrm)
   }
   
-  plot + xlim(limits) + ylim(limits)
   
+  # Plot les composantes principales dans un plan avec l'origine au centre
+  p <- ggplot(df, aes(x = F_k, y = F_l)) +
+    geom_point(shape = 15, color = "black", size = 1.5) + # Utilisation de petits carrés noirs
+    theme_classic() +
+    labs(x = paste("F", k, sep = ""), y = paste("F", l, sep = "")) +
+    ggtitle(paste("Représentation des individus dans le plan (", k, ",", l, ")")) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))
+  
+  # Ajouter des lignes pour les axes horizontal et vertical se coupant à l'origine
+  p <- p + geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
+    geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5)
+  
+  if (aff_noms == TRUE) {
+    if (repel) {
+      # Ajouter les étiquettes avec repulsion
+      p <- p + geom_text_repel(aes(label = rownames(df)), size = 3, color = col, box.padding = unit(0.2, "lines"))
+    } else {
+      # Ajouter les étiquettes sans repulsion
+      p <- p + geom_text(aes(label = rownames(df)), size = 3, color = col, nudge_x = 0.2, nudge_y = 0.2)
+    }
+  }
+  
+  print(p)
 }
 
 ```
@@ -1538,9 +1643,10 @@ representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy",
     coord_fixed(ratio = 1) +
     geom_hline(yintercept = 0, linetype = "dotted", lwd = 0.5) +
     geom_vline(xintercept = 0, linetype = "dotted", lwd = 0.5) +
-    labs(x = paste("PC", k),
-         y = paste("PC", l)) +
+    labs(x = paste("F", k, sep = ""),
+         y = paste("F", l, sep = "")) +
     ggtitle(paste("Représentation des tableaux dans le plan (", k, ",", l, ")")) +
+    theme(plot.title = element_text(size = cex_titre * 12, face = "bold", hjust = 0.5))+
     geom_path(data = df, aes(varabs, varord), color = "#222211", linewidth = 0.5) +  # Ajout du cercle unité
     xlim(-1, 1) +
     ylim(-1, 1) +
@@ -1564,67 +1670,48 @@ representation_graph_tab <- function(T_tab, k, l, aff_noms = TRUE, col = "navy",
 
 ### Les données partitionné en thèmes
 
+
+```{r,include=FALSE}
+mat_coldiff = function(X){
+  
+  p = length(X[1,]) # la dimension des individus
+  M = diag(p)/p
+  
+  Pm = X %*% M %*% t(X)
+  
+  return(Pm)
+  
+}
+```
+
+
 ```{r}
 # Tableau à trois dimension
 data(chickenk)
 
 M = as.matrix(chickenk$Mortality)
-rownames(M) = seq(1,351,1)
+rownames(M) = paste("L",1:351,sep = "")
 
 FS = as.matrix(chickenk$FarmStructure)
-rownames(FS) = seq(1,351,1)
+rownames(FS) = paste("L",1:351,sep = "")
 
 OFH = as.matrix(chickenk$OnFarmHistory)
-rownames(OFH) = seq(1,351,1)
+rownames(OFH) = paste("L",1:351,sep = "")
 
 FC = as.matrix(chickenk$FlockCharacteristics)
-rownames(FC) = seq(1,351,1)
+rownames(FC) = paste("L",1:351,sep = "")
 
 CTS = as.matrix(chickenk$CatchingTranspSlaught)
-rownames(CTS) = seq(1,351,1)
+rownames(CTS) = paste("L",1:351,sep = "")
 
-data = list(M, FS, OFH, FC, CTS)
+data = list(M = M, FS = FS, OFH = OFH, FC = FC, CTS = CTS)
+
 ```
 
+
+### 2.3. Aides à l'interprétation
 
 ```{r}
-data("friday87")
-Tab_friday <- function() {
-  
-  t_tab <- friday87$fau
-  v <- c(0,11, 18, 31, 35, 48, 70, 74, 77, 85, 91)
-  noms <- friday87$tab.names
-  n_result <- list()
-  
-  for (i in 2:11) {
-    nom_tableau <- noms[i-1]  # Nom du tableau
-    tableau <- as.matrix.data.frame(t_tab[, (v[i-1]+1):v[i]])  # Extraction des colonnes
-    n_result[[nom_tableau]] <- tableau  # Stocker le tableau nommé dans n_result
-  }
-  
-  return(n_result)
-}
-
-```
-
-
-```{r}
-# Créer une liste vide
-lst <- list()
-
-# Boucle sur les éléments de Tab_friday
-for (i in 1:length(Tab_friday())) {
-  nom <- friday87$tab.names  # Créer un nom unique pour chaque élément de la liste
-  tableau <- mat_coldiff(Tab_friday()[[i]])  # Calculer le tableau
-  lst[[nom[i]]] <- tableau  # Ajouter le tableau à la liste
-}
-
-
-```
-
-### Aides à l'interprétation
-
-```{r, include=FALSE}
 # Définition des fonctions
 cos_square <- function(Pm, Fk) {
   rv <- coef_RV(Pm,Fk)
@@ -1642,4 +1729,11 @@ QLT_k <- function(Pm, lst_Fs) {
   } 
   return(cos)
 }
+
+
+CTR_k <- function(Pm, Fk, lambda_k) {
+  c <- cos_square(Pm,Fk)/lambda_k
+  return(c)
+}
+
 ```
